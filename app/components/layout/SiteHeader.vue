@@ -19,9 +19,9 @@
         class="site-header__nav"
         aria-label="Main navigation"
       >
-        <NuxtLink to="/journeys">
+        <!-- <NuxtLink to="/journey">
           Journeys
-        </NuxtLink>
+        </NuxtLink> -->
 
         <NuxtLink to="/destinations">
           Destinations

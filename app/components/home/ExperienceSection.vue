@@ -596,81 +596,13 @@ onMounted(() => {
           0.58
         )
 
-      // ======================================================
-      // PIN + SCROLL CHAPTERS
-      // ======================================================
-
-      let previousScrollIndex = 0
-
-      scrollTrigger =
-        ScrollTrigger.create({
-          trigger: sectionRef.value,
-
-          start: 'top top',
-
-          end: '+=320%',
-
-          pin: stageRef.value,
-
-          scrub: 1,
-
-          anticipatePin: 1,
-
-          invalidateOnRefresh: true,
-
-          onEnter: () => {
-            startAutoplay()
-          },
-
-          onEnterBack: () => {
-            startAutoplay()
-          },
-
-          onLeave: () => {
-            stopAutoplay()
-          },
-
-          onLeaveBack: () => {
-            stopAutoplay()
-          },
-
-          onUpdate: (self) => {
-            const maxIndex =
-              experiences.length - 1
-
-            const nextIndex =
-              Math.round(
-                self.progress *
-                  maxIndex
-              )
-
-            if (
-              nextIndex !==
-              previousScrollIndex
-            ) {
-              const direction: 1 | -1 =
-                nextIndex >
-                previousScrollIndex
-                  ? 1
-                  : -1
-
-              previousScrollIndex =
-                nextIndex
-
-              changeExperience(
-                nextIndex,
-                direction
-              )
-
-              resetAutoplay()
-            }
-          }
-        })
+      startAutoplay()
 
       return () => {
         entrance.kill()
         scrollTrigger?.kill()
         scrollTrigger = null
+        stopAutoplay()
       }
     })
 
@@ -966,7 +898,7 @@ onBeforeUnmount(() => {
            BOTTOM NAVIGATION
       ================================================= -->
 
-      <nav
+      <!-- <nav
         class="experiences__navigation"
         aria-label="Experience navigation"
       >
@@ -1004,7 +936,7 @@ onBeforeUnmount(() => {
             />
           </span>
         </button>
-      </nav>
+      </nav> -->
     </div>
   </section>
 </template>

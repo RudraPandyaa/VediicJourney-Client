@@ -64,18 +64,18 @@
             </div>
 
             <div class="destinations__counter">
-              <span
+              <!-- <span
                 ref="counterRef"
                 class="destinations__counter-current"
               >
                 {{ activeNumber }}
-              </span>
+              </span> -->
 
-              <span class="destinations__counter-line" />
+              <!-- <span class="destinations__counter-line" />
 
               <span class="destinations__counter-total">
                 {{ totalNumber }}
-              </span>
+              </span> -->
             </div>
           </div>
         </div>
@@ -153,7 +153,7 @@
            BOTTOM NAVIGATION
       =================================================== -->
 
-      <div class="destinations__navigation">
+      <!-- <div class="destinations__navigation">
         <button
           v-for="(destination, index) in destinations"
           :key="`${destination.name}-navigation`"
@@ -183,7 +183,7 @@
             />
           </span>
         </button>
-      </div>
+      </div> -->
     </div>
   </section>
 </template>
@@ -273,6 +273,26 @@ let scrollTrigger: ScrollTrigger | undefined
 
 let isChanging = false
 let queuedIndex: number | null = null
+
+let autoplayTimer: ReturnType<typeof setInterval> | undefined
+
+const startAutoplay = () => {
+  stopAutoplay()
+  autoplayTimer = setInterval(() => {
+    let nextIndex = activeIndex.value + 1
+    if (nextIndex >= destinations.length) {
+      nextIndex = 0
+    }
+    changeDestination(nextIndex)
+  }, 4000)
+}
+
+const stopAutoplay = () => {
+  if (autoplayTimer) {
+    clearInterval(autoplayTimer)
+    autoplayTimer = undefined
+  }
+}
 
 
 // ============================================================
@@ -691,34 +711,8 @@ const goToDestination = (index: number) => {
     return
   }
 
-  // Mobile — change directly
-  if (
-    !scrollTrigger ||
-    window.innerWidth <= 768
-  ) {
-    changeDestination(index)
-    return
-  }
-
-  const totalSteps =
-    destinations.length - 1
-
-  if (totalSteps <= 0) return
-
-  const progress =
-    index / totalSteps
-
-  const scrollPosition =
-    scrollTrigger.start +
-    (
-      scrollTrigger.end -
-      scrollTrigger.start
-    ) * progress
-
-  window.scrollTo({
-    top: scrollPosition,
-    behavior: 'smooth'
-  })
+  changeDestination(index)
+  startAutoplay()
 }
 
 
@@ -915,82 +909,7 @@ onMounted(() => {
       )
 
 
-      // ======================================================
-      // PINNED DESTINATION JOURNEY
-      // ======================================================
 
-      let previousIndex = 0
-
-
-      scrollTrigger =
-        ScrollTrigger.create({
-          trigger: sectionRef.value,
-
-          start: 'top top',
-
-          end: '+=250%',
-
-          pin: stageRef.value,
-
-          scrub: 1,
-
-          anticipatePin: 1,
-
-          invalidateOnRefresh: true,
-
-          onUpdate: (self) => {
-            const maxIndex =
-              destinations.length - 1
-
-            const nextIndex =
-              Math.min(
-                maxIndex,
-                Math.floor(
-                  self.progress *
-                  destinations.length
-                )
-              )
-
-
-            if (
-              nextIndex !== previousIndex
-            ) {
-              previousIndex = nextIndex
-
-              changeDestination(nextIndex)
-            }
-          }
-        })
-
-
-      // ======================================================
-      // VERY SUBTLE HORIZONTAL IMAGE DRIFT
-      // ======================================================
-
-      gsap.to(
-        '.destinations__image-stage',
-        {
-          xPercent: -1.5,
-
-          ease: 'none',
-
-          scrollTrigger: {
-            trigger: sectionRef.value,
-
-            start: 'top top',
-
-            end: '+=250%',
-
-            scrub: 1.5
-          }
-        }
-      )
-
-
-      return () => {
-        scrollTrigger?.kill()
-        scrollTrigger = undefined
-      }
     })
 
 
@@ -1095,6 +1014,8 @@ onMounted(() => {
   requestAnimationFrame(() => {
     ScrollTrigger.refresh()
   })
+  
+  startAutoplay()
 })
 
 
@@ -1103,6 +1024,7 @@ onMounted(() => {
 // ============================================================
 
 onUnmounted(() => {
+  stopAutoplay()
   scrollTrigger?.kill()
 
   mm?.revert()
