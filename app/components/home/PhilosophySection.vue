@@ -29,7 +29,7 @@
 
           <span class="philosophy__title-line">
             <span class="philosophy__title-text">
-              around <em>you.</em>
+              around you.
             </span>
           </span>
         </h2>
@@ -49,9 +49,8 @@
             class="philosophy__link"
             aria-label="Discover the Vedic Journey approach"
           >
-            <span class="philosophy__link-line" />
+           
 
-            <Icon name="lucide:arrow-right" />
           </NuxtLink>
         </div>
 
@@ -336,18 +335,16 @@ onUnmounted(() => {
 
 
   &__content {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  position: relative;
 
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 
-    padding:
-      clamp(70px, 6vw, 115px)
-      clamp(45px, 7vw, 130px)
-      clamp(70px, 7vw, 120px);
-  }
+  padding:
+    clamp(70px, 6vw, 115px)
+    clamp(45px, 7vw, 130px)
+    clamp(70px, 7vw, 120px);
+}
 
 
   // ==========================================================
@@ -356,7 +353,8 @@ onUnmounted(() => {
 
   &__title {
     position: relative;
-
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.02em;
     z-index: 2;
 
     width: min(920px, 62vw);
@@ -387,21 +385,22 @@ onUnmounted(() => {
   }
 
 
-  &__title em {
-    font-weight: 400;
-    font-style: italic;
-  }
-
-
   // ==========================================================
   // COPY
   // ==========================================================
 
   &__copy {
-    width: min(100%, 500px);
+  position: absolute;
 
-    margin-left: clamp(10px, 4vw, 75px);
-  }
+  top: 50%;
+  left: 50%;
+
+  width: min(72%, 500px);
+
+  margin: 0;
+
+  transform: translate(-50%, -50%);
+}
 
 
   &__description {

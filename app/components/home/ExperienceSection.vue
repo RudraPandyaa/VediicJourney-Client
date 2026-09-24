@@ -81,26 +81,43 @@ const experiences: Experience[] = [
 
 const sectionRef = ref<HTMLElement | null>(null)
 const stageRef = ref<HTMLElement | null>(null)
-const titleRef = ref<HTMLElement | null>(null)
+const carouselRef = ref<HTMLElement | null>(null)
 const descriptionRef = ref<HTMLElement | null>(null)
-const counterRef = ref<HTMLElement | null>(null)
 
 const activeIndex = ref(0)
 const isAnimating = ref(false)
 
 let ctx: gsap.Context | null = null
 let mm: gsap.MatchMedia | null = null
-let scrollTrigger: ScrollTrigger | null = null
+
 let autoplayTimer: ReturnType<typeof setInterval> | null = null
 let autoplayResumeTimer: ReturnType<typeof setTimeout> | null = null
+
+let descriptionTween: gsap.core.Timeline | null = null
+
+// ============================================================
+// COMPUTED
+// ============================================================
 
 const activeExperience = computed<Experience>(() => {
   return experiences[activeIndex.value] ?? experiences[0]!
 })
 
-const activeNumber = computed(() =>
-  String(activeIndex.value + 1).padStart(2, '0')
-)
+const previousIndex = computed(() => {
+  return activeIndex.value === 0
+    ? experiences.length - 1
+    : activeIndex.value - 1
+})
+
+const nextIndex = computed(() => {
+  return activeIndex.value === experiences.length - 1
+    ? 0
+    : activeIndex.value + 1
+})
+
+const activeNumber = computed(() => {
+  return String(activeIndex.value + 1).padStart(2, '0')
+})
 
 const totalNumber = String(experiences.length).padStart(2, '0')
 
@@ -126,12 +143,8 @@ const startAutoplay = () => {
       return
     }
 
-    const nextIndex =
-      (activeIndex.value + 1) %
-      experiences.length
-
-    changeExperience(nextIndex, 1, true)
-  }, 2000)
+    nextExperience(true)
+  }, 5000)
 }
 
 const resetAutoplay = () => {
@@ -143,7 +156,7 @@ const resetAutoplay = () => {
 
   autoplayResumeTimer = setTimeout(() => {
     startAutoplay()
-  }, 2500)
+  }, 5500)
 }
 
 // ============================================================
@@ -151,259 +164,69 @@ const resetAutoplay = () => {
 // ============================================================
 
 const changeExperience = (
-  nextIndex: number,
-  forcedDirection?: 1 | -1,
+  newIndex: number,
+  direction: 1 | -1,
   fromAutoplay = false
 ) => {
   if (
-    nextIndex === activeIndex.value ||
-    isAnimating.value ||
-    !sectionRef.value
+    newIndex === activeIndex.value ||
+    isAnimating.value
   ) {
     return
   }
 
-  const oldIndex = activeIndex.value
-
-  const direction =
-    forcedDirection ??
-    (nextIndex > oldIndex ? 1 : -1)
-
-  const layers =
-    sectionRef.value.querySelectorAll<HTMLElement>(
-      '.experiences__image-layer'
-    )
-
-  const oldLayer = layers[oldIndex]
-  const newLayer = layers[nextIndex]
-
-  if (!newLayer) return
-
   isAnimating.value = true
 
-  const oldImage =
-    oldLayer?.querySelector<HTMLElement>(
-      '.experiences__image'
-    )
-
-  const newImage =
-    newLayer.querySelector<HTMLElement>(
-      '.experiences__image'
-    )
-
-  // ==========================================================
-  // PREPARE NEW IMAGE
-  // ==========================================================
-
-  gsap.set(newLayer, {
-    zIndex: 3,
-    yPercent: direction === 1 ? 100 : -100,
-    opacity: 1
-  })
-
-  if (oldLayer) {
-    gsap.set(oldLayer, {
-      zIndex: 2,
-      yPercent: 0,
-      opacity: 1
-    })
+  if (descriptionTween) {
+    descriptionTween.kill()
   }
 
-  if (newImage) {
-    gsap.set(newImage, {
-      scale: 1.12,
-      yPercent: direction === 1 ? -7 : 7
-    })
-  }
+  const description = descriptionRef.value
 
-  // ==========================================================
-  // CONTENT OUT
-  // ==========================================================
-
-  const timeline = gsap.timeline({
+  descriptionTween = gsap.timeline({
     onComplete: () => {
-      layers.forEach((layer, index) => {
-        gsap.set(layer, {
-          zIndex: index === nextIndex ? 2 : 0,
-          yPercent: 0,
-          opacity: index === nextIndex ? 1 : 0
-        })
-      })
-
       isAnimating.value = false
     }
   })
 
-  if (titleRef.value) {
-    timeline.to(
-      titleRef.value,
+  // Fade current description out
+  if (description) {
+    descriptionTween.to(
+      description,
       {
-        yPercent: direction === 1 ? -110 : 110,
+        y: direction === 1 ? -18 : 18,
         opacity: 0,
-        duration: 0.42,
+        duration: 0.22,
         ease: 'power2.in'
       },
       0
     )
   }
 
-  if (descriptionRef.value) {
-    timeline.to(
-      descriptionRef.value,
-      {
-        y: direction === 1 ? -25 : 25,
-        opacity: 0,
-        duration: 0.32,
-        ease: 'power2.in'
-      },
-      0.03
-    )
-  }
-
-  if (counterRef.value) {
-    timeline.to(
-      counterRef.value,
-      {
-        y: direction === 1 ? -14 : 14,
-        opacity: 0,
-        duration: 0.25
-      },
-      0
-    )
-  }
-
-  // ==========================================================
-  // IMAGE TRANSITION
-  // ==========================================================
-
-  if (oldLayer) {
-    timeline.to(
-      oldLayer,
-      {
-        yPercent:
-          direction === 1 ? -100 : 100,
-        duration: 1.05,
-        ease: 'power3.inOut'
-      },
-      0.08
-    )
-  }
-
-  timeline.to(
-    newLayer,
-    {
-      yPercent: 0,
-      duration: 1.05,
-      ease: 'power3.inOut'
-    },
-    0.08
-  )
-
-  if (oldImage) {
-    timeline.to(
-      oldImage,
-      {
-        scale: 1.08,
-        duration: 1,
-        ease: 'power2.inOut'
-      },
-      0.08
-    )
-  }
-
-  if (newImage) {
-    timeline.to(
-      newImage,
-      {
-        scale: 1.04,
-        yPercent: 0,
-        duration: 1.15,
-        ease: 'power3.out'
-      },
-      0.08
-    )
-  }
-
-  // ==========================================================
-  // UPDATE VUE CONTENT
-  // ==========================================================
-
-  timeline.call(
+  // Change active card
+  descriptionTween.call(
     () => {
-      activeIndex.value = nextIndex
+      activeIndex.value = newIndex
     },
     [],
-    0.45
+    0.22
   )
 
-  // ==========================================================
-  // CONTENT IN
-  // ==========================================================
-
-  timeline.call(
-    () => {
-      if (titleRef.value) {
-        gsap.set(titleRef.value, {
-          yPercent:
-            direction === 1 ? 110 : -110,
-          opacity: 0
-        })
-      }
-
-      if (descriptionRef.value) {
-        gsap.set(descriptionRef.value, {
-          y: direction === 1 ? 25 : -25,
-          opacity: 0
-        })
-      }
-
-      if (counterRef.value) {
-        gsap.set(counterRef.value, {
-          y: direction === 1 ? 14 : -14,
-          opacity: 0
-        })
-      }
-    },
-    [],
-    0.48
-  )
-
-  if (titleRef.value) {
-    timeline.to(
-      titleRef.value,
+  // Fade new description in
+  if (description) {
+    descriptionTween.fromTo(
+      description,
       {
-        yPercent: 0,
-        opacity: 1,
-        duration: 0.65,
-        ease: 'power3.out'
+        y: direction === 1 ? 18 : -18,
+        opacity: 0
       },
-      0.58
-    )
-  }
-
-  if (descriptionRef.value) {
-    timeline.to(
-      descriptionRef.value,
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.55,
-        ease: 'power3.out'
-      },
-      0.67
-    )
-  }
-
-  if (counterRef.value) {
-    timeline.to(
-      counterRef.value,
       {
         y: 0,
         opacity: 1,
         duration: 0.45,
         ease: 'power3.out'
       },
-      0.64
+      0.28
     )
   }
 
@@ -416,34 +239,34 @@ const changeExperience = (
 // CONTROLS
 // ============================================================
 
-const nextExperience = () => {
-  const nextIndex =
+const nextExperience = (
+  fromAutoplay = false
+) => {
+  const newIndex =
     (activeIndex.value + 1) %
     experiences.length
 
-  changeExperience(nextIndex, 1)
+  changeExperience(
+    newIndex,
+    1,
+    fromAutoplay
+  )
 }
 
 const previousExperience = () => {
-  const previousIndex =
+  const newIndex =
     activeIndex.value === 0
       ? experiences.length - 1
       : activeIndex.value - 1
 
-  changeExperience(previousIndex, -1)
-}
-
-const selectExperience = (index: number) => {
-  if (index === activeIndex.value) return
-
-  const direction: 1 | -1 =
-    index > activeIndex.value ? 1 : -1
-
-  changeExperience(index, direction)
+  changeExperience(
+    newIndex,
+    -1
+  )
 }
 
 // ============================================================
-// MOUNT
+// ENTRANCE ANIMATION
 // ============================================================
 
 onMounted(() => {
@@ -459,38 +282,17 @@ onMounted(() => {
   ctx = gsap.context(() => {
     mm = gsap.matchMedia()
 
-    // ========================================================
-    // DESKTOP
-    // ========================================================
-
-    mm.add('(min-width: 769px)', () => {
-      if (
-        !sectionRef.value ||
-        !stageRef.value
-      ) {
+    const setupEntrance = (
+      start: string,
+      mobile = false
+    ) => {
+      if (!sectionRef.value) {
         return
       }
 
-      const layers =
-        sectionRef.value.querySelectorAll<HTMLElement>(
-          '.experiences__image-layer'
-        )
-
-      // ======================================================
-      // IMAGE INITIAL STATE
-      // ======================================================
-
-      layers.forEach((layer, index) => {
-        gsap.set(layer, {
-          zIndex: index === 0 ? 2 : 0,
-          yPercent: 0,
-          opacity: index === 0 ? 1 : 0
-        })
-      })
-
-      // ======================================================
-      // ENTRANCE STATES
-      // ======================================================
+      // ------------------------------------------
+      // INITIAL STATES
+      // ------------------------------------------
 
       gsap.set(
         '.experiences__eyebrow',
@@ -508,38 +310,37 @@ onMounted(() => {
       )
 
       gsap.set(
-        '.experiences__visual',
-        {
-          clipPath:
-            'inset(100% 0 0 0)'
-        }
-      )
-
-      gsap.set(
-        '.experiences__content-inner',
+        '.experiences__carousel',
         {
           opacity: 0,
-          y: 35
+          y: mobile ? 25 : 45
         }
       )
 
       gsap.set(
-        '.experiences__navigation',
+        '.experiences__content',
         {
           opacity: 0,
           y: 20
         }
       )
 
-      // ======================================================
-      // ENTRANCE
-      // ======================================================
+      gsap.set(
+        '.experiences__side-control',
+        {
+          opacity: 0
+        }
+      )
+
+      // ------------------------------------------
+      // ENTRANCE TIMELINE
+      // ------------------------------------------
 
       const entrance =
         gsap.timeline({
           scrollTrigger: {
             trigger: sectionRef.value,
-            start: 'top 78%',
+            start,
             once: true
           }
         })
@@ -555,6 +356,7 @@ onMounted(() => {
           },
           0
         )
+
         .to(
           '.experiences__heading-text',
           {
@@ -565,138 +367,88 @@ onMounted(() => {
           },
           0.08
         )
+
         .to(
-          '.experiences__visual',
-          {
-            clipPath:
-              'inset(0% 0 0 0)',
-            duration: 1.25,
-            ease: 'power3.inOut'
-          },
-          0.18
-        )
-        .to(
-          '.experiences__content-inner',
+          '.experiences__carousel',
           {
             opacity: 1,
             y: 0,
-            duration: 0.75,
+            duration: 0.9,
             ease: 'power3.out'
           },
-          0.45
+          0.25
         )
+
         .to(
-          '.experiences__navigation',
+          '.experiences__content',
           {
             opacity: 1,
             y: 0,
             duration: 0.65,
             ease: 'power3.out'
           },
-          0.58
+          0.48
+        )
+
+        .to(
+          '.experiences__side-control',
+          {
+            opacity: 1,
+            duration: 0.45,
+            stagger: 0.05,
+            ease: 'power2.out'
+          },
+          0.62
         )
 
       startAutoplay()
 
       return () => {
         entrance.kill()
-        scrollTrigger?.kill()
-        scrollTrigger = null
         stopAutoplay()
       }
-    })
+    }
 
-    // ========================================================
-    // MOBILE
-    // ========================================================
-
-    mm.add('(max-width: 768px)', () => {
-      if (!sectionRef.value) return
-
-      const layers =
-        sectionRef.value.querySelectorAll<HTMLElement>(
-          '.experiences__image-layer'
+    // Desktop
+    mm?.add(
+      '(min-width: 769px)',
+      () => {
+        return setupEntrance(
+          'top 78%'
         )
-
-      layers.forEach((layer, index) => {
-        gsap.set(layer, {
-          zIndex: index === 0 ? 2 : 0,
-          yPercent: 0,
-          opacity: index === 0 ? 1 : 0
-        })
-      })
-
-      const mobileEntrance =
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: sectionRef.value,
-            start: 'top 82%',
-            once: true
-          }
-        })
-
-      mobileEntrance
-        .from(
-          '.experiences__eyebrow',
-          {
-            opacity: 0,
-            y: 18,
-            duration: 0.5
-          }
-        )
-        .from(
-          '.experiences__heading-text',
-          {
-            yPercent: 105,
-            duration: 0.8,
-            stagger: 0.08,
-            ease: 'power3.out'
-          },
-          0.05
-        )
-        .from(
-          '.experiences__visual',
-          {
-            clipPath:
-              'inset(0 100% 0 0)',
-            duration: 1,
-            ease: 'power3.inOut'
-          },
-          0.2
-        )
-        .from(
-          '.experiences__content-inner',
-          {
-            opacity: 0,
-            y: 30,
-            duration: 0.65,
-            ease: 'power3.out'
-          },
-          0.35
-        )
-
-      startAutoplay()
-
-      return () => {
-        mobileEntrance.kill()
-        stopAutoplay()
       }
-    })
+    )
+
+    // Mobile
+    mm?.add(
+      '(max-width: 768px)',
+      () => {
+        return setupEntrance(
+          'top 82%',
+          true
+        )
+      }
+    )
   }, sectionRef.value)
 })
 
 // ============================================================
-// UNMOUNT
+// CLEANUP
 // ============================================================
 
 onBeforeUnmount(() => {
   stopAutoplay()
 
   if (autoplayResumeTimer) {
-    clearTimeout(autoplayResumeTimer)
+    clearTimeout(
+      autoplayResumeTimer
+    )
   }
 
-  scrollTrigger?.kill()
+  if (descriptionTween) {
+    descriptionTween.kill()
+  }
+
   mm?.revert()
   ctx?.revert()
 })
@@ -711,238 +463,178 @@ onBeforeUnmount(() => {
       ref="stageRef"
       class="experiences__stage"
     >
-      <!-- ================================================
-           TOP
-      ================================================= -->
+
+      <!-- ==================================================
+           HEADER
+      =================================================== -->
 
       <div class="experiences__top">
-        <div>
-          <p class="experiences__eyebrow eyebrow">
-            Ways to travel
-          </p>
 
-          <h2
-            class="experiences__heading heading-lg"
-          >
-            <span class="experiences__heading-line">
-              <span class="experiences__heading-text">
-                How do you want
-              </span>
-            </span>
-
-            <span class="experiences__heading-line">
-              <span class="experiences__heading-text">
-                to experience
-                <em>the world?</em>
-              </span>
-            </span>
-          </h2>
-        </div>
-
-        <NuxtLink
-          to="/experiences"
-          class="experiences__all text-link"
+        <h2
+          class="experiences__heading heading-lg"
         >
-          <span>
-            Explore all experiences
+
+          <span
+            class="experiences__heading-line"
+          >
+            <span
+              class="experiences__heading-text"
+            >
+              How do you want
+            </span>
           </span>
 
-          <Icon
-            name="lucide:arrow-right"
-          />
-        </NuxtLink>
+          <span
+            class="experiences__heading-line"
+          >
+            <span
+              class="experiences__heading-text"
+            >
+              to experience
+              the world?
+            </span>
+          </span>
+
+        </h2>
+
       </div>
 
-      <!-- ================================================
+
+      <!-- ==================================================
            MAIN
-      ================================================= -->
+      =================================================== -->
 
       <div class="experiences__main">
-        <!-- IMAGE -->
 
-        <div class="experiences__visual-wrap">
-          <div class="experiences__visual">
-            <div
-              v-for="experience in experiences"
-              :key="`${experience.slug}-image`"
-              class="experiences__image-layer"
-            >
-              <img
-                :src="experience.image"
-                :alt="experience.name"
-                class="experiences__image"
-              >
-            </div>
+        <!-- ==================================================
+             IMAGE CAROUSEL
+        =================================================== -->
+
+        <div
+          ref="carouselRef"
+          class="experiences__carousel"
+        >
+
+          <!-- ------------------------------------------
+               PREVIOUS BUTTON
+          ------------------------------------------- -->
+
+          <button
+            type="button"
+            class="experiences__side-control experiences__side-control--previous"
+            aria-label="Previous experience"
+            @click="previousExperience"
+          >
+            <Icon
+              name="lucide:arrow-left"
+            />
+          </button>
+
+
+          <!-- ------------------------------------------
+               EXPERIENCE CARDS
+          ------------------------------------------- -->
+
+          <div
+            v-for="(
+              experience,
+              index
+            ) in experiences"
+            :key="experience.slug"
+            class="experiences__card"
+            :class="{
+              'experiences__card--active':
+                activeIndex === index,
+
+              'experiences__card--previous':
+                index === previousIndex,
+
+              'experiences__card--next':
+                index === nextIndex
+            }"
+          >
+
+            <img
+              :src="experience.image"
+              :alt="experience.name"
+              class="experiences__image"
+              loading="eager"
+              decoding="async"
+            />
 
             <div
               class="experiences__image-overlay"
             />
 
-            <!-- <div
-              class="experiences__image-counter"
+            <div
+              class="experiences__card-title"
             >
-              <span>
-                {{ activeNumber }}
-              </span>
+              {{ experience.name }}
+            </div>
 
-              <span
-                class="experiences__image-counter-line"
-              />
-
-              <span>
-                {{ totalNumber }}
-              </span>
-            </div> -->
           </div>
+
+
+          <!-- ------------------------------------------
+               NEXT BUTTON
+          ------------------------------------------- -->
+
+          <button
+            type="button"
+            class="experiences__side-control experiences__side-control--next"
+            aria-label="Next experience"
+            @click="nextExperience()"
+          >
+            <Icon
+              name="lucide:arrow-right"
+            />
+          </button>
+
         </div>
 
-        <!-- CONTENT -->
 
-        <div class="experiences__content">
+        <!-- ==================================================
+             DESCRIPTION
+        =================================================== -->
+
+        <div
+          class="experiences__content"
+        >
+
           <div
             class="experiences__content-inner"
           >
-            <!-- <div
-              class="experiences__counter-mask"
-            >
-              <div
-                ref="counterRef"
-                class="experiences__counter"
-              >
-                <span>
-                  {{ activeNumber }}
-                </span>
-
-                <span
-                  class="experiences__counter-line"
-                />
-
-                <span>
-                  {{ totalNumber }}
-                </span>
-              </div>
-            </div> -->
-
-            <div
-              class="experiences__title-mask"
-            >
-              <h3
-                ref="titleRef"
-                class="experiences__title"
-              >
-                {{ activeExperience.name }}
-              </h3>
-            </div>
 
             <div
               class="experiences__description-mask"
             >
+
               <p
                 ref="descriptionRef"
-                class="experiences__description body-large"
+                class="experiences__description"
               >
                 {{
                   activeExperience.description
                 }}
               </p>
+
             </div>
 
-            <NuxtLink
-              :to="`/experiences/${activeExperience.slug}`"
-              class="experiences__explore"
-            >
-              <span>
-                Explore
-                {{ activeExperience.name }}
-              </span>
-
-              <Icon
-                name="lucide:arrow-up-right"
-              />
-            </NuxtLink>
-
-            <!-- CONTROLS -->
-
-            <div class="experiences__controls">
-              <button
-                type="button"
-                class="experiences__control"
-                aria-label="Previous experience"
-                @click="previousExperience"
-              >
-                <Icon
-                  name="lucide:arrow-left"
-                />
-              </button>
-
-              <span
-                class="experiences__control-line"
-              />
-
-              <button
-                type="button"
-                class="experiences__control"
-                aria-label="Next experience"
-                @click="nextExperience"
-              >
-                <Icon
-                  name="lucide:arrow-right"
-                />
-              </button>
-            </div>
           </div>
+
         </div>
+
       </div>
 
-      <!-- ================================================
-           BOTTOM NAVIGATION
-      ================================================= -->
-
-      <!-- <nav
-        class="experiences__navigation"
-        aria-label="Experience navigation"
-      >
-        <button
-          v-for="(experience, index) in experiences"
-          :key="experience.slug"
-          type="button"
-          class="experiences__nav-item"
-          :class="{
-            'experiences__nav-item--active':
-              activeIndex === index
-          }"
-          @click="selectExperience(index)"
-        >
-          <span class="experiences__nav-number">
-            {{
-              String(index + 1).padStart(
-                2,
-                '0'
-              )
-            }}
-          </span>
-
-          <span class="experiences__nav-name">
-            {{ experience.name }}
-          </span>
-
-          <span class="experiences__nav-line">
-            <span
-              class="experiences__nav-progress"
-              :class="{
-                'experiences__nav-progress--active':
-                  activeIndex === index
-              }"
-            />
-          </span>
-        </button>
-      </nav> -->
     </div>
   </section>
 </template>
 
+
 <style lang="scss" scoped>
+
 @use '~/assets/scss/variables' as *;
+
 
 // ============================================================
 // SECTION
@@ -950,824 +642,858 @@ onBeforeUnmount(() => {
 
 .experiences {
   position: relative;
+
   min-height: 100svh;
+
   overflow: hidden;
+
   background: $color-charcoal;
+
+  color: $color-ivory;
+}
+
+
+// ============================================================
+// STAGE
+// ============================================================
+
+.experiences__stage {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 100svh;
+
+  overflow: hidden;
+
+  padding:
+    clamp(55px, 5vw, 80px)
+    var(--page-padding)
+    clamp(60px, 5vw, 90px);
+}
+
+
+// ============================================================
+// HEADER
+// ============================================================
+
+.experiences__top {
+  position: relative;
+
+  z-index: 20;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 100%;
+
+  text-align: center;
+}
+
+
+.experiences__eyebrow {
+  margin: 0 0 18px;
+
+  color:
+    rgba(
+      244,
+      240,
+      232,
+      0.5
+    );
+}
+
+
+.experiences__heading {
+  max-width: 900px;
+
+  margin: 0;
+
   color: $color-ivory;
 
-  // ==========================================================
-  // STAGE
-  // ==========================================================
+  line-height: 0.9;
 
-  &__stage {
-    position: relative;
-    width: 100%;
-    min-height: 100svh;
-    overflow: hidden;
-    padding:
-      clamp(38px, 3.5vw, 58px)
-      var(--page-padding)
-      clamp(30px, 2.8vw, 44px);
+  letter-spacing: -0.04em;
+}
+
+
+.experiences__heading-line {
+  display: block;
+
+  overflow: hidden;
+
+  padding-right: 0.16em;
+
+  padding-bottom: 0.12em;
+}
+
+
+.experiences__heading-text {
+  display: block;
+  font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.02em;
+  will-change: transform;
+}
+
+
+
+// ============================================================
+// MAIN
+// ============================================================
+
+.experiences__main {
+  position: relative;
+
+  z-index: 5;
+
+  width: 100%;
+
+  margin-top:
+    clamp(
+      48px,
+      5vw,
+      72px
+    );
+}
+
+
+// ============================================================
+// CAROUSEL
+// ============================================================
+
+.experiences__carousel {
+  --center-width:
+    clamp(
+      620px,
+      62vw,
+      930px
+    );
+
+  --side-width:
+    clamp(
+      170px,
+      16vw,
+      240px
+    );
+
+  --carousel-height:
+    clamp(
+      430px,
+      43vw,
+      620px
+    );
+
+  --image-gap:
+    clamp(
+      7px,
+      0.55vw,
+      10px
+    );
+
+  position: relative;
+
+  width: 100%;
+
+  height: var(--carousel-height);
+
+  overflow: hidden;
+}
+
+
+// ============================================================
+// CARDS
+// ============================================================
+
+.experiences__card {
+  position: absolute;
+
+  top: 50%;
+
+  left: 50%;
+
+  height: var(--carousel-height);
+
+  overflow: hidden;
+
+  transform:
+    translate(-50%, -50%);
+
+  opacity: 0;
+
+  z-index: 1;
+
+  pointer-events: none;
+
+  will-change:
+    left,
+    width,
+    transform,
+    opacity;
+
+  transition:
+    left 800ms
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
+
+    width 800ms
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
+
+    transform 800ms
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
+
+    opacity 650ms ease;
+}
+
+
+// ============================================================
+// ACTIVE CENTER IMAGE
+// ============================================================
+
+.experiences__card--active {
+  width: var(--center-width);
+
+  left: 50%;
+
+  transform:
+    translate(-50%, -50%);
+
+  opacity: 1;
+
+  z-index: 5;
+
+  pointer-events: auto;
+}
+
+
+// ============================================================
+// PREVIOUS IMAGE
+// ============================================================
+
+.experiences__card--previous {
+  width: var(--side-width);
+
+  left:
+    calc(
+      50%
+      -
+      (
+        var(--center-width) / 2
+      )
+      -
+      var(--image-gap)
+      -
+      (
+        var(--side-width) / 2
+      )
+    );
+
+  transform:
+    translate(-50%, -50%);
+
+  opacity: 1;
+
+  z-index: 3;
+}
+
+
+// ============================================================
+// NEXT IMAGE
+// ============================================================
+
+.experiences__card--next {
+  width: var(--side-width);
+
+  left:
+    calc(
+      50%
+      +
+      (
+        var(--center-width) / 2
+      )
+      +
+      var(--image-gap)
+      +
+      (
+        var(--side-width) / 2
+      )
+    );
+
+  transform:
+    translate(-50%, -50%);
+
+  opacity: 1;
+
+  z-index: 3;
+}
+
+
+// ============================================================
+// IMAGE
+// ============================================================
+
+.experiences__image {
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  object-position: center;
+
+  transform:
+    scale(1.005);
+
+  will-change:
+    transform;
+}
+
+
+// ============================================================
+// OVERLAY
+// ============================================================
+
+.experiences__image-overlay {
+  position: absolute;
+
+  z-index: 2;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(
+        7,
+        7,
+        6,
+        0.76
+      )
+      0%,
+
+      rgba(
+        7,
+        7,
+        6,
+        0.28
+      )
+      38%,
+
+      rgba(
+        7,
+        7,
+        6,
+        0.03
+      )
+      72%,
+
+      transparent
+      100%
+    );
+}
+
+
+// ============================================================
+// TITLE OVER CENTER IMAGE
+// ============================================================
+
+.experiences__card-title {
+  position: absolute;
+
+  z-index: 4;
+
+  bottom:
+    clamp(
+      30px,
+      4vw,
+      58px
+    );
+
+  left: 50%;
+
+  width: 90%;
+
+  transform:
+    translateX(-50%);
+
+  color: $color-ivory;
+
+  font-family:
+    'Bebas Neue',
+    sans-serif;
+
+  font-size:
+    clamp(
+      4rem,
+      6vw,
+      7rem
+    );
+
+  font-weight: 400;
+
+  line-height: 0.84;
+
+  letter-spacing: 0.04em;
+
+  text-align: center;
+
+  text-transform: uppercase;
+
+  text-shadow:
+    0 4px 28px
+    rgba(
+      0,
+      0,
+      0,
+      0.42
+    );
+
+  pointer-events: none;
+}
+
+
+// ============================================================
+// SIDE ARROWS
+// ============================================================
+
+.experiences__side-control {
+  position: absolute;
+
+  top: 50%;
+
+  z-index: 20;
+
+  display: grid;
+
+  width: 54px;
+
+  height: 54px;
+
+  place-items: center;
+
+  padding: 0;
+
+  border: 1px solid rgba(250, 248, 243, 0.68);
+
+  border-radius: 50%;
+
+  background: rgba(15, 15, 13, 0.22);
+
+  color: $color-ivory-light;
+
+  cursor: pointer;
+
+  backdrop-filter: blur(7px);
+
+  transform:
+    translateY(-50%);
+
+  transition:
+    background $transition-fast,
+    color $transition-fast,
+    border-color $transition-fast,
+    transform $transition-medium;
+
+  :deep(svg) {
+    width: 18px;
+    height: 18px;
   }
 
-  // ==========================================================
-  // TOP
-  // ==========================================================
+  &:hover {
+    border-color: $color-ivory-light;
 
-  &__top {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 50px;
-  }
+    background: $color-ivory-light;
 
-  &__eyebrow {
-    margin: 0 0 18px;
-    color:
-      rgba(244, 240, 232, 0.5);
-  }
+    color: $color-charcoal;
 
-  &__heading {
-    max-width: 700px;
-    margin: 0;
-    color: $color-ivory;
-    line-height: 0.9;
-    letter-spacing: -0.04em;
-  }
-
-  &__heading-line {
-    display: block;
-    overflow: hidden;
-    padding: 0 0.16em 0.12em 0;
-  }
-
-  &__heading-text {
-    display: block;
-    will-change: transform;
-  }
-
-  &__heading em {
-    color: #cdb28d;
-    font-weight: 400;
-    font-style: italic;
-  }
-
-  &__all {
-    display: inline-flex;
-    flex-shrink: 0;
-    align-items: center;
-    gap: 11px;
-    margin-top: 12px;
-    color: $color-ivory;
-    text-decoration: none;
-
-    :deep(svg) {
-      width: 15px;
-      height: 15px;
-      transition:
-        transform $transition-medium;
-    }
-
-    &:hover :deep(svg) {
-      transform: translateX(4px);
-    }
-  }
-
-  // ==========================================================
-  // MAIN
-  // ==========================================================
-
-    &__main {
-    position: absolute;
-    z-index: 4;
-
-    top: clamp(250px, 27vh, 310px);
-
-    right: var(--page-padding);
-    left: var(--page-padding);
-
-    display: grid;
-    grid-template-columns:
-        minmax(500px, 1.12fr)
-        minmax(390px, 0.88fr);
-
-    align-items: center;
-    gap: clamp(70px, 8vw, 150px);
-
-
-    bottom: clamp(105px, 11vh, 130px);
-
-    transform: none;
-    }
-
-  // ==========================================================
-  // VISUAL
-  // ==========================================================
-
-    &__visual-wrap {
-    width: 100%;
-    height: 100%;
-    max-width: 850px;
-
-    display: flex;
-    align-items: center;
-    }
-
-    &__visual {
-    position: relative;
-
-    width: 100%;
-    height: 100%;
-    max-height: 560px;
-
-    overflow: hidden;
-    background: #2a2925;
-
-    will-change: clip-path;
-    }
-
-  &__image-layer {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    opacity: 0;
-    will-change:
-      transform,
-      opacity;
-
-    &:first-child {
-      z-index: 2;
-      opacity: 1;
-    }
-  }
-
-  &__image {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: scale(1.04);
-    will-change: transform;
-  }
-
-  &__image-overlay {
-    position: absolute;
-    z-index: 5;
-    inset: 0;
-    pointer-events: none;
-
-    background:
-      linear-gradient(
-        to top,
-        rgba(10, 10, 8, 0.38) 0%,
-        rgba(10, 10, 8, 0.08) 32%,
-        transparent 58%
-      );
-  }
-
-//   &__image-counter {
-//     position: absolute;
-//     z-index: 8;
-//     right: 24px;
-//     bottom: 20px;
-
-//     display: flex;
-//     align-items: center;
-//     gap: 10px;
-
-//     color:
-//       rgba(250, 248, 243, 0.8);
-
-//     font-family:
-//       'Manrope',
-//       sans-serif;
-
-//     font-size: 0.68rem;
-//     letter-spacing: 0.12em;
-//   }
-
-//   &__image-counter-line {
-//     display: block;
-//     width: 30px;
-//     height: 1px;
-//     background:
-//       rgba(250, 248, 243, 0.45);
-//   }
-
-  // ==========================================================
-  // CONTENT
-  // ==========================================================
-
-  &__content {
-    position: relative;
-    z-index: 6;
-    min-width: 0;
-  }
-
-  &__content-inner {
-    width: 100%;
-    max-width: 510px;
-  }
-
-  // ==========================================================
-  // COUNTER
-  // ==========================================================
-
-  &__counter-mask {
-    overflow: hidden;
-  }
-
-  &__counter {
-    display: flex;
-    align-items: center;
-    gap: 13px;
-
-    color:
-      rgba(244, 240, 232, 0.48);
-
-    font-family:
-      'Manrope',
-      sans-serif;
-
-    font-size: var(--fs-body-sm);
-    letter-spacing: 0.12em;
-
-    will-change:
-      transform,
-      opacity;
-  }
-
-  &__counter-line {
-    display: block;
-    width: 45px;
-    height: 1px;
-    background:
-      rgba(244, 240, 232, 0.25);
-  }
-
-  // ==========================================================
-  // TITLE
-  // ==========================================================
-
-  &__title-mask {
-    overflow: hidden;
-    margin-top: 0;
-    padding-bottom: 0.08em;
-  }
-
-  &__title {
-    margin: 0;
-
-    color: $color-ivory;
-
-    font-family:
-      'Cormorant Garamond',
-      Georgia,
-      serif;
-
-    font-size:
-      clamp(4.6rem, 6.2vw, 7.5rem);
-
-    font-weight: 400;
-    line-height: 0.88;
-    letter-spacing: -0.045em;
-
-    will-change:
-      transform,
-      opacity;
-  }
-
-  // ==========================================================
-  // DESCRIPTION
-  // ==========================================================
-
-  &__description-mask {
-    overflow: hidden;
-    margin-top:
-      clamp(30px, 3vw, 44px);
-  }
-
-  &__description {
-    width: 100%;
-    max-width: 470px;
-    margin: 0;
-
-    color:
-      rgba(244, 240, 232, 0.64);
-
-    line-height: 1.6;
-
-    will-change:
-      transform,
-      opacity;
-  }
-
-  // ==========================================================
-  // EXPLORE BUTTON
-  // ==========================================================
-
-  &__explore {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-
-    min-height: 48px;
-    margin-top: 32px;
-    padding: 0 20px;
-
-    border:
-      1px solid
-      rgba(244, 240, 232, 0.45);
-
-    border-radius: 100px;
-
-    color: $color-ivory;
-
-    font-family:
-      'Manrope',
-      sans-serif;
-
-    font-size:
-      clamp(
-        0.72rem,
-        0.72vw,
-        0.84rem
-      );
-
-    font-weight: 500;
-    letter-spacing: 0.09em;
-    line-height: 1;
-    text-decoration: none;
-    text-transform: uppercase;
-
-    transition:
-      background 450ms
-        cubic-bezier(
-          0.22,
-          1,
-          0.36,
-          1
-        ),
-      color 450ms
-        cubic-bezier(
-          0.22,
-          1,
-          0.36,
-          1
-        ),
-      border-color 450ms
-        cubic-bezier(
-          0.22,
-          1,
-          0.36,
-          1
-        );
-
-    :deep(svg) {
-      width: 15px;
-      height: 15px;
-
-      transition:
-        transform 450ms
-          cubic-bezier(
-            0.22,
-            1,
-            0.36,
-            1
-          );
-    }
-
-    &:hover {
-      border-color:
-        $color-ivory;
-
-      background:
-        $color-ivory;
-
-      color:
-        $color-charcoal;
-    }
-
-    &:hover :deep(svg) {
-      transform:
-        translate(3px, -3px);
-    }
-  }
-
-  // ==========================================================
-  // CONTROLS
-  // ==========================================================
-
-  &__controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 32px;
-  }
-
-  &__control {
-    appearance: none;
-
-    display: grid;
-    width: 42px;
-    height: 42px;
-    place-items: center;
-
-    padding: 0;
-
-    border:
-      1px solid
-      rgba(244, 240, 232, 0.32);
-
-    border-radius: 50%;
-
-    background: transparent;
-    color: $color-ivory;
-
-    cursor: pointer;
-
-    transition:
-      background $transition-medium,
-      color $transition-medium,
-      border-color $transition-medium,
-      transform $transition-medium;
-
-    &:hover {
-      border-color:
-        $color-ivory;
-
-      background:
-        $color-ivory;
-
-      color:
-        $color-charcoal;
-
-      transform:
-        scale(1.06);
-    }
-
-    :deep(svg) {
-      width: 15px;
-      height: 15px;
-    }
-  }
-
-  &__control-line {
-    display: block;
-    width: 22px;
-    height: 1px;
-
-    background:
-      rgba(244, 240, 232, 0.28);
-  }
-
-  // ==========================================================
-  // NAVIGATION
-  // ==========================================================
-
-    &__navigation {
-    position: absolute;
-    z-index: 12;
-
-    right: var(--page-padding);
-    bottom: clamp(28px, 3vw, 38px);
-    left: var(--page-padding);
-
-    display: grid;
-    grid-template-columns: repeat(9, minmax(0, 1fr));
-    gap: clamp(12px, 1.5vw, 28px);
-    }
-
-  &__nav-item {
-    appearance: none;
-
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-
-    padding: 0;
-    border: 0;
-
-    background: transparent;
-
-    color:
-      rgba(244, 240, 232, 0.35);
-
-    text-align: left;
-    cursor: pointer;
-
-    transition:
-      color $transition-medium;
-
-    &:hover,
-    &--active {
-      color: $color-ivory;
-    }
-  }
-
-  &__nav-number {
-    font-family:
-      'Manrope',
-      sans-serif;
-
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-  }
-
-  &__nav-name {
-    overflow: hidden;
-    width: 100%;
-
-    font-family:
-      'Manrope',
-      sans-serif;
-
-    font-size:
-      clamp(
-        0.62rem,
-        0.65vw,
-        0.78rem
-      );
-
-    font-weight: 500;
-    letter-spacing: 0.07em;
-
-    text-overflow: ellipsis;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  &__nav-line {
-    position: relative;
-
-    display: block;
-    width: 100%;
-    height: 1px;
-
-    margin-top: 2px;
-
-    overflow: hidden;
-
-    background:
-      rgba(244, 240, 232, 0.14);
-  }
-
-  &__nav-progress {
-    position: absolute;
-    inset: 0;
-
-    background: #cdb28d;
-
-    transform: scaleX(0);
-    transform-origin: left center;
-
-    transition:
-      transform 600ms
-        cubic-bezier(
-          0.22,
-          1,
-          0.36,
-          1
-        );
-
-    &--active {
-      transform: scaleX(1);
-    }
+    transform:
+      translateY(-50%)
+      scale(1.06);
   }
 }
 
+
 // ============================================================
-// LAPTOP
+// PREVIOUS ARROW POSITION
 // ============================================================
 
-@media (max-width: 1280px) {
-  .experiences {
-    &__main {
-      grid-template-columns:
-        minmax(430px, 1.08fr)
-        minmax(340px, 0.92fr);
+.experiences__side-control--previous {
+  left:
+    calc(
+      50%
+      -
+      (
+        var(--center-width) / 2
+      )
+      -
+      var(--image-gap)
+      -
+      (
+        var(--side-width) / 2
+      )
+    );
+}
 
-      gap:
-        clamp(50px, 6vw, 90px);
-    }
 
-    &__visual-wrap {
-      max-width: 680px;
-    }
+// ============================================================
+// NEXT ARROW POSITION
+// ============================================================
 
-    &__title {
-      font-size:
-        clamp(
-          4rem,
-          6vw,
-          6rem
-        );
-    }
+.experiences__side-control--next {
+  left:
+    calc(
+      50%
+      +
+      (
+        var(--center-width) / 2
+      )
+      +
+      var(--image-gap)
+      +
+      (
+        var(--side-width) / 2
+      )
+    );
 
-    &__navigation {
-      gap: 12px;
-    }
+  right: auto;
+}
+
+
+// ============================================================
+// DESCRIPTION
+// ============================================================
+
+.experiences__content {
+  position: relative;
+
+  z-index: 10;
+
+  display: flex;
+
+  justify-content: center;
+
+  width: 100%;
+
+  margin-top:
+    clamp(
+      25px,
+      3vw,
+      40px
+    );
+
+  text-align: center;
+}
+
+
+.experiences__content-inner {
+  width:
+    min(
+      100%,
+      650px
+    );
+}
+
+
+.experiences__description-mask {
+  overflow: hidden;
+}
+
+
+.experiences__description {
+  max-width: 620px;
+
+  margin: 0 auto;
+
+  color:
+    rgba(
+      244,
+      240,
+      232,
+      0.68
+    );
+
+  font-family:
+    'Manrope',
+    sans-serif;
+
+  font-size: 15px;
+
+  line-height: 1.7;
+
+  will-change:
+    transform,
+    opacity;
+}
+
+
+// ============================================================
+// TABLET
+// ============================================================
+
+@media (max-width: 1100px) {
+
+  .experiences__carousel {
+    --center-width:
+      clamp(
+        540px,
+        60vw,
+        760px
+      );
+
+    --side-width:
+      clamp(
+        145px,
+        15vw,
+        200px
+      );
+
+    --carousel-height:
+      clamp(
+        420px,
+        46vw,
+        540px
+      );
+  }
+
+
+  .experiences__side-control {
+    width: 48px;
+
+    height: 48px;
+  }
+
+
+  .experiences__card-title {
+    font-size:
+      clamp(
+        3.5rem,
+        6vw,
+        5.5rem
+      );
   }
 }
 
+
 // ============================================================
-// TABLET / MOBILE
+// MOBILE
 // ============================================================
 
 @media (max-width: 768px) {
+
   .experiences {
     min-height: auto;
+  }
+
+
+  .experiences__stage {
+    min-height: auto;
+
+    padding:
+      76px
+      var(--page-padding)
+      70px;
+  }
+
+
+  .experiences__heading {
+    max-width: 560px;
+  }
+
+
+  .experiences__main {
+    margin-top: 44px;
+  }
+
+
+  .experiences__carousel {
+    --center-width:
+      min(
+        82vw,
+        430px
+      );
+
+    --side-width:
+      0px;
+
+    --image-gap: 0px;
+
+    --carousel-height: 450px;
+
     overflow: hidden;
+  }
 
-    &__stage {
-      min-height: auto;
 
-      padding:
-        78px
-        var(--page-padding)
-        70px;
-    }
+  .experiences__card--previous,
+  .experiences__card--next {
+    width: var(--center-width);
 
-    &__top {
-      display: block;
-    }
+    opacity: 0;
 
-    &__eyebrow {
-      margin-bottom: 16px;
-    }
+    pointer-events: none;
+  }
 
-    &__heading {
-      max-width: 520px;
-    }
 
-    &__all {
-      margin-top: 28px;
-    }
+  .experiences__card--previous {
+    left: -100%;
+  }
 
-    // ========================================================
-    // MAIN
-    // ========================================================
 
-    &__main {
-      position: relative;
+  .experiences__card--next {
+    left: 200%;
+  }
 
-      top: auto;
-      right: auto;
-      left: auto;
 
-      display: flex;
-      flex-direction: column;
-      gap: 42px;
+  .experiences__card--active {
+    left: 50%;
 
-      margin-top: 58px;
+    width: var(--center-width);
+  }
 
-      transform: none;
-    }
 
-    &__visual-wrap {
-      width: 100%;
-      max-width: none;
-    }
+  .experiences__card-title {
+    bottom: 38px;
 
-    &__visual {
-      aspect-ratio: 4 / 5;
-    }
+    font-size:
+      clamp(
+        3.5rem,
+        15vw,
+        5.5rem
+      );
+  }
 
-    &__content-inner {
-      max-width: 100%;
-    }
 
-    &__title-mask {
-      margin-top: 18px;
-    }
+  .experiences__side-control {
+    width: 46px;
 
-    &__title {
-      font-size:
-        clamp(
-          3.8rem,
-          16vw,
-          5.5rem
-        );
-    }
+    height: 46px;
+  }
 
-    &__description-mask {
-      margin-top: 24px;
-    }
 
-    &__description {
-      max-width: 480px;
-    }
+  .experiences__side-control--previous {
+    left: 12px;
+  }
 
-    &__explore {
-      margin-top: 26px;
-    }
 
-    &__controls {
-      margin-top: 26px;
-    }
+  .experiences__side-control--next {
+    left: auto;
 
-    // ========================================================
-    // NAV
-    // ========================================================
+    right: 12px;
+  }
 
-    &__navigation {
-      position: relative;
 
-      right: auto;
-      bottom: auto;
-      left: auto;
+  .experiences__content {
+    margin-top: 28px;
+  }
 
-      display: flex;
-      gap: 26px;
 
-      width:
-        calc(
-          100% +
-          var(--page-padding)
-        );
+  .experiences__description {
+    max-width: 500px;
 
-      margin-top: 54px;
+    font-size: 14px;
 
-      overflow-x: auto;
-
-      padding-right:
-        var(--page-padding);
-
-      scrollbar-width: none;
-
-      -webkit-overflow-scrolling:
-        touch;
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
-    }
-
-    &__nav-item {
-      min-width: 115px;
-      flex: 0 0 115px;
-    }
-
-    &__nav-name {
-      font-size: 0.72rem;
-    }
+    line-height: 1.65;
   }
 }
+
 
 // ============================================================
 // SMALL MOBILE
 // ============================================================
 
 @media (max-width: 480px) {
-  .experiences {
-    &__stage {
-      padding:
-        66px
-        var(--page-padding)
-        62px;
-    }
 
-    &__main {
-      margin-top: 48px;
-    }
+  .experiences__stage {
+    padding:
+      66px
+      var(--page-padding)
+      60px;
+  }
 
-    &__title {
-      font-size:
-        clamp(
-          3.4rem,
-          16vw,
-          4.7rem
-        );
-    }
 
-    &__navigation {
-      margin-top: 46px;
-    }
+  .experiences__main {
+    margin-top: 38px;
+  }
+
+
+  .experiences__carousel {
+    --center-width: 84vw;
+
+    --carousel-height: 400px;
+  }
+
+
+  .experiences__card-title {
+    bottom: 30px;
+
+    font-size:
+      clamp(
+        3.2rem,
+        15vw,
+        4.6rem
+      );
+  }
+
+
+  .experiences__side-control {
+    width: 42px;
+
+    height: 42px;
+  }
+
+
+  .experiences__side-control--previous {
+    left: 8px;
+  }
+
+
+  .experiences__side-control--next {
+    right: 8px;
+  }
+
+
+  .experiences__description {
+    font-size: 13.5px;
   }
 }
+
 
 // ============================================================
 // REDUCED MOTION
 // ============================================================
 
-@media (prefers-reduced-motion: reduce) {
-  .experiences {
-    &__eyebrow,
-    &__heading-text,
-    &__visual,
-    &__content-inner,
-    &__navigation,
-    &__title,
-    &__description,
-    &__counter,
-    &__image {
-      transition: none !important;
-    }
+@media (
+  prefers-reduced-motion: reduce
+) {
+
+  .experiences__card {
+    transition: none;
+  }
+
+  .experiences__image {
+    transition: none;
   }
 }
+
 </style>

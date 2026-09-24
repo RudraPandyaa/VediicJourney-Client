@@ -1,23 +1,6 @@
 <template>
-  <section
-    ref="sectionRef"
-    class="destinations"
-  >
-    <div
-      ref="stageRef"
-      class="destinations__stage"
-    >
-      <!-- ==================================================
-           EXPLORE ALL
-      =================================================== -->
-
-      <NuxtLink
-        to="/destinations"
-        class="destinations__all text-link"
-      >
-        <span>Explore all destinations</span>
-        <Icon name="lucide:arrow-right" />
-      </NuxtLink>
+  <section ref="sectionRef" class="destinations">
+    <div ref="stageRef" class="destinations__stage">
 
       <!-- ==================================================
            MAIN LAYOUT
@@ -38,7 +21,7 @@
 
             <span class="destinations__heading-line">
               <span class="destinations__heading-text">
-                journey <em>take you?</em>
+                journey take you?
               </span>
             </span>
           </h2>
@@ -46,22 +29,25 @@
           <!-- Active destination -->
           <div class="destinations__destination">
             <div class="destinations__name-mask">
-              <h3
-                ref="nameRef"
-                class="destinations__name"
-              >
+              <h3 ref="nameRef" class="destinations__name">
                 {{ activeDestination.name }}
               </h3>
             </div>
 
             <div class="destinations__description-mask">
-              <p
-                ref="descriptionRef"
-                class="destinations__description body-large"
-              >
+              <p ref="descriptionRef" class="destinations__description body-large">
                 {{ activeDestination.description }}
               </p>
             </div>
+            <!-- Explore destination -->
+            <NuxtLink :to="activeDestination.url" class="destinations__explore"
+              :aria-label="`Explore ${activeDestination.name}`">
+              <span>
+                Explore {{ activeDestination.name }}
+              </span>
+
+              <Icon name="lucide:arrow-up-right" />
+            </NuxtLink>
 
             <div class="destinations__counter">
               <!-- <span
@@ -85,64 +71,28 @@
         =================================================== -->
 
         <div class="destinations__visual-wrap">
-          <div
-            ref="visualRef"
-            class="destinations__visual"
-          >
+          <div ref="visualRef" class="destinations__visual">
             <div class="destinations__image-stage">
-              <div
-                v-for="(destination, index) in destinations"
-                :key="`${destination.name}-image`"
-                class="destinations__image-layer"
-                :data-index="index"
-              >
-                <img
-                  :src="destination.image"
-                  :alt="destination.name"
-                  class="destinations__image"
-                >
+              <div v-for="(destination, index) in destinations" :key="`${destination.name}-image`"
+                class="destinations__image-layer" :data-index="index">
+                <img :src="destination.image" :alt="destination.name" class="destinations__image">
               </div>
 
               <div class="destinations__image-overlay" />
 
-              <!-- Explore destination -->
-              <NuxtLink
-                :to="activeDestination.url"
-                class="destinations__image-link"
-                :aria-label="`Explore ${activeDestination.name}`"
-              >
-                <span>
-                  Explore {{ activeDestination.name }}
-                </span>
-
-                <Icon name="lucide:arrow-up-right" />
-              </NuxtLink>
-
               <!-- Previous / Next -->
               <div class="destinations__controls">
-                <button
-                  type="button"
-                  class="destinations__control"
-                  :disabled="activeIndex === 0"
-                  aria-label="Previous destination"
-                  @click="previousDestination"
-                >
+                <button type="button" class="destinations__control" aria-label="Previous destination"
+                  @click="previousDestination">
                   <Icon name="lucide:arrow-left" />
                 </button>
 
                 <span class="destinations__control-line" />
 
-                <button
-                  type="button"
-                  class="destinations__control"
-                  :disabled="
-                    activeIndex === destinations.length - 1
-                  "
-                  aria-label="Next destination"
-                  @click="nextDestination"
-                >
+                <button type="button" class="destinations__control" aria-label="Next destination"
+                  @click="nextDestination">
                   <Icon name="lucide:arrow-right" />
-                </button>
+                  </button>
               </div>
             </div>
           </div>
@@ -221,7 +171,7 @@ const destinations: Destination[] = [
     name: 'Europe',
     description:
       'Timeless cities, beautiful countryside and enduring traditions unfold through journeys that reveal a more intimate side of Europe.',
-    image: '/images/destinations/europe.avif',
+    image: '/images/destinations/europe.jpg',
     url: '/destinations/europe'
   },
   {
@@ -384,7 +334,12 @@ const changeDestination = (
   // DIRECTION
   // ==========================================================
 
-  const movingForward = nextIndex > oldIndex
+  const movingForward =
+  nextIndex > oldIndex ||
+  (
+    oldIndex === destinations.length - 1 &&
+    nextIndex === 0
+  )
 
 
   // ==========================================================
@@ -440,7 +395,7 @@ const changeDestination = (
         }
       })
 
-      
+
 
       gsap.set(newLayer, {
         zIndex: 2,
@@ -517,9 +472,9 @@ const changeDestination = (
   }
 
 
-// ==========================================================
-// CINEMATIC HORIZONTAL SLIDE
-// ==========================================================
+  // ==========================================================
+  // CINEMATIC HORIZONTAL SLIDE
+  // ==========================================================
 
   if (oldLayer) {
     tl.to(
@@ -681,21 +636,22 @@ const changeDestination = (
 // ============================================================
 
 const previousDestination = () => {
-  if (activeIndex.value <= 0) return
+  const previousIndex =
+    activeIndex.value === 0
+      ? destinations.length - 1
+      : activeIndex.value - 1
 
-  goToDestination(activeIndex.value - 1)
+  goToDestination(previousIndex)
 }
 
 
 const nextDestination = () => {
-  if (
-    activeIndex.value >=
-    destinations.length - 1
-  ) {
-    return
-  }
+  const nextIndex =
+    activeIndex.value === destinations.length - 1
+      ? 0
+      : activeIndex.value + 1
 
-  goToDestination(activeIndex.value + 1)
+  goToDestination(nextIndex)
 }
 
 
@@ -1014,7 +970,7 @@ onMounted(() => {
   requestAnimationFrame(() => {
     ScrollTrigger.refresh()
   })
-  
+
   startAutoplay()
 })
 
@@ -1066,9 +1022,7 @@ onUnmounted(() => {
     overflow: hidden;
 
     padding:
-      clamp(42px, 4vw, 64px)
-      var(--page-padding)
-      clamp(28px, 3vw, 46px);
+      clamp(42px, 4vw, 64px) var(--page-padding) clamp(28px, 3vw, 46px);
   }
 
 
@@ -1123,8 +1077,7 @@ onUnmounted(() => {
     display: grid;
 
     grid-template-columns:
-      minmax(430px, 0.82fr)
-      minmax(580px, 1.18fr);
+      minmax(430px, 0.82fr) minmax(580px, 1.18fr);
 
     align-items: center;
 
@@ -1185,9 +1138,7 @@ onUnmounted(() => {
     overflow: hidden;
 
     padding:
-      0
-      0
-      0.09em;
+      0 0 0.09em;
   }
 
 
@@ -1199,13 +1150,9 @@ onUnmounted(() => {
     white-space: nowrap;
 
     will-change: transform;
-  }
 
-
-  &__heading em {
-    font-weight: 400;
-
-    font-style: italic;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.02em;
   }
 
 
@@ -1217,7 +1164,8 @@ onUnmounted(() => {
     position: relative;
 
     z-index: 7;
-
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.02em;
     margin-top:
       clamp(42px, 5vh, 66px);
   }
@@ -1231,10 +1179,7 @@ onUnmounted(() => {
     overflow: hidden;
 
     padding:
-      0
-      10px
-      8px
-      0;
+      0 10px 8px 0;
   }
 
 
@@ -1243,10 +1188,7 @@ onUnmounted(() => {
 
     margin: 0;
 
-    font-family:
-      'Cormorant Garamond',
-      Georgia,
-      serif;
+    font-family: 'Bebas Neue', sans-serif;
 
     font-size:
       clamp(3.2rem, 4.1vw, 5.25rem);
@@ -1255,7 +1197,9 @@ onUnmounted(() => {
 
     line-height: 0.95;
 
-    letter-spacing: -0.04em;
+    letter-spacing: 0.02em;
+
+    text-transform: uppercase;
 
     will-change:
       transform,
@@ -1441,13 +1385,11 @@ onUnmounted(() => {
     pointer-events: none;
 
     background:
-      linear-gradient(
-        to top,
+      linear-gradient(to top,
         rgba(10, 10, 8, 0.42) 0%,
         rgba(10, 10, 8, 0.16) 22%,
         rgba(10, 10, 8, 0.03) 44%,
-        transparent 62%
-      );
+        transparent 62%);
   }
 
 
@@ -1455,69 +1397,46 @@ onUnmounted(() => {
   // EXPLORE ACTIVE DESTINATION
   // ==========================================================
 
-  &__image-link {
-    position: absolute;
-    z-index: 10;
-
-    right: 28px;
-    bottom: 82px;
-
+  &__explore {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: 14px;
 
-    gap: 12px;
+    width: fit-content;
 
-    min-height: 48px;
-    padding: 0 20px;
+    margin-top: 26px;
+    padding: 0 0 9px;
 
-    border: 1px solid rgba(250, 248, 243, 0.72);
-    border-radius: 100px;
+    border-bottom: 1px solid rgba(23, 23, 21, 0.5);
 
-    background: rgba(15, 15, 13, 0.28);
-
-    color: $color-ivory-light;
+    color: $color-charcoal;
 
     font-family: 'Manrope', sans-serif;
-    font-size: clamp(0.72rem, 0.72vw, 0.84rem);
-    font-weight: 500;
-
-    letter-spacing: 0.1em;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
     line-height: 1;
-
     text-decoration: none;
     text-transform: uppercase;
 
-    cursor: pointer;
-
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-
     transition:
-      background 450ms cubic-bezier(0.22, 1, 0.36, 1),
-      color 450ms cubic-bezier(0.22, 1, 0.36, 1),
-      border-color 450ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+      gap $transition-medium,
+      border-color $transition-fast;
 
     :deep(svg) {
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
+      width: 15px;
+      height: 15px;
 
-      transition:
-        transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform $transition-medium;
     }
 
     &:hover {
-      border-color: $color-ivory-light;
-      background: $color-ivory-light;
-      color: $color-charcoal;
-
-      transform: translateY(-2px);
+      gap: 22px;
+      border-color: $color-charcoal;
     }
 
     &:hover :deep(svg) {
-      transform: translate(3px, -3px);
+      transform: translateX(4px);
     }
   }
 
@@ -1543,64 +1462,50 @@ onUnmounted(() => {
 
 
   &__control {
-    appearance: none;
+  appearance: none;
 
-    display: grid;
+  display: grid;
 
-    width: 38px;
-    height: 38px;
+  width: 38px;
+  height: 38px;
 
-    place-items: center;
+  place-items: center;
 
-    padding: 0;
+  padding: 0;
 
-    border:
-      1px solid
-      rgba(250, 248, 243, 0.68);
+  border: 1px solid rgba(250, 248, 243, 0.68);
 
-    border-radius: 50%;
+  border-radius: 50%;
 
-    background:
-      rgba(15, 15, 13, 0.22);
+  background: rgba(15, 15, 13, 0.22);
 
-    color: $color-ivory-light;
+  color: $color-ivory-light;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
 
-    transition:
-      background $transition-fast,
-      color $transition-fast,
-      border-color $transition-fast,
-      opacity $transition-fast,
-      transform $transition-medium;
+  transition:
+    background $transition-fast,
+    color $transition-fast,
+    border-color $transition-fast,
+    transform $transition-medium;
 
-    &:hover:not(:disabled) {
-      border-color:
-        $color-ivory-light;
+  &:hover {
+    border-color: $color-ivory-light;
 
-      background:
-        $color-ivory-light;
+    background: $color-ivory-light;
 
-      color:
-        $color-charcoal;
+    color: $color-charcoal;
 
-      transform:
-        scale(1.06);
-    }
-
-    &:disabled {
-      opacity: 0.35;
-
-      cursor: default;
-    }
-
-    :deep(svg) {
-      width: 14px;
-      height: 14px;
-    }
+    transform: scale(1.06);
   }
+
+  :deep(svg) {
+    width: 14px;
+    height: 14px;
+  }
+}
 
 
   &__control-line {
@@ -1748,14 +1653,10 @@ onUnmounted(() => {
       left center;
 
     transition:
-      transform
-      700ms
-      cubic-bezier(
-        0.22,
+      transform 700ms cubic-bezier(0.22,
         1,
         0.36,
-        1
-      );
+        1);
 
     &--active {
       transform:
@@ -1773,8 +1674,7 @@ onUnmounted(() => {
   .destinations {
     &__layout {
       grid-template-columns:
-        minmax(430px, 0.82fr)
-        minmax(640px, 1.18fr);
+        minmax(430px, 0.82fr) minmax(640px, 1.18fr);
 
       gap: 120px;
     }
@@ -1785,11 +1685,9 @@ onUnmounted(() => {
 
     &__heading {
       width:
-        clamp(
-          680px,
+        clamp(680px,
           42vw,
-          850px
-        );
+          850px);
     }
   }
 }
@@ -1803,24 +1701,19 @@ onUnmounted(() => {
   .destinations {
     &__layout {
       grid-template-columns:
-        minmax(350px, 0.84fr)
-        minmax(440px, 1.16fr);
+        minmax(350px, 0.84fr) minmax(440px, 1.16fr);
 
       gap:
-        clamp(
-          45px,
+        clamp(45px,
           5vw,
-          75px
-        );
+          75px);
     }
 
     &__heading {
       width:
-        clamp(
-          550px,
+        clamp(550px,
           48vw,
-          680px
-        );
+          680px);
     }
 
     &__destination {
@@ -1846,19 +1739,16 @@ onUnmounted(() => {
   .destinations {
     &__layout {
       grid-template-columns:
-        minmax(310px, 0.88fr)
-        minmax(390px, 1.12fr);
+        minmax(310px, 0.88fr) minmax(390px, 1.12fr);
 
       gap: 38px;
     }
 
     &__heading {
       width:
-        clamp(
-          500px,
+        clamp(500px,
           49vw,
-          590px
-        );
+          590px);
 
       line-height: 0.94;
     }
@@ -1884,35 +1774,28 @@ onUnmounted(() => {
   .destinations {
     &__layout {
       grid-template-columns:
-        minmax(280px, 0.9fr)
-        minmax(330px, 1.1fr);
+        minmax(280px, 0.9fr) minmax(330px, 1.1fr);
 
       gap: 28px;
     }
 
     &__heading {
       width:
-        clamp(
-          440px,
+        clamp(440px,
           51vw,
-          520px
-        );
+          520px);
 
       font-size:
-        clamp(
-          2.8rem,
+        clamp(2.8rem,
           6vw,
-          4rem
-        );
+          4rem);
     }
 
     &__name {
       font-size:
-        clamp(
-          2.8rem,
+        clamp(2.8rem,
           6vw,
-          4rem
-        );
+          4rem);
     }
 
     &__description {
@@ -1951,9 +1834,7 @@ onUnmounted(() => {
       overflow: hidden;
 
       padding:
-        76px
-        var(--page-padding)
-        70px;
+        76px var(--page-padding) 70px;
     }
 
 
@@ -2012,11 +1893,9 @@ onUnmounted(() => {
 
     &__name {
       font-size:
-        clamp(
-          3.6rem,
+        clamp(3.6rem,
           15vw,
-          5.5rem
-        );
+          5.5rem);
     }
 
 
@@ -2101,19 +1980,14 @@ onUnmounted(() => {
       display: flex;
 
       width:
-        calc(
-          100% +
-          var(--page-padding)
-        );
+        calc(100% + var(--page-padding));
 
       max-width: none;
 
       gap: 28px;
 
       margin:
-        48px
-        0
-        0;
+        48px 0 0;
 
       overflow-x: auto;
 
@@ -2135,8 +2009,7 @@ onUnmounted(() => {
       min-width: 125px;
 
       flex:
-        0 0
-        125px;
+        0 0 125px;
     }
 
 
@@ -2168,18 +2041,14 @@ onUnmounted(() => {
   .destinations {
     &__stage {
       padding:
-        64px
-        var(--page-padding)
-        62px;
+        64px var(--page-padding) 62px;
     }
 
     &__heading {
       font-size:
-        clamp(
-          2.9rem,
+        clamp(2.9rem,
           13vw,
-          4rem
-        );
+          4rem);
     }
 
     &__destination {
@@ -2188,11 +2057,9 @@ onUnmounted(() => {
 
     &__name {
       font-size:
-        clamp(
-          3.3rem,
+        clamp(3.3rem,
           16vw,
-          4.7rem
-        );
+          4.7rem);
     }
 
     &__description {
@@ -2220,6 +2087,7 @@ onUnmounted(() => {
 
 @media (prefers-reduced-motion: reduce) {
   .destinations {
+
     &__heading-text,
     &__name,
     &__description,

@@ -33,11 +33,7 @@
       <div class="hero__content">
         <!-- Eyebrow -->
         <p class="hero__eyebrow eyebrow hero-animate-eyebrow">
-          <span>Bespoke Travel</span>
-
-          <span class="hero__eyebrow-line" />
-
-          <span>India &amp; The World</span>
+          <span>luxury travel redefined</span>
         </p>
 
         <!-- Main Heading -->
@@ -57,13 +53,12 @@
 
         <!-- Description -->
         <p class="hero__description body-large hero-animate-description">
-          Private journeys, thoughtfully designed around
-          who you are and how you want to travel.
+          Beyond destinations. Bespoke journeys created for the way you dream of travelling.
         </p>
 
         <!-- CTA -->
         <NuxtLink
-          to="/plan-your-journey"
+          to="/destinations"
         class="hero__cta text-link hero-animate-cta"
         >
           <span>Begin Your Journey</span>
@@ -77,7 +72,9 @@
       <!-- Hero Footer -->
       <div class="hero__footer hero-animate-footer">
         <p class="hero__regions">
-          <span>India</span>
+          <span>Asia</span>
+          <span>·</span>
+          <span>Australia</span>
           <span>·</span>
           <span>Europe</span>
           <span>·</span>
@@ -397,7 +394,8 @@ onUnmounted(() => {
 
   &__title-text {
     display: block;
-
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.02em;
     will-change: transform;
   }
 

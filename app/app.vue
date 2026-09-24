@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import CustomCursor from '~/components/ui/CustomCursor.vue'
+import SiteFooter from '~/components/layout/SiteFooter.vue'
 </script>
 
 <template>
-  <NuxtPage />
+  <div class="app-wrapper">
+    <NuxtPage />
 
-  <CustomCursor />
+    <SiteFooter />
+
+    <CustomCursor />
+  </div>
 </template>

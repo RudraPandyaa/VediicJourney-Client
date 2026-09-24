@@ -1,62 +1,55 @@
 <template>
-  <header class="site-header">
+  <header class="site-header" :class="{ 'site-header--dark': isDestinationsPage }">
     <div class="site-header__inner">
       <!-- Brand -->
-      <NuxtLink
-        to="/"
-        class="site-header__brand"
-        aria-label="Vedic Journey home"
-        >
-        <img
-            src="/images/logo/logo.png"
-            alt="Vedic Journey"
-            class="site-header__logo"
-        >
-        </NuxtLink>
+      <NuxtLink to="/" class="site-header__brand" aria-label="Vedic Journey home">
+        <img src="/images/logo/logo.png" alt="Vedic Journey" class="site-header__logo">
+      </NuxtLink>
 
       <!-- Desktop Navigation -->
-      <nav
-        class="site-header__nav"
-        aria-label="Main navigation"
-      >
-        <!-- <NuxtLink to="/journey">
-          Journeys
-        </NuxtLink> -->
+      <nav class="site-header__nav" aria-label="Main navigation">
+        <NuxtLink to="/">
+          Home
+        </NuxtLink>
 
         <NuxtLink to="/destinations">
           Destinations
         </NuxtLink>
 
-        <NuxtLink to="/experiences">
-          Experiences
+        <NuxtLink to="/about">
+          About Us
         </NuxtLink>
 
-        <NuxtLink to="/journal">
-          Journal
+        <NuxtLink to="/contact">
+          Contact Us
+        </NuxtLink>
+
+        <NuxtLink to="/blogs">
+          Blogs
         </NuxtLink>
       </nav>
 
-      <!-- CTA -->
-      <NuxtLink
-        to="/plan-your-journey"
-        class="site-header__cta"
-      >
-        <span>Plan Your Journey</span>
-        <span class="site-header__cta-line" />
-      </NuxtLink>
-
       <!-- Mobile Menu -->
-      <button
-        class="site-header__menu"
-        type="button"
-        aria-label="Open navigation"
-      >
+      <button class="site-header__menu" type="button" aria-label="Open navigation">
         <span />
         <span />
       </button>
     </div>
   </header>
 </template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+
+const route = useRoute()
+
+const isDestinationsPage = computed(() => {
+  return route.path === '/destinations' ||
+    route.path.startsWith('/destinations/')||
+    route.path.startsWith('/about') ||
+    route.path.startsWith('/contact')
+})
+</script>
 
 <style lang="scss" scoped>
 @use '~/assets/scss/variables' as *;
@@ -69,15 +62,20 @@
 
   width: 100%;
   padding:
-    clamp(22px, 2.2vw, 32px)
-    var(--page-padding);
+    clamp(22px, 2.2vw, 32px) var(--page-padding);
 
   color: $color-ivory-light;
 
+  // Dark navigation on the white Destinations pages
+  &--dark {
+    color: $color-charcoal;
+    font-weight: 500;
+  }
+
   &__inner {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
     align-items: center;
+    justify-content: space-between;
 
     width: 100%;
     max-width: $container-max;
@@ -150,15 +148,15 @@
     gap: clamp(30px, 3vw, 55px);
 
     a {
-        position: relative;
+      position: relative;
 
-        padding-block: 10px;
+      padding-block: 10px;
 
-        font-size: var(--fs-nav);
-        font-weight: 500;
-        letter-spacing: 0.13em;
-        text-transform: uppercase;
-        font-family: 'Manrope', sans-serif;
+      font-size: var(--fs-nav);
+      font-weight: 500;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      font-family: 'Manrope', sans-serif;
 
       &::after {
         position: absolute;
