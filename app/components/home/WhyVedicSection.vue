@@ -99,10 +99,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section
-    ref="sectionRef"
-    class="why-vedic"
-  >
+  <section ref="sectionRef" class="why-vedic">
     <div class="why-vedic__inner">
 
       <!-- ================================================
@@ -130,14 +127,10 @@ onBeforeUnmount(() => {
 
       <div class="why-vedic__points">
 
-        <article
-          v-for="point in points"
-          :key="point.number"
-          class="why-vedic__point"
-        >
+        <article v-for="point in points" :key="point.number" class="why-vedic__point">
 
           <div class="why-vedic__icon">
-            <Icon :name="point.icon" />
+            <Icon :name="point.icon" :size="72" />
           </div>
 
           <h3 class="why-vedic__point-title">
@@ -173,9 +166,7 @@ onBeforeUnmount(() => {
     z-index: 2;
 
     padding:
-      clamp(110px, 10vw, 180px)
-      var(--page-padding)
-      clamp(110px, 11vw, 190px);
+      clamp(110px, 10vw, 180px) var(--page-padding) clamp(110px, 11vw, 190px);
   }
 
   // ==========================================================
@@ -205,10 +196,7 @@ onBeforeUnmount(() => {
     overflow: hidden;
 
     padding:
-      0.06em
-      0.12em
-      0.15em
-      0.04em;
+      0.06em 0.12em 0.15em 0.04em;
   }
 
   &__heading-text {
@@ -334,9 +322,7 @@ onBeforeUnmount(() => {
   .why-vedic {
     &__inner {
       padding:
-        90px
-        var(--page-padding)
-        100px;
+        90px var(--page-padding) 100px;
     }
 
     &__points {
@@ -356,9 +342,7 @@ onBeforeUnmount(() => {
   .why-vedic {
     &__inner {
       padding:
-        75px
-        var(--page-padding)
-        85px;
+        75px var(--page-padding) 85px;
     }
 
     &__divider {
@@ -407,6 +391,7 @@ onBeforeUnmount(() => {
 
 @media (prefers-reduced-motion: reduce) {
   .why-vedic {
+
     &__heading-text,
     &__divider,
     &__point {

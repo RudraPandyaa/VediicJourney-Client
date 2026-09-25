@@ -40,14 +40,16 @@
               </p>
             </div>
             <!-- Explore destination -->
-            <NuxtLink :to="activeDestination.url" class="destinations__explore"
-              :aria-label="`Explore ${activeDestination.name}`">
-              <span>
-                Explore {{ activeDestination.name }}
-              </span>
+            <div ref="exploreRef" class="destinations__explore-wrap">
+              <NuxtLink :to="activeDestination.url" class="destinations__explore"
+                :aria-label="`Explore ${activeDestination.name}`">
+                <span>
+                  Explore {{ activeDestination.name }}
+                </span>
 
-              <Icon name="lucide:arrow-up-right" />
-            </NuxtLink>
+                <Icon name="lucide:arrow-right" />
+              </NuxtLink>
+            </div>
 
             <div class="destinations__counter">
               <!-- <span
@@ -92,7 +94,7 @@
                 <button type="button" class="destinations__control" aria-label="Next destination"
                   @click="nextDestination">
                   <Icon name="lucide:arrow-right" />
-                  </button>
+                </button>
               </div>
             </div>
           </div>
@@ -208,6 +210,7 @@ const visualRef = ref<HTMLElement | null>(null)
 
 const nameRef = ref<HTMLElement | null>(null)
 const descriptionRef = ref<HTMLElement | null>(null)
+const exploreRef = ref<HTMLElement | null>(null)
 const counterRef = ref<HTMLElement | null>(null)
 
 
@@ -335,11 +338,11 @@ const changeDestination = (
   // ==========================================================
 
   const movingForward =
-  nextIndex > oldIndex ||
-  (
-    oldIndex === destinations.length - 1 &&
-    nextIndex === 0
-  )
+    nextIndex > oldIndex ||
+    (
+      oldIndex === destinations.length - 1 &&
+      nextIndex === 0
+    )
 
 
   // ==========================================================
@@ -443,6 +446,21 @@ const changeDestination = (
   if (descriptionRef.value) {
     tl.to(
       descriptionRef.value,
+      {
+        x: movingForward ? -20 : 20,
+        opacity: 0,
+
+        duration: 0.25,
+
+        ease: 'power2.in'
+      },
+      0.02
+    )
+  }
+
+  if (exploreRef.value) {
+    tl.to(
+      exploreRef.value,
       {
         x: movingForward ? -20 : 20,
         opacity: 0,
@@ -566,6 +584,13 @@ const changeDestination = (
         })
       }
 
+      if (exploreRef.value) {
+        gsap.set(exploreRef.value, {
+          x: movingForward ? 20 : -20,
+          opacity: 0
+        })
+      }
+
       if (counterRef.value) {
         gsap.set(counterRef.value, {
           x: movingForward ? 12 : -12,
@@ -601,6 +626,21 @@ const changeDestination = (
   if (descriptionRef.value) {
     tl.to(
       descriptionRef.value,
+      {
+        x: 0,
+        opacity: 1,
+
+        duration: 0.45,
+
+        ease: 'power2.out'
+      },
+      0.46
+    )
+  }
+
+  if (exploreRef.value) {
+    tl.to(
+      exploreRef.value,
       {
         x: 0,
         opacity: 1,
@@ -1394,49 +1434,64 @@ onUnmounted(() => {
 
 
   // ==========================================================
-  // EXPLORE ACTIVE DESTINATION
+  // EXPLORE DESTINATION CTA
   // ==========================================================
 
   &__explore {
     display: inline-flex;
+
     align-items: center;
-    gap: 14px;
+    justify-content: center;
+
+    gap: 12px;
 
     width: fit-content;
 
+    min-height: 54px;
+
     margin-top: 26px;
-    padding: 0 0 9px;
 
-    border-bottom: 1px solid rgba(23, 23, 21, 0.5);
+    padding: 0 25px;
 
-    color: $color-charcoal;
+    border: 1px solid $color-charcoal;
 
-    font-family: 'Manrope', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
+    background: $color-charcoal;
+
+    color: $color-ivory-light;
+
+    font-family:
+      'Manrope',
+      sans-serif;
+
+    font-size: var(--fs-link);
+
+    font-weight: 500;
+
+    letter-spacing: 0.07em;
+
     line-height: 1;
+
     text-decoration: none;
+
     text-transform: uppercase;
 
     transition:
-      gap $transition-medium,
-      border-color $transition-fast;
+      background $transition-medium,
+      color $transition-medium;
 
     :deep(svg) {
-      width: 15px;
-      height: 15px;
+      width: 16px;
+      height: 16px;
 
-      transition: transform $transition-medium;
+      /*
+     * No transform or transition on arrow.
+     */
     }
 
     &:hover {
-      gap: 22px;
-      border-color: $color-charcoal;
-    }
+      background: transparent;
 
-    &:hover :deep(svg) {
-      transform: translateX(4px);
+      color: $color-charcoal;
     }
   }
 
@@ -1462,50 +1517,47 @@ onUnmounted(() => {
 
 
   &__control {
-  appearance: none;
+    appearance: none;
 
-  display: grid;
+    display: grid;
 
-  width: 38px;
-  height: 38px;
+    width: 42px;
+    height: 42px;
 
-  place-items: center;
+    place-items: center;
 
-  padding: 0;
+    padding: 0;
 
-  border: 1px solid rgba(250, 248, 243, 0.68);
+    border: 1px solid $color-charcoal;
 
-  border-radius: 50%;
+    border-radius: 0;
 
-  background: rgba(15, 15, 13, 0.22);
+    background: $color-charcoal;
 
-  color: $color-ivory-light;
+    color: $color-ivory-light;
 
-  cursor: pointer;
+    cursor: pointer;
 
-  backdrop-filter: blur(7px);
+    backdrop-filter: blur(7px);
 
-  transition:
-    background $transition-fast,
-    color $transition-fast,
-    border-color $transition-fast,
-    transform $transition-medium;
+    transition:
+      background $transition-medium,
+      color $transition-medium,
+      border-color $transition-medium;
 
-  &:hover {
-    border-color: $color-ivory-light;
+    &:hover {
+      background: $color-ivory-light;
 
-    background: $color-ivory-light;
+      color: $color-charcoal;
 
-    color: $color-charcoal;
+      border-color: $color-ivory-light;
+    }
 
-    transform: scale(1.06);
+    :deep(svg) {
+      width: 14px;
+      height: 14px;
+    }
   }
-
-  :deep(svg) {
-    width: 14px;
-    height: 14px;
-  }
-}
 
 
   &__control-line {

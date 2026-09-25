@@ -411,46 +411,75 @@ onUnmounted(() => {
     color: rgba(250, 248, 243, 0.88);
   }
 
-  // ==========================================================
-  // CTA
-  // ==========================================================
+ // ==========================================================
+// CTA
+// ==========================================================
 
-  &__cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 18px;
+&__cta {
+  display: inline-flex;
 
-    width: fit-content;
+  align-items: center;
+  justify-content: center;
 
-    margin-top: 25px;
-    padding-bottom: 9px;
+  gap: 12px;
 
-    border-bottom: 1px solid rgba(250, 248, 243, 0.55);
+  width: fit-content;
 
-    color: $color-ivory-light;
+  min-height: 54px;
 
-    transition:
-      gap $transition-medium,
-      border-color $transition-fast;
+  margin-top: 25px;
+  padding: 0 25px;
 
-    &:hover {
-      gap: 25px;
+  border: 1px solid #fff;
 
-      border-color: $color-ivory-light;
-    }
+  background: #fff;
+
+  color: #000;
+
+  font-family: 'Manrope', sans-serif;
+
+  font-size: var(--fs-link);
+
+  font-weight: 500;
+
+  letter-spacing: 0.07em;
+
+  text-decoration: none;
+
+  text-transform: uppercase;
+
+  transition:
+    background $transition-medium,
+    color $transition-medium;
+
+  &:hover {
+    background: transparent;
+
+    color: #fff;
+
+    /*
+     * No gap change here.
+     * Arrow stays exactly where it is.
+     */
   }
+}
 
-  &__cta-arrow {
-    display: grid;
-    place-items: center;
 
-    font-size: 1.05rem;
+// ==========================================================
+// CTA ARROW
+// ==========================================================
 
-    :deep(svg) {
-      width: 17px;
-      height: 17px;
-    }
+&__cta-arrow {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  :deep(svg) {
+    width: 16px;
+    height: 16px;
   }
+}
 
   // ==========================================================
   // HERO FOOTER

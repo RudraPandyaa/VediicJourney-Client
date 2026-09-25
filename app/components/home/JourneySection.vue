@@ -689,7 +689,7 @@ onBeforeUnmount(() => {
   &__title {
     margin: 0;
 
-    color: $color-plum;
+    color: #000;
 
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(1.65rem, 2vw, 2.15rem);

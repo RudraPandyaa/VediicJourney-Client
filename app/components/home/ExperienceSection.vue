@@ -144,7 +144,7 @@ const startAutoplay = () => {
     }
 
     nextExperience(true)
-  }, 5000)
+  }, 3000)
 }
 
 const resetAutoplay = () => {
@@ -1095,17 +1095,15 @@ onBeforeUnmount(() => {
 
   padding: 0;
 
-  border: 1px solid rgba(250, 248, 243, 0.68);
+  border: 1px solid rgba(15, 15, 13, 0.22);
 
-  border-radius: 50%;
 
-  background: rgba(15, 15, 13, 0.22);
+  background: #000;
 
-  color: $color-ivory-light;
+  color: #fff;
 
   cursor: pointer;
 
-  backdrop-filter: blur(7px);
 
   transform:
     translateY(-50%);
@@ -1122,15 +1120,12 @@ onBeforeUnmount(() => {
   }
 
   &:hover {
-    border-color: $color-ivory-light;
+    border-color: #fff;
 
-    background: $color-ivory-light;
+    background: #fff;
 
-    color: $color-charcoal;
+    color: #000;
 
-    transform:
-      translateY(-50%)
-      scale(1.06);
   }
 }
 

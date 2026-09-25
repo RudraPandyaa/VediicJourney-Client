@@ -1,17 +1,10 @@
 <template>
-  <section
-    ref="sectionRef"
-    class="philosophy"
-  >
+  <section ref="sectionRef" class="philosophy">
     <!-- LEFT IMAGE -->
     <div class="philosophy__visual">
       <div class="philosophy__image-wrap">
-        <img
-          ref="imageRef"
-          src="/images/home/philosophy.jpg"
-          alt="A meaningful Vedic Journey travel experience"
-          class="philosophy__image"
-        >
+        <img ref="imageRef" src="/images/home/philosophy.jpg" alt="A meaningful Vedic Journey travel experience"
+          class="philosophy__image">
       </div>
     </div>
 
@@ -36,6 +29,7 @@
 
         <!-- Bottom copy -->
         <div class="philosophy__copy">
+
           <p class="philosophy__description body">
             We believe the most memorable journeys aren't chosen
             from a shelf. They begin with a conversation — your
@@ -44,14 +38,18 @@
             shaped around the person taking it.
           </p>
 
-          <NuxtLink
-            to="/about"
-            class="philosophy__link"
-            aria-label="Discover the Vedic Journey approach"
-          >
-           
+          <!-- CTA -->
+          <NuxtLink to="/destinations" class="philosophy__link" aria-label="Begin your journey with Vedic Journey">
+            <span class="philosophy__link-text">
+              Find Your Perfect Escape
+            </span>
+
+            <span class="philosophy__link-arrow">
+              <Icon name="lucide:arrow-right" />
+            </span>
 
           </NuxtLink>
+
         </div>
 
       </div>
@@ -154,11 +152,11 @@ onMounted(() => {
         0.62
       )
 
-      // Arrow
+      // CTA
       timeline.from(
         '.philosophy__link',
         {
-          x: -18,
+          y: 20,
           opacity: 0,
           ease: 'power2.out',
           duration: 0.55
@@ -238,7 +236,7 @@ onMounted(() => {
         '.philosophy__link',
         {
           opacity: 0,
-          x: -15,
+          y: 15,
           duration: 0.5
         },
         '-=0.3'
@@ -335,16 +333,14 @@ onUnmounted(() => {
 
 
   &__content {
-  position: relative;
+    position: relative;
 
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 
-  padding:
-    clamp(70px, 6vw, 115px)
-    clamp(45px, 7vw, 130px)
-    clamp(70px, 7vw, 120px);
-}
+    padding:
+      clamp(70px, 6vw, 115px) clamp(45px, 7vw, 130px) clamp(70px, 7vw, 120px);
+  }
 
 
   // ==========================================================
@@ -353,19 +349,21 @@ onUnmounted(() => {
 
   &__title {
     position: relative;
+
     font-family: 'Bebas Neue', sans-serif;
+
     letter-spacing: 0.02em;
+
     z-index: 2;
 
     width: min(920px, 62vw);
 
     /*
-     * Pull the title across the image/panel boundary,
-     * like the editorial reference you shared.
+     * Keep the existing editorial overlap.
      */
     margin-left: clamp(-120px, -6.5vw, -70px);
 
-    color: #cdb28d;
+    color: $color-ivory-light;
   }
 
 
@@ -390,71 +388,130 @@ onUnmounted(() => {
   // ==========================================================
 
   &__copy {
-  position: absolute;
+    position: absolute;
 
-  top: 50%;
-  left: 50%;
+    /*
+     * Instead of putting the paragraph exactly in the
+     * center of the entire panel, place the content toward
+     * the lower-middle area so it visually connects with
+     * the heading above it.
+     */
+    top: 52%;
 
-  width: min(72%, 500px);
+    left: 50%;
 
-  margin: 0;
+    width: min(68%, 540px);
 
-  transform: translate(-50%, -50%);
-}
+    margin: 0;
+
+    transform: translateX(-50%);
+  }
 
 
   &__description {
+    max-width: 520px;
+
     margin: 0;
 
     color: rgba(250, 248, 243, 0.9);
+
+    line-height: 1.75;
   }
 
 
   // ==========================================================
-  // LINK
+  // CTA
   // ==========================================================
 
   &__link {
     display: inline-flex;
+
+    flex: 0 0 auto;
+
     align-items: center;
 
-    gap: 0;
+    justify-content: center;
+
+    gap: 12px;
+
+    min-height: 54px;
 
     width: fit-content;
 
-    margin-top: 30px;
+    margin-top: 42px;
 
-    color: $color-ivory-light;
+    padding:
+      0 25px;
 
-    transition: gap $transition-medium;
+    border:
+      1px solid #fff;
 
-    &:hover {
-      gap: 12px;
+    background: #fff;
 
-      .philosophy__link-line {
-        width: 56px;
-      }
-    }
+    color: #000;
+
+    font-family:
+      'Manrope',
+      sans-serif;
+
+    font-size:
+      var(--fs-link);
+
+    font-weight: 500;
+
+    letter-spacing: 0.07em;
+
+    text-decoration: none;
+
+    text-transform: uppercase;
+
+    transition:
+      background $transition-medium,
+
+      color $transition-medium;
+  }
+
+
+  // ==========================================================
+  // CTA ARROW
+  // ==========================================================
+
+  &__link-arrow {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition:
+      transform $transition-medium;
 
     :deep(svg) {
-      width: 20px;
-      height: 20px;
+      width: 16px;
+
+      height: 16px;
     }
   }
 
 
-  &__link-line {
-    display: block;
+  // ==========================================================
+  // CTA HOVER
+  // ==========================================================
 
-    width: 42px;
-    height: 1px;
+  &__link:hover {
+    background:
+      transparent;
 
-    margin-right: -1px;
-
-    background: currentColor;
-
-    transition: width $transition-medium;
+    color:
+      #fff;
   }
+
+
+
+  /*
+   * Small editorial line underneath the CTA.
+   */
+ 
 
 
   // ==========================================================
@@ -465,15 +522,21 @@ onUnmounted(() => {
     position: absolute;
 
     right: clamp(24px, 3vw, 55px);
+
     bottom: clamp(22px, 3vw, 45px);
 
     font-family: 'Manrope', sans-serif;
+
     font-size: var(--fs-body-sm);
+
     font-weight: 500;
 
     letter-spacing: 0.14em;
 
-    color: rgba(250, 248, 243, 0.45);
+    color: rgba(250,
+        248,
+        243,
+        0.45);
   }
 }
 
@@ -488,9 +551,7 @@ onUnmounted(() => {
 
     &__content {
       padding:
-        65px
-        clamp(40px, 6vw, 85px)
-        65px;
+        65px clamp(40px, 6vw, 85px) 65px;
     }
 
 
@@ -502,9 +563,9 @@ onUnmounted(() => {
 
 
     &__copy {
-      max-width: 460px;
+      width: min(72%, 470px);
 
-      margin-left: 20px;
+      margin-left: 0;
     }
   }
 }
@@ -522,9 +583,7 @@ onUnmounted(() => {
 
     &__content {
       padding:
-        60px
-        40px
-        60px;
+        60px 40px 60px;
     }
 
 
@@ -536,6 +595,8 @@ onUnmounted(() => {
 
 
     &__copy {
+      width: 74%;
+
       margin-left: 0;
     }
   }
@@ -560,7 +621,9 @@ onUnmounted(() => {
 
     &__visual {
       width: 100%;
+
       min-height: auto;
+
       height: 62svh;
 
       background: $color-charcoal;
@@ -592,9 +655,7 @@ onUnmounted(() => {
       min-height: 72svh;
 
       padding:
-        55px
-        var(--page-padding)
-        80px;
+        55px var(--page-padding) 80px;
     }
 
 
@@ -614,11 +675,21 @@ onUnmounted(() => {
     // --------------------------------------------------------
 
     &__copy {
+      position: relative;
+
+      top: auto;
+
+      left: auto;
+
       width: 100%;
+
       max-width: 500px;
 
       margin-top: 80px;
+
       margin-left: 0;
+
+      transform: none;
     }
 
 
@@ -627,8 +698,18 @@ onUnmounted(() => {
     }
 
 
+    // --------------------------------------------------------
+    // CTA
+    // --------------------------------------------------------
+
+    &__link {
+      margin-top: 34px;
+    }
+
+
     &__marker {
       right: var(--page-padding);
+
       bottom: 28px;
     }
   }
@@ -652,12 +733,18 @@ onUnmounted(() => {
       min-height: 68svh;
 
       padding-top: 45px;
+
       padding-bottom: 70px;
     }
 
 
     &__copy {
       margin-top: 60px;
+    }
+
+
+    &__link {
+      margin-top: 30px;
     }
   }
 }
