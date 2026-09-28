@@ -59,22 +59,25 @@ onMounted(() => {
   ctx = gsap.context(() => {
     mm = gsap.matchMedia()
 
-    // ========================================================
-    // DESKTOP
-    // ========================================================
+    /* ======================================================== */
+    /* DESKTOP */
+    /* ======================================================== */
 
     mm.add('(min-width: 769px)', () => {
       if (!sectionRef.value) return
 
-      // ------------------------------------------------------
-      // HEADER
-      // ------------------------------------------------------
+      /* ------------------------------------------------------ */
+      /* HEADER */
+      /* ------------------------------------------------------ */
 
       gsap.set('.journeys__eyebrow', {
         opacity: 0,
         y: 20
       })
 
+      /* Each word starts completely below its masked line. */
+      /* The parent line clips the word so it feels like it is */
+      /* sliding out from behind a curtain. */
       gsap.set('.journeys__heading-text', {
         yPercent: 110
       })
@@ -91,9 +94,13 @@ onMounted(() => {
 
       const headerTimeline = gsap.timeline({
         scrollTrigger: {
-          trigger: sectionRef.value,
-          start: 'top 78%',
-          once: true
+          /* Trigger from the heading itself rather than the whole */
+          /* section, so the animation waits until the typography */
+          /* is properly on screen. */
+          trigger: sectionRef.value.querySelector('.journeys__heading'),
+          start: 'top 55%',
+          end: 'bottom 45%',
+          toggleActions: 'play none none reverse'
         }
       })
 
@@ -113,8 +120,8 @@ onMounted(() => {
           {
             yPercent: 0,
             duration: 0.9,
-            stagger: 0.09,
-            ease: 'power3.out'
+            stagger: 0.12,
+            ease: 'power4.out'
           },
           0.08
         )
@@ -139,9 +146,9 @@ onMounted(() => {
           0.42
         )
 
-      // ------------------------------------------------------
-      // JOURNEY CARDS
-      // ------------------------------------------------------
+      /* ------------------------------------------------------ */
+      /* JOURNEY CARDS */
+      /* ------------------------------------------------------ */
 
       const cards =
         sectionRef.value.querySelectorAll<HTMLElement>(
@@ -223,9 +230,9 @@ onMounted(() => {
             0.5
           )
 
-        // ----------------------------------------------------
-        // SUBTLE PARALLAX
-        // ----------------------------------------------------
+        /* ---------------------------------------------------- */
+        /* SUBTLE PARALLAX */
+        /* ---------------------------------------------------- */
 
         gsap.fromTo(
           image,
@@ -250,18 +257,19 @@ onMounted(() => {
       }
     })
 
-    // ========================================================
-    // MOBILE
-    // ========================================================
+    /* ======================================================== */
+    /* MOBILE */
+    /* ======================================================== */
 
     mm.add('(max-width: 768px)', () => {
       if (!sectionRef.value) return
 
       const headerTimeline = gsap.timeline({
         scrollTrigger: {
-          trigger: sectionRef.value,
-          start: 'top 84%',
-          once: true
+          trigger: sectionRef.value.querySelector('.journeys__heading'),
+          start: 'top 65%',
+          end: 'bottom 45%',
+          toggleActions: 'play none none reverse'
         }
       })
 
@@ -275,10 +283,10 @@ onMounted(() => {
         .from(
           '.journeys__heading-text',
           {
-            yPercent: 105,
+            yPercent: 110,
             duration: 0.8,
-            stagger: 0.08,
-            ease: 'power3.out'
+            stagger: 0.10,
+            ease: 'power4.out'
           },
           0.05
         )
@@ -419,10 +427,6 @@ onBeforeUnmount(() => {
                 <img :src="journey.image" :alt="journey.title" class="journeys__image">
 
                 <div class="journeys__overlay" />
-
-                <span class="journeys__image-arrow">
-                  <Icon name="lucide:arrow-up-right" />
-                </span>
               </div>
             </NuxtLink>
 
@@ -449,9 +453,9 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 @use '~/assets/scss/variables' as *;
 
-// ============================================================
-// SECTION
-// ============================================================
+/* ============================================================ */
+/* SECTION */
+/* ============================================================ */
 
 .journeys {
   position: relative;
@@ -469,9 +473,9 @@ onBeforeUnmount(() => {
       clamp(100px, 8vw, 160px) var(--page-padding) clamp(90px, 8vw, 160px);
   }
 
-  // ==========================================================
-  // MAIN LAYOUT
-  // ==========================================================
+  /* ========================================================== */
+  /* MAIN LAYOUT */
+  /* ========================================================== */
 
   &__layout {
     display: grid;
@@ -483,9 +487,9 @@ onBeforeUnmount(() => {
     margin-inline: auto;
   }
 
-  // ==========================================================
-  // LEFT HEADING
-  // ==========================================================
+  /* ========================================================== */
+  /* LEFT HEADING */
+  /* ========================================================== */
 
   &__header {
     position: relative;
@@ -516,8 +520,8 @@ onBeforeUnmount(() => {
 
   &__heading-line {
     display: block;
-    overflow: visible;
-    padding: 0.02em 0.08em 0.08em 0;
+    overflow: hidden;
+    padding: 0.02em 0.08em 0.10em 0;
   }
 
   &__heading-text {
@@ -528,9 +532,9 @@ onBeforeUnmount(() => {
     will-change: transform;
   }
 
-  // ==========================================================
-  // DESTINATION GRID
-  // ==========================================================
+  /* ========================================================== */
+  /* DESTINATION GRID */
+  /* ========================================================== */
 
   &__grid {
     display: grid;
@@ -540,9 +544,9 @@ onBeforeUnmount(() => {
     align-items: start;
   }
 
-  // ==========================================================
-  // CARD POSITIONS — STAGGERED LIKE REFERENCE
-  // ==========================================================
+  /* ========================================================== */
+  /* CARD POSITIONS — STAGGERED LIKE REFERENCE */
+  /* ========================================================== */
 
   &__card {
     position: relative;
@@ -569,9 +573,9 @@ onBeforeUnmount(() => {
     }
   }
 
-  // ==========================================================
-  // IMAGE
-  // ==========================================================
+  /* ========================================================== */
+  /* IMAGE */
+  /* ========================================================== */
 
   &__visual-link {
     display: block;
@@ -617,9 +621,9 @@ onBeforeUnmount(() => {
       opacity 700ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  // ==========================================================
-  // IMAGE ARROW
-  // ==========================================================
+  /* ========================================================== */
+  /* IMAGE ARROW */
+  /* ========================================================== */
 
   &__image-arrow {
     position: absolute;
@@ -671,9 +675,9 @@ onBeforeUnmount(() => {
     }
   }
 
-  // ==========================================================
-  // CONTENT BELOW IMAGE
-  // ==========================================================
+  /* ========================================================== */
+  /* CONTENT BELOW IMAGE */
+  /* ========================================================== */
 
   &__card-content {
     padding-top: 18px;
@@ -700,36 +704,54 @@ onBeforeUnmount(() => {
   }
 
   &__explore {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 
-    margin-top: 13px;
+  min-height: 54px;
+  margin-top: 18px;
+  padding: 0 25px;
 
-    color: $color-charcoal;
+  border: 1px solid #000;
+  background: #000;
+  color: #fff;
 
-    font-family: 'Manrope', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
+  font-family: 'Manrope', sans-serif;
+  font-size: var(--fs-link);
+  font-weight: 500;
+  letter-spacing: 0.07em;
 
-    text-decoration: none;
+  text-decoration: none;
+  text-transform: uppercase;
 
-    :deep(svg) {
-      width: 14px;
-      height: 14px;
-      transition: transform $transition-medium;
-    }
+  transition:
+    background $transition-medium,
+    color $transition-medium;
 
-    &:hover :deep(svg) {
-      transform: translateX(4px);
-    }
+  :deep(svg) {
+    width: 16px;
+    height: 16px;
+
+    /* No arrow animation */
+    transition: none;
+  }
+
+  &:hover {
+    background: transparent;
+    color: #000;
+  }
+
+  &:hover :deep(svg) {
+    /* Keep arrow completely static */
+    transform: none;
   }
 }
+}
 
-// ============================================================
-// LARGE DESKTOP
-// ============================================================
+/* ============================================================ */
+/* LARGE DESKTOP */
+/* ============================================================ */
 
 @media (min-width: 1600px) {
   .journeys {
@@ -744,9 +766,9 @@ onBeforeUnmount(() => {
   }
 }
 
-// ============================================================
-// LAPTOP
-// ============================================================
+/* ============================================================ */
+/* LAPTOP */
+/* ============================================================ */
 
 @media (max-width: 1200px) {
   .journeys {
@@ -777,9 +799,9 @@ onBeforeUnmount(() => {
   }
 }
 
-// ============================================================
-// TABLET
-// ============================================================
+/* ============================================================ */
+/* TABLET */
+/* ============================================================ */
 
 @media (max-width: 900px) {
   .journeys {
@@ -825,9 +847,9 @@ onBeforeUnmount(() => {
   }
 }
 
-// ============================================================
-// MOBILE
-// ============================================================
+/* ============================================================ */
+/* MOBILE */
+/* ============================================================ */
 
 @media (max-width: 600px) {
   .journeys {
@@ -891,14 +913,15 @@ onBeforeUnmount(() => {
   }
 }
 
-// ============================================================
-// REDUCED MOTION
-// ============================================================
+/* ============================================================ */
+/* REDUCED MOTION */
+/* ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
   .journeys {
 
     &__eyebrow,
+    &__heading-line,
     &__heading-text,
     &__visual,
     &__image,

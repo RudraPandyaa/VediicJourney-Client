@@ -189,7 +189,7 @@ onUnmounted(() => {
   }
   
   &__name {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: 'Bebas Neue', sans-serif;
     font-size: 2.8rem;
     font-weight: 400;
     margin: 0;

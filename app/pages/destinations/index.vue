@@ -5,9 +5,6 @@
     <!-- HERO -->
     <section class="journey-hero">
       <div class="journey-hero__content">
-        <p class="journey-hero__eyebrow eyebrow">
-          Plan Your Journey
-        </p>
 
         <h1 class="journey-hero__heading heading-xl">
           Discover the world's most
@@ -1375,62 +1372,59 @@ onUnmounted(() => {
   }
 
   &__explore {
-    display: inline-flex;
-    align-items: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-    gap: 16px;
+  gap: 16px;
 
-    margin-top:
-      clamp(35px, 4vw, 55px);
+  margin-top:
+    clamp(35px, 4vw, 55px);
 
-    padding-bottom: 10px;
+  padding: 14px 22px;
 
-    border-bottom:
-      1px solid
-      rgba($color-charcoal, 0.35);
+  border: 1px solid $color-charcoal;
+  border-radius: 0;
 
-    color:
-      $color-charcoal;
+  background: $color-charcoal;
+  color: $color-ivory;
 
-    text-decoration: none;
+  text-decoration: none;
 
-    font-family:
-      'Manrope',
-      sans-serif;
+  font-family:
+    'Manrope',
+    sans-serif;
 
-    font-size: 12px;
+  font-size: 12px;
 
-    letter-spacing:
-      0.12em;
+  font-weight: 500;
 
-    text-transform:
-      uppercase;
+  letter-spacing:
+    0.12em;
 
-    transition:
-      border-color $transition-fast;
+  text-transform: uppercase;
 
-    &:hover {
-      border-color:
-        $color-charcoal;
+  transition:
+    background $transition-fast,
+    color $transition-fast,
+    border-color $transition-fast;
 
-      .world-content__explore-arrow {
-        transform:
-          translateX(5px);
-      }
-    }
+  &:hover {
+    background: transparent;
+    color: $color-charcoal;
+    border-color: $color-charcoal;
   }
+}
 
-  &__explore-arrow {
-    display: flex;
+&__explore-arrow {
+  display: flex;
+  align-items: center;
 
-    transition:
-      transform $transition-fast;
-
-    :deep(svg) {
-      width: 17px;
-      height: 17px;
-    }
+  :deep(svg) {
+    width: 17px;
+    height: 17px;
   }
+}
 }
 
 /* ============================================================

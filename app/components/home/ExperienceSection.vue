@@ -535,12 +535,13 @@ onBeforeUnmount(() => {
                EXPERIENCE CARDS
           ------------------------------------------- -->
 
-          <div
+          <NuxtLink
             v-for="(
               experience,
               index
             ) in experiences"
             :key="experience.slug"
+            :to="`/${experience.slug}`"
             class="experiences__card"
             :class="{
               'experiences__card--active':
@@ -552,6 +553,7 @@ onBeforeUnmount(() => {
               'experiences__card--next':
                 index === nextIndex
             }"
+            :aria-label="`Explore ${experience.name} experiences`"
           >
 
             <img
@@ -572,7 +574,7 @@ onBeforeUnmount(() => {
               {{ experience.name }}
             </div>
 
-          </div>
+          </NuxtLink>
 
 
           <!-- ------------------------------------------
@@ -829,6 +831,10 @@ onBeforeUnmount(() => {
 
   pointer-events: none;
 
+  text-decoration: none;
+
+  cursor: pointer;
+
   will-change:
     left,
     width,
@@ -891,6 +897,8 @@ onBeforeUnmount(() => {
 .experiences__card--previous {
   width: var(--side-width);
 
+  pointer-events: auto;
+
   left:
     calc(
       50%
@@ -921,6 +929,8 @@ onBeforeUnmount(() => {
 
 .experiences__card--next {
   width: var(--side-width);
+
+  pointer-events: auto;
 
   left:
     calc(

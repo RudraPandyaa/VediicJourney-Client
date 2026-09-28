@@ -71,17 +71,6 @@
 
       <!-- Hero Footer -->
       <div class="hero__footer hero-animate-footer">
-        <p class="hero__regions">
-          <span>Asia</span>
-          <span>·</span>
-          <span>Australia</span>
-          <span>·</span>
-          <span>Europe</span>
-          <span>·</span>
-          <span>Africa</span>
-          <span>·</span>
-          <span>South America</span>
-        </p>
 
         <button
           class="hero__scroll"

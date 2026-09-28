@@ -204,12 +204,12 @@ onUnmounted(() => {
   }
   
   &__name {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 2.8rem;
-    font-weight: 400;
-    margin: 0;
-    color: $color-charcoal;
-  }
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 400;
+  margin: 0;
+  color: $color-charcoal;
+}
   
   &__desc {
     font-family: 'Manrope', sans-serif;
@@ -220,23 +220,45 @@ onUnmounted(() => {
   }
   
   &__explore {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 10px;
-    font-weight: 600;
-    color: $color-charcoal;
-    text-decoration: none;
-    
-    :deep(svg) {
-      width: 16px;
-      height: 16px;
-      transition: transform 0.3s ease;
-    }
-    
-    &:hover :deep(svg) {
-      transform: translateX(4px);
-    }
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 16px;
+
+  margin-top: 10px;
+  padding: 14px 22px;
+
+  border: 1px solid $color-charcoal;
+  border-radius: 0;
+
+  background: $color-charcoal;
+  color: $color-ivory;
+
+  text-decoration: none;
+
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  transition:
+    background $transition-fast,
+    color $transition-fast,
+    border-color $transition-fast;
+
+  :deep(svg) {
+    width: 16px;
+    height: 16px;
   }
+
+  &:hover {
+    background: transparent;
+    color: $color-charcoal;
+    border-color: $color-charcoal;
+  }
+}
 }
 </style>

@@ -8,7 +8,7 @@
         <p class="india-hero__eyebrow eyebrow">Destination</p>
         <h1 class="india-hero__heading heading-xl">
           Discover the wild beauty of <br />
-          <em>Africa</em>
+          Africa
         </h1>
         <p class="india-hero__description body-large">
           A continent of breathtaking safaris, ancient civilizations, and dramatic landscapes. Explore our curated African journeys.

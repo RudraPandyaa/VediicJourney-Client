@@ -45,7 +45,6 @@ const route = useRoute()
 
 const isDestinationsPage = computed(() => {
   return route.path === '/destinations' ||
-    route.path.startsWith('/destinations/')||
     route.path.startsWith('/contact')
 })
 </script>

@@ -1367,60 +1367,57 @@ onUnmounted(() => {
 
   &__link {
     display: inline-flex;
-
     align-items: center;
-
+    justify-content: center;
     gap: 18px;
 
     width: fit-content;
-
+    min-height: 54px;
     margin-top: 45px;
+    padding: 0 25px;
 
-    padding-bottom: 10px;
-
-    border-bottom:
-      1px solid rgba($color-ivory, 0.4);
-
-    color:
-      $color-ivory;
+    border: 1px solid $color-ivory;
+    background: $color-ivory;
+    color: $color-charcoal;
 
     text-decoration: none;
 
-    font-family:
-      'Manrope',
-      sans-serif;
-
+    font-family: 'Manrope', sans-serif;
     font-size: 11px;
-
-    letter-spacing:
-      0.12em;
-
-    text-transform:
-      uppercase;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 
     transition:
+      background $transition-fast,
+      color $transition-fast,
       border-color $transition-fast;
 
     &:hover {
-      border-color:
-        $color-ivory;
+      background: transparent;
+      color: $color-ivory;
+      border-color: $color-ivory;
 
+      // No arrow movement
       .about-destinations__arrow {
-        transform:
-          translateX(5px);
+        transform: none;
       }
     }
   }
 
   &__arrow {
     display: flex;
+    align-items: center;
 
-    transition:
-      transform $transition-fast;
+    // No transition / animation
+    transition: none;
+    transform: none;
 
     :deep(svg) {
       width: 17px;
       height: 17px;
+      transition: none;
+      transform: none;
     }
   }
 
@@ -1490,59 +1487,58 @@ onUnmounted(() => {
     }
   }
 
-  &__link {
+   &__link {
     display: inline-flex;
-
     align-items: center;
-
+    justify-content: center;
     gap: 18px;
 
+    width: fit-content;
+    min-height: 54px;
     margin-top: 55px;
+    padding: 0 25px;
 
-    padding-bottom: 10px;
-
-    border-bottom:
-      1px solid rgba($color-charcoal, 0.35);
-
-    color:
-      $color-charcoal;
+    border: 1px solid $color-charcoal;
+    background: $color-charcoal;
+    color: $color-ivory;
 
     text-decoration: none;
 
-    font-family:
-      'Manrope',
-      sans-serif;
-
+    font-family: 'Manrope', sans-serif;
     font-size: 11px;
-
-    letter-spacing:
-      0.12em;
-
-    text-transform:
-      uppercase;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 
     transition:
+      background $transition-fast,
+      color $transition-fast,
       border-color $transition-fast;
 
     &:hover {
-      border-color:
-        $color-charcoal;
+      background: transparent;
+      color: $color-charcoal;
+      border-color: $color-charcoal;
 
+      // No arrow movement
       span:last-child {
-        transform:
-          translateX(5px);
+        transform: none;
       }
     }
 
     span:last-child {
       display: flex;
+      align-items: center;
 
-      transition:
-        transform $transition-fast;
+      // Completely static arrow
+      transition: none;
+      transform: none;
 
       :deep(svg) {
         width: 17px;
         height: 17px;
+        transition: none;
+        transform: none;
       }
     }
   }

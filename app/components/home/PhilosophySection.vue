@@ -1,59 +1,40 @@
 <template>
   <section ref="sectionRef" class="philosophy">
-    <!-- LEFT IMAGE -->
-    <div class="philosophy__visual">
-      <div class="philosophy__image-wrap">
-        <img ref="imageRef" src="/images/home/philosophy.jpg" alt="A meaningful Vedic Journey travel experience"
-          class="philosophy__image">
-      </div>
+
+    <div class="philosophy__content">
+
+      <!-- Heading -->
+      <h2 class="philosophy__title heading-xl">
+        <span v-for="(character, index) in headingCharacters" :key="`${character}-${index}`"
+          class="philosophy__title-character" aria-hidden="true">
+          {{ character === ' ' ? '\u00A0' : character }}
+        </span>
+
+        <span class="sr-only">
+          Discover the journey that's yours.
+        </span>
+      </h2>
+
+      <!-- Intro -->
+      <p class="philosophy__description body">
+        Tell us what inspires you, how you like to travel, and what
+        you want to experience. We'll turn your ideas into a
+        thoughtfully planned journey shaped around you.
+      </p>
+
+      <!-- CTA -->
+      <NuxtLink to="/contact" class="philosophy__link" aria-label="Plan your journey with Vedic Journey">
+        <span class="philosophy__link-text">
+          Plan Your Journey
+        </span>
+
+        <span class="philosophy__link-arrow">
+          <Icon name="lucide:arrow-right" />
+        </span>
+      </NuxtLink>
+
     </div>
 
-    <!-- RIGHT CONTENT -->
-    <div class="philosophy__panel">
-      <div class="philosophy__content">
-
-        <!-- Heading -->
-        <h2 class="philosophy__title heading-xl">
-          <span class="philosophy__title-line">
-            <span class="philosophy__title-text">
-              Travel shaped
-            </span>
-          </span>
-
-          <span class="philosophy__title-line">
-            <span class="philosophy__title-text">
-              around you.
-            </span>
-          </span>
-        </h2>
-
-        <!-- Bottom copy -->
-        <div class="philosophy__copy">
-
-          <p class="philosophy__description body">
-            We believe the most memorable journeys aren't chosen
-            from a shelf. They begin with a conversation — your
-            curiosity, your rhythm, and the experiences that move you.
-            From India to the world beyond, every journey is thoughtfully
-            shaped around the person taking it.
-          </p>
-
-          <!-- CTA -->
-          <NuxtLink to="/destinations" class="philosophy__link" aria-label="Begin your journey with Vedic Journey">
-            <span class="philosophy__link-text">
-              Find Your Perfect Escape
-            </span>
-
-            <span class="philosophy__link-arrow">
-              <Icon name="lucide:arrow-right" />
-            </span>
-
-          </NuxtLink>
-
-        </div>
-
-      </div>
-    </div>
   </section>
 </template>
 
@@ -62,7 +43,9 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 const sectionRef = ref<HTMLElement | null>(null)
-const imageRef = ref<HTMLImageElement | null>(null)
+
+const headingText = "Discover the journey that's yours."
+const headingCharacters = headingText.split('')
 
 let ctx: gsap.Context | undefined
 
@@ -74,122 +57,50 @@ onMounted(() => {
   ctx = gsap.context(() => {
     const mm = gsap.matchMedia()
 
-    // ========================================================
-    // DESKTOP / TABLET
-    // ========================================================
-
     mm.add('(min-width: 769px)', () => {
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.value,
-          start: 'top 82%',
-          end: 'top -10%',
-          scrub: 1.15
+          start: 'top 92%',
+          end: 'top 45%',
+          scrub: 2
         }
       })
 
-      // Dark panel
       timeline.from(
-        '.philosophy__panel',
+        '.philosophy__title-character',
         {
           opacity: 0,
-          duration: 0.35
+          yPercent: 100,
+          stagger: 0.045,
+          ease: 'power2.out',
+          duration: 0.18
         },
         0
       )
 
-      // Image container reveals from left
-      timeline.fromTo(
-        '.philosophy__image-wrap',
-        {
-          clipPath: 'inset(0 100% 0 0)'
-        },
-        {
-          clipPath: 'inset(0 0% 0 0)',
-          ease: 'power3.inOut',
-          duration: 2.5
-        },
-        0
-      )
-
-      // Image itself moves underneath mask
-      timeline.fromTo(
-        imageRef.value,
-        {
-          scale: 1.14,
-          xPercent: -10
-        },
-        {
-          scale: 1,
-          xPercent: 0,
-          ease: 'power3.out',
-          duration: 1.3
-        },
-        0
-      )
-
-      // Heading line reveal
-      timeline.from(
-        '.philosophy__title-text',
-        {
-          yPercent: 115,
-          stagger: 0.1,
-          ease: 'power3.out',
-          duration: 0.85
-        },
-        0.3
-      )
-
-      // Paragraph
       timeline.from(
         '.philosophy__description',
         {
-          y: 30,
+          y: 24,
           opacity: 0,
           ease: 'power2.out',
           duration: 0.65
         },
-        0.62
+        0.22
       )
 
-      // CTA
       timeline.from(
         '.philosophy__link',
         {
-          y: 20,
+          y: 18,
           opacity: 0,
           ease: 'power2.out',
           duration: 0.55
         },
-        0.72
-      )
-
-      // ------------------------------------------------------
-      // IMAGE PARALLAX
-      // ------------------------------------------------------
-
-      gsap.fromTo(
-        imageRef.value,
-        {
-          yPercent: -2
-        },
-        {
-          yPercent: 3,
-          ease: 'none',
-
-          scrollTrigger: {
-            trigger: sectionRef.value,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1.2
-          }
-        }
+        0.35
       )
     })
-
-    // ========================================================
-    // MOBILE
-    // ========================================================
 
     mm.add('(max-width: 768px)', () => {
       const timeline = gsap.timeline({
@@ -199,28 +110,17 @@ onMounted(() => {
         }
       })
 
-      timeline.fromTo(
-        '.philosophy__image-wrap',
-        {
-          clipPath: 'inset(0 100% 0 0)'
-        },
-        {
-          clipPath: 'inset(0 0% 0 0)',
-          ease: 'power3.inOut',
-          duration: 1
-        }
-      )
-
       timeline.from(
-        '.philosophy__title-text',
-        {
-          yPercent: 110,
-          stagger: 0.1,
-          ease: 'power3.out',
-          duration: 0.8
-        },
-        '-=0.45'
-      )
+  '.philosophy__title-character',
+  {
+    opacity: 0,
+    y: 8,
+    stagger: 0.08,
+    ease: 'none',
+    duration: 0.3
+  },
+  0
+)
 
       timeline.from(
         '.philosophy__description',
@@ -265,309 +165,175 @@ onUnmounted(() => {
 .philosophy {
   position: relative;
 
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   width: 100%;
 
-  min-height: 100svh;
+  min-height: 52svh;
 
   overflow: hidden;
 
   background: $color-charcoal;
   color: $color-ivory-light;
-
-
-  // ==========================================================
-  // LEFT — IMAGE
-  // ==========================================================
-
-  &__visual {
-    position: relative;
-
-    min-width: 0;
-    min-height: 100svh;
-
-    overflow: hidden;
-  }
-
-
-  &__image-wrap {
-    position: absolute;
-
-    inset: 0;
-
-    overflow: hidden;
-
-    clip-path: inset(0 0 0 0);
-
-    will-change: clip-path;
-  }
-
-
-  &__image {
-    display: block;
-
-    width: 100%;
-    height: 106%;
-
-    object-fit: cover;
-    object-position: center;
-
-    will-change: transform;
-  }
-
-
-  // ==========================================================
-  // RIGHT — PANEL
-  // ==========================================================
-
-  &__panel {
-    position: relative;
-
-    min-width: 0;
-    min-height: 100svh;
-
-    background: $color-charcoal;
-  }
-
-
-  &__content {
-    position: relative;
-
-    width: 100%;
-    height: 100%;
-
-    padding:
-      clamp(70px, 6vw, 115px) clamp(45px, 7vw, 130px) clamp(70px, 7vw, 120px);
-  }
-
-
-  // ==========================================================
-  // HEADING
-  // ==========================================================
-
-  &__title {
-    position: relative;
-
-    font-family: 'Bebas Neue', sans-serif;
-
-    letter-spacing: 0.02em;
-
-    z-index: 2;
-
-    width: min(920px, 62vw);
-
-    /*
-     * Keep the existing editorial overlap.
-     */
-    margin-left: clamp(-120px, -6.5vw, -70px);
-
-    color: $color-ivory-light;
-  }
-
-
-  &__title-line {
-    display: block;
-
-    overflow: hidden;
-
-    padding-bottom: 0.06em;
-  }
-
-
-  &__title-text {
-    display: block;
-
-    will-change: transform;
-  }
-
-
-  // ==========================================================
-  // COPY
-  // ==========================================================
-
-  &__copy {
-    position: absolute;
-
-    /*
-     * Instead of putting the paragraph exactly in the
-     * center of the entire panel, place the content toward
-     * the lower-middle area so it visually connects with
-     * the heading above it.
-     */
-    top: 52%;
-
-    left: 50%;
-
-    width: min(68%, 540px);
-
-    margin: 0;
-
-    transform: translateX(-50%);
-  }
-
-
-  &__description {
-    max-width: 520px;
-
-    margin: 0;
-
-    color: rgba(250, 248, 243, 0.9);
-
-    line-height: 1.75;
-  }
-
-
-  // ==========================================================
-  // CTA
-  // ==========================================================
-
-  &__link {
-    display: inline-flex;
-
-    flex: 0 0 auto;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 12px;
-
-    min-height: 54px;
-
-    width: fit-content;
-
-    margin-top: 42px;
-
-    padding:
-      0 25px;
-
-    border:
-      1px solid #fff;
-
-    background: #fff;
-
-    color: #000;
-
-    font-family:
-      'Manrope',
-      sans-serif;
-
-    font-size:
-      var(--fs-link);
-
-    font-weight: 500;
-
-    letter-spacing: 0.07em;
-
-    text-decoration: none;
-
-    text-transform: uppercase;
-
-    transition:
-      background $transition-medium,
-
-      color $transition-medium;
-  }
-
-
-  // ==========================================================
-  // CTA ARROW
-  // ==========================================================
-
-  &__link-arrow {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    transition:
-      transform $transition-medium;
-
-    :deep(svg) {
-      width: 16px;
-
-      height: 16px;
-    }
-  }
-
-
-  // ==========================================================
-  // CTA HOVER
-  // ==========================================================
-
-  &__link:hover {
-    background:
-      transparent;
-
-    color:
-      #fff;
-  }
-
-
-
-  /*
-   * Small editorial line underneath the CTA.
-   */
- 
-
-
-  // ==========================================================
-  // SECTION NUMBER
-  // ==========================================================
-
-  &__marker {
-    position: absolute;
-
-    right: clamp(24px, 3vw, 55px);
-
-    bottom: clamp(22px, 3vw, 45px);
-
-    font-family: 'Manrope', sans-serif;
-
-    font-size: var(--fs-body-sm);
-
-    font-weight: 500;
-
-    letter-spacing: 0.14em;
-
-    color: rgba(250,
-        248,
-        243,
-        0.45);
-  }
 }
 
 
 // ============================================================
-// LAPTOP
+// CONTENT
 // ============================================================
 
-@media (max-width: 1366px) {
+.philosophy__content {
+  position: relative;
 
-  .philosophy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    &__content {
-      padding:
-        65px clamp(40px, 6vw, 85px) 65px;
-    }
+  width: 100vw;
+  max-width: none;
+
+  margin-left: calc(50% - 50vw);
+  margin-right: 0;
+
+  padding:
+    clamp(70px, 8vw, 105px) var(--page-padding);
+
+  text-align: center;
+}
 
 
-    &__title {
-      width: min(800px, 64vw);
+// ============================================================
+// HEADING
+// ============================================================
 
-      margin-left: -70px;
-    }
+.philosophy__title {
+  position: relative;
+  z-index: 2;
+
+  display: block;
+
+  width: 100%;
+  max-width: none;
+
+  margin: 0;
+
+  font-family: 'Bebas Neue', sans-serif;
+
+  letter-spacing: 0.02em;
+
+  color: $color-ivory-light;
+
+  white-space: nowrap;
+
+  text-align: center;
+}
 
 
-    &__copy {
-      width: min(72%, 470px);
+.philosophy__title {
+  white-space: nowrap;
+  text-align: center;
+}
 
-      margin-left: 0;
-    }
+
+.philosophy__title-character {
+  display: inline-block;
+
+  will-change: transform, opacity;
+}
+
+
+// ============================================================
+// DESCRIPTION
+// ============================================================
+
+.philosophy__description {
+  width: 100%;
+  max-width: 760px;
+
+  margin:
+    clamp(28px, 3vw, 38px) auto 0;
+
+  color: rgba(250, 248, 243, 0.9);
+
+  line-height: 1.75;
+
+  text-align: center;
+}
+
+
+// ============================================================
+// CTA
+// ============================================================
+
+.philosophy__link {
+  display: inline-flex;
+
+  flex: 0 0 auto;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  min-height: 54px;
+
+  width: fit-content;
+
+  margin-top: 34px;
+
+  padding:
+    0 25px;
+
+  border:
+    1px solid #fff;
+
+  background: #fff;
+
+  color: #000;
+
+  font-family:
+    'Manrope',
+    sans-serif;
+
+  font-size:
+    var(--fs-link);
+
+  font-weight: 500;
+
+  letter-spacing: 0.07em;
+
+  text-decoration: none;
+
+  text-transform: uppercase;
+
+  transition:
+    background $transition-medium,
+    color $transition-medium;
+}
+
+
+.philosophy__link-arrow {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  :deep(svg) {
+    width: 16px;
+
+    height: 16px;
   }
+}
+
+
+.philosophy__link:hover {
+  background: transparent;
+
+  color: #fff;
 }
 
 
@@ -576,29 +342,15 @@ onUnmounted(() => {
 // ============================================================
 
 @media (max-width: 1024px) {
-
   .philosophy {
-    grid-template-columns: 48% 52%;
+    min-height: 48svh;
+  }
 
+  .philosophy__content {
+    max-width: 900px;
 
-    &__content {
-      padding:
-        60px 40px 60px;
-    }
-
-
-    &__title {
-      width: min(700px, 72vw);
-
-      margin-left: -65px;
-    }
-
-
-    &__copy {
-      width: 74%;
-
-      margin-left: 0;
-    }
+    padding:
+      65px var(--page-padding);
   }
 }
 
@@ -608,110 +360,23 @@ onUnmounted(() => {
 // ============================================================
 
 @media (max-width: 768px) {
-
   .philosophy {
-    display: block;
-
     min-height: auto;
+  }
 
+  .philosophy__content {
+    max-width: 620px;
 
-    // --------------------------------------------------------
-    // IMAGE
-    // --------------------------------------------------------
+    padding:
+      60px var(--page-padding) 70px;
+  }
 
-    &__visual {
-      width: 100%;
+  .philosophy__description {
+    max-width: 520px;
+  }
 
-      min-height: auto;
-
-      height: 62svh;
-
-      background: $color-charcoal;
-    }
-
-
-    &__image-wrap {
-      position: absolute;
-    }
-
-
-    &__image {
-      height: 105%;
-
-      object-position: center;
-    }
-
-
-    // --------------------------------------------------------
-    // PANEL
-    // --------------------------------------------------------
-
-    &__panel {
-      min-height: auto;
-    }
-
-
-    &__content {
-      min-height: 72svh;
-
-      padding:
-        55px var(--page-padding) 80px;
-    }
-
-
-    // --------------------------------------------------------
-    // TITLE
-    // --------------------------------------------------------
-
-    &__title {
-      width: 100%;
-
-      margin-left: 0;
-    }
-
-
-    // --------------------------------------------------------
-    // COPY
-    // --------------------------------------------------------
-
-    &__copy {
-      position: relative;
-
-      top: auto;
-
-      left: auto;
-
-      width: 100%;
-
-      max-width: 500px;
-
-      margin-top: 80px;
-
-      margin-left: 0;
-
-      transform: none;
-    }
-
-
-    &__description {
-      max-width: 430px;
-    }
-
-
-    // --------------------------------------------------------
-    // CTA
-    // --------------------------------------------------------
-
-    &__link {
-      margin-top: 34px;
-    }
-
-
-    &__marker {
-      right: var(--page-padding);
-
-      bottom: 28px;
-    }
+  .philosophy__link {
+    margin-top: 30px;
   }
 }
 
@@ -721,32 +386,38 @@ onUnmounted(() => {
 // ============================================================
 
 @media (max-width: 480px) {
-
-  .philosophy {
-
-    &__visual {
-      height: 55svh;
-    }
-
-
-    &__content {
-      min-height: 68svh;
-
-      padding-top: 45px;
-
-      padding-bottom: 70px;
-    }
-
-
-    &__copy {
-      margin-top: 60px;
-    }
-
-
-    &__link {
-      margin-top: 30px;
-    }
+  .philosophy__content {
+    padding:
+      50px var(--page-padding) 60px;
   }
+
+  .philosophy__link {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+
+// ============================================================
+// ACCESSIBILITY
+// ============================================================
+
+.sr-only {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+
+  border: 0;
 }
 
 
@@ -756,19 +427,10 @@ onUnmounted(() => {
 
 @media (prefers-reduced-motion: reduce) {
 
-  .philosophy {
-
-    &__image-wrap {
-      clip-path: none !important;
-    }
-
-
-    &__image,
-    &__title-text,
-    &__description,
-    &__link {
-      transform: none !important;
-    }
+  .philosophy__title-character,
+  .philosophy__description,
+  .philosophy__link {
+    transform: none !important;
   }
 }
 </style>

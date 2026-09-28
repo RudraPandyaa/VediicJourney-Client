@@ -36,17 +36,17 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 const certificates = [
   {
     id: 1,
-    image: '/images/certificates/certificate-1.webp',
+    image: '/images/certificates/demo.png',
     alt: 'Vedic Journey certificate'
   },
   {
     id: 2,
-    image: '/images/certificates/certificate-2.webp',
+    image: '/images/certificates/demo.png',
     alt: 'Vedic Journey certificate'
   },
   {
     id: 3,
-    image: '/images/certificates/certificate-3.webp',
+    image: '/images/certificates/demo.png',
     alt: 'Vedic Journey certificate'
   }
 ]

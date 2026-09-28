@@ -4,29 +4,39 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 interface Service {
   title: string
+  slug: string
   description: string
+  image: string
 }
 
 const services: Service[] = [
   {
     title: 'Visa Assistance',
+    slug: 'visa',
     description:
-      'Clear guidance through visa requirements and documentation, helping make the process feel straightforward from the start.'
+      'Clear guidance through visa requirements and documentation, helping make the process feel straightforward from the start.',
+    image: '/images/support/visa.jpg'
   },
   {
     title: 'Flights & Connections',
+    slug: 'flights',
     description:
-      'Thoughtfully considered routes and connections designed around comfort, timing and the rhythm of your journey.'
+      'Thoughtfully considered routes and connections designed around comfort, timing and the rhythm of your journey.',
+    image: '/images/support/flights.jpg'
   },
   {
     title: 'Private Transfers',
+    slug: 'private-chauffeur',
     description:
-      'Seamless arrivals, departures and private transfers arranged so every transition feels effortless.'
+      'Seamless arrivals, departures and private transfers arranged so every transition feels effortless.',
+    image: '/images/support/transfers.jpg'
   },
   {
     title: 'On-ground Support',
+    slug: 'on-ground-support',
     description:
-      'Personal assistance throughout your journey, with trusted local support whenever and wherever it is needed.'
+      'Personal assistance throughout your journey, with trusted local support whenever and wherever it is needed.',
+    image: '/images/support/support.jpg'
   }
 ]
 
@@ -144,10 +154,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section
-    ref="sectionRef"
-    class="travel-support"
-  >
+  <section ref="sectionRef" class="travel-support">
     <div class="travel-support__inner">
 
       <!-- ==================================================
@@ -165,9 +172,7 @@ onBeforeUnmount(() => {
           </span>
 
           <span class="travel-support__heading-line">
-            <span
-              class="travel-support__heading-text travel-support__heading-text--accent"
-            >
+            <span class="travel-support__heading-text travel-support__heading-text--accent">
               TAKEN CARE OF
             </span>
           </span>
@@ -184,58 +189,67 @@ onBeforeUnmount(() => {
 
 
       <!-- ==================================================
-           SERVICES
-      =================================================== -->
+     SERVICES
+=================================================== -->
 
-      <div class="travel-support__services">
+<div class="travel-support__services">
 
-        <article
-          v-for="service in services"
-          :key="service.title"
-          class="travel-support__service"
-        >
+  <NuxtLink
+    v-for="service in services"
+    :key="service.title"
+    :to="`/${service.slug}`"
+    class="travel-support__service"
+  >
 
-          <div class="travel-support__service-inner">
+    <!-- Full Background Image -->
+    <img
+      v-if="service.image"
+      :src="service.image"
+      :alt="service.title"
+      class="travel-support__service-image"
+    />
 
-            <h3 class="travel-support__service-title">
-              {{ service.title }}
-            </h3>
+    <!-- Dark overlay -->
+    <div class="travel-support__service-overlay"></div>
 
-            <p class="travel-support__description">
-              {{ service.description }}
-            </p>
+    <!-- Content over image -->
+    <div class="travel-support__service-content">
 
-          </div>
+      <h3 class="travel-support__service-title">
+        {{ service.title }}
+      </h3>
 
-        </article>
+      <p class="travel-support__description">
+        {{ service.description }}
+      </p>
 
-      </div>
+    </div>
+
+  </NuxtLink>
+
+</div>
 
 
       <!-- ==================================================
-           CTA
-      =================================================== -->
+     VISA CTA
+=================================================== -->
 
       <div class="travel-support__cta">
 
         <div class="travel-support__cta-content">
 
-
           <h3 class="travel-support__cta-title">
-            Let us take care
+            Make your visa process
             <span>
-              of the details.
+              feel effortless.
             </span>
           </h3>
 
         </div>
 
-        <NuxtLink
-          to="/contact"
-          class="travel-support__cta-link"
-        >
+        <NuxtLink to="/visa" class="travel-support__cta-link">
           <span>
-            Enquire Now
+            Explore Visa Assistance
           </span>
 
           <Icon name="lucide:arrow-right" />
@@ -281,9 +295,7 @@ onBeforeUnmount(() => {
   margin-inline: auto;
 
   padding:
-    clamp(90px, 8vw, 140px)
-    var(--page-padding)
-    clamp(90px, 8vw, 140px);
+    clamp(90px, 8vw, 140px) var(--page-padding) clamp(90px, 8vw, 140px);
 }
 
 
@@ -327,11 +339,9 @@ onBeforeUnmount(() => {
    * used by the other sections.
    */
   font-size:
-    clamp(
-      3.8rem,
+    clamp(3.8rem,
       6vw,
-      6.8rem
-    );
+      6.8rem);
 
   font-weight: 400;
 
@@ -349,9 +359,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
 
   padding:
-    0.02em
-    0.06em
-    0.08em;
+    0.02em 0.06em 0.08em;
 }
 
 
@@ -381,9 +389,7 @@ onBeforeUnmount(() => {
   max-width: 610px;
 
   margin:
-    clamp(28px, 3vw, 42px)
-    auto
-    0;
+    clamp(28px, 3vw, 42px) auto 0;
 
   color: $color-text-muted;
 
@@ -403,8 +409,7 @@ onBeforeUnmount(() => {
   grid-template-columns:
     repeat(2, minmax(0, 1fr));
 
-  gap:
-    22px;
+  gap: 22px;
 
   width: 100%;
 
@@ -414,70 +419,114 @@ onBeforeUnmount(() => {
 
 
 // ============================================================
-// SERVICE BOX
+// SERVICE
 // ============================================================
 
 .travel-support__service {
+  display: block;
   position: relative;
 
-  min-height:
-    clamp(
-      250px,
-      20vw,
-      320px
-    );
+  cursor: pointer;
 
-  padding:
-    clamp(35px, 4vw, 58px);
+  text-decoration: none;
 
-  border:
-    1px solid
-    rgba(
-      23,
-      23,
-      21,
-      0.18
-    );
+  color: inherit;
 
-  background: transparent;
+  min-width: 0;
 
-  opacity: 0;
+  text-decoration: none;
+
+  color: inherit;
+
+  height: clamp(400px, 38vw, 590px);
 
   overflow: hidden;
 
+  background: #222;
+
+  opacity: 0;
+
+  transform: translateY(30px);
+
+  isolation: isolate;
+}
+
+
+// ============================================================
+// FULL BACKGROUND IMAGE
+// ============================================================
+
+.travel-support__service-image {
+  position: absolute;
+
+  inset: 0;
+
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  object-position: center;
+
+  transform: scale(1);
+
   transition:
-    transform 500ms
+    transform 900ms
     cubic-bezier(
       0.22,
       1,
       0.36,
       1
-    ),
+    );
 
-    background 500ms
-    ease,
-
-    border-color 500ms
-    ease;
+  z-index: -2;
 }
 
 
 // ============================================================
-// SERVICE INNER
+// IMAGE OVERLAY
 // ============================================================
 
-.travel-support__service-inner {
-  position: relative;
+.travel-support__service-overlay {
+  position: absolute;
 
-  z-index: 2;
+  inset: 0;
 
-  display: flex;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.02) 25%,
+      rgba(0, 0, 0, 0.18) 45%,
+      rgba(0, 0, 0, 0.78) 100%
+    );
 
-  flex-direction: column;
+  z-index: -1;
 
-  justify-content: space-between;
+  transition:
+    background 500ms ease;
+}
 
-  height: 100%;
+
+// ============================================================
+// CONTENT OVER IMAGE
+// ============================================================
+
+.travel-support__service-content {
+  position: absolute;
+
+  right: 0;
+
+  bottom: 0;
+
+  left: 0;
+
+  padding:
+    clamp(30px, 4vw, 55px);
+
+  color: #fff;
 }
 
 
@@ -488,27 +537,24 @@ onBeforeUnmount(() => {
 .travel-support__service-title {
   margin: 0;
 
-  /*
-   * Same font family as the main heading.
-   */
   font-family:
     'Bebas Neue',
     sans-serif;
 
   font-size:
     clamp(
-      2.8rem,
-      4vw,
-      4.5rem
+      3.2rem,
+      5vw,
+      5.8rem
     );
 
   font-weight: 400;
 
-  line-height: 0.9;
+  line-height: 0.86;
 
   letter-spacing: 0.015em;
 
-  color: $color-charcoal;
+  color: #fff;
 }
 
 
@@ -517,16 +563,13 @@ onBeforeUnmount(() => {
 // ============================================================
 
 .travel-support__description {
-  max-width: 500px;
+  max-width: 530px;
 
   margin:
-    30px
+    20px
     0
     0;
 
-  /*
-   * Same typography family as the main heading's subtext.
-   */
   font-family:
     'Manrope',
     sans-serif;
@@ -536,66 +579,31 @@ onBeforeUnmount(() => {
 
   font-weight: 400;
 
-  line-height: 1.7;
+  line-height: 1.65;
 
-  color: $color-text-muted;
+  color: rgba(255, 255, 255, 0.88);
 }
 
 
 // ============================================================
-// BOX HOVER
+// IMAGE HOVER
 // ============================================================
 
-.travel-support__service::before {
-  content: '';
+.travel-support__service:hover
+.travel-support__service-image {
+  transform: scale(1.06);
+}
 
-  position: absolute;
 
-  right: 0;
-
-  bottom: 0;
-
-  left: 0;
-
-  height: 3px;
-
+.travel-support__service:hover
+.travel-support__service-overlay {
   background:
-    $color-charcoal;
-
-  transform:
-    scaleX(0);
-
-  transform-origin:
-    left center;
-
-  transition:
-    transform 600ms
-    cubic-bezier(
-      0.22,
-      1,
-      0.36,
-      1
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.04) 20%,
+      rgba(0, 0, 0, 0.22) 45%,
+      rgba(0, 0, 0, 0.84) 100%
     );
-}
-
-
-.travel-support__service:hover {
-  transform:
-    translateY(-6px);
-
-  border-color:
-    rgba(
-      23,
-      23,
-      21,
-      0.35
-    );
-}
-
-
-.travel-support__service:hover::before {
-  transform:
-    scaleX(1);
 }
 
 
@@ -613,27 +621,20 @@ onBeforeUnmount(() => {
   gap: 60px;
 
   margin-top:
-    clamp(
-      85px,
+    clamp(85px,
       9vw,
-      140px
-    );
+      140px);
 
   padding-top:
-    clamp(
-      50px,
+    clamp(50px,
       5vw,
-      75px
-    );
+      75px);
 
   border-top:
-    1px solid
-    rgba(
-      23,
+    1px solid rgba(23,
       23,
       21,
-      0.2
-    );
+      0.2);
 
   opacity: 0;
 }
@@ -645,9 +646,7 @@ onBeforeUnmount(() => {
 
 .travel-support__cta-label {
   margin:
-    0
-    0
-    18px;
+    0 0 18px;
 
   color: $color-text-muted;
 }
@@ -669,11 +668,9 @@ onBeforeUnmount(() => {
     sans-serif;
 
   font-size:
-    clamp(
-      3.8rem,
+    clamp(3.8rem,
       6vw,
-      6.8rem
-    );
+      6.8rem);
 
   font-weight: 400;
 
@@ -713,10 +710,9 @@ onBeforeUnmount(() => {
     0 25px;
 
   border:
-    1px solid
-    $color-charcoal;
+    1px solid $color-charcoal;
 
-  
+
 
   background: #000;
 
@@ -738,11 +734,9 @@ onBeforeUnmount(() => {
   text-transform: uppercase;
 
   transition:
-    background
-    $transition-medium,
+    background $transition-medium,
 
-    color
-    $transition-medium;
+    color $transition-medium;
 }
 
 
@@ -752,8 +746,7 @@ onBeforeUnmount(() => {
   height: 16px;
 
   transition:
-    transform
-    $transition-medium;
+    transform $transition-medium;
 }
 
 
@@ -784,10 +777,17 @@ onBeforeUnmount(() => {
 
 
   .travel-support__service {
-    min-height: 270px;
+    height: 430px;
+  }
 
-    padding:
-      35px;
+
+  .travel-support__service-content {
+    padding: 32px;
+  }
+
+
+  .travel-support__service-title {
+    font-size: 4rem;
   }
 
 
@@ -810,9 +810,7 @@ onBeforeUnmount(() => {
 
   .travel-support__inner {
     padding:
-      75px
-      var(--page-padding)
-      85px;
+      75px var(--page-padding) 85px;
   }
 
 
@@ -820,11 +818,9 @@ onBeforeUnmount(() => {
     max-width: 600px;
 
     font-size:
-      clamp(
-        3.5rem,
+      clamp(3.5rem,
         12vw,
-        5.5rem
-      );
+        5.5rem);
 
     line-height: 0.88;
   }
@@ -847,20 +843,20 @@ onBeforeUnmount(() => {
 
 
   .travel-support__service {
-    min-height: 230px;
+    height: 430px;
+  }
 
-    padding:
-      32px;
+
+  .travel-support__service-content {
+    padding: 30px;
   }
 
 
   .travel-support__service-title {
     font-size:
-      clamp(
-        2.8rem,
+      clamp(2.8rem,
         10vw,
-        4rem
-      );
+        4rem);
   }
 
 
@@ -878,11 +874,9 @@ onBeforeUnmount(() => {
 
   .travel-support__cta-title {
     font-size:
-      clamp(
-        3.5rem,
+      clamp(3.5rem,
         13vw,
-        5.5rem
-      );
+        5.5rem);
   }
 
 
@@ -908,19 +902,19 @@ onBeforeUnmount(() => {
 
   .travel-support__heading {
     font-size:
-      clamp(
-        3.2rem,
+      clamp(3.2rem,
         12vw,
-        4.8rem
-      );
+        4.8rem);
   }
 
 
   .travel-support__service {
-    min-height: 215px;
+    height: 390px;
+  }
 
-    padding:
-      28px;
+
+  .travel-support__service-content {
+    padding: 26px;
   }
 
 

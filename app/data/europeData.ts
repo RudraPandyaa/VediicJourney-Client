@@ -2,6 +2,29 @@ import type { StateData } from './statesData'
 
 export const europeData: StateData[] = [
   {
+    id: 'spain',
+    name: 'Spain',
+    tagline: 'Passion, Tapas & Architecture',
+    description: 'Spain, officially the Kingdom of Spain, is a country in Southern and Western Europe with territories in North Africa. Featuring the southernmost point of continental Europe, it is the largest country in Southern Europe and the fourth-most populous European Union (EU) member state. Spanning the major...',
+    image: 'https://images.unsplash.com/photo-1543783207-ec64e4d95325?q=80&w=2070&auto=format&fit=crop',
+    places: [
+      { name: 'Barcelona', description: 'Barcelona is a city on the northeastern coast of Spain. It is the capital and largest city of the autonomous community of Catalonia, as well as the second-most populous municipality of Spain after Madrid. With a population of 1.7 million within city ...', image: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Evening_light_over_Barcelona.jpg/1280px-Evening_light_over_Barcelona.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail' },
+      { name: 'Madrid', description: 'Madrid is the capital and largest city of Spain. It had a population of over 3.4 million in the city proper in 2025, and a metropolitan area population of approximately 6.8 million. Madrid is the second-largest city in the European Union (EU), after ...', image: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Madrid_-_Sky_Bar_360%C2%BA_%28Hotel_Riu_Plaza_Espa%C3%B1a%29%2C_vistas_19.jpg/1280px-Madrid_-_Sky_Bar_360%C2%BA_%28Hotel_Riu_Plaza_Espa%C3%B1a%29%2C_vistas_19.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail' },
+      { name: 'Seville', description: 'Seville is the capital and largest city of the Spanish autonomous community of Andalusia and the province of Seville. It is situated on the lower reaches of the River Guadalquivir, in the southwest of the Iberian Peninsula.', image: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/Sevilla_Cathedral_-_Southeast.jpg/1280px-Sevilla_Cathedral_-_Southeast.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail' },
+      { name: 'Granada', description: 'Granada is the capital city of the province of Granada, in the autonomous community of Andalusia, Spain. Granada is located at the foot of the Sierra Nevada mountains, at the confluence of four rivers, the Darro, the Genil, the Monachil and the Beiro...', image: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Granada_%2825987961022%29.jpg/1280px-Granada_%2825987961022%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail' },
+      { name: 'San Sebastián', description: 'San Sebastián or Donostia, officially known by the bilingual name Donostia / San Sebastián, is a city and municipality located in the Basque Autonomous Community in Spain. It lies on the coast of the Bay of Biscay, 20 km from the Spain–France border....', image: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/San_Sebasti%C3%A1n_-_Ayuntamiento_10.jpg/1280px-San_Sebasti%C3%A1n_-_Ayuntamiento_10.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail' },
+      { name: 'Valencia', description: 'Valencia, known officially in Valencian as València, is the capital and largest city of the Valencian Community and the province of the same name in Spain. It is located on the banks of the Turia, on the east coast of the Iberian Peninsula on the Med...', image: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fe/Malvarrosa_Beach%2C_Valencia%2C_Spain_%2829812271043%29.jpg/1280px-Malvarrosa_Beach%2C_Valencia%2C_Spain_%2829812271043%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail' },
+      { name: 'Cordoba', description: 'Córdoba most commonly refers to:Córdoba, Spain, a major city in southern Spain and formerly the imperial capital of Islamic Spain Córdoba, Argentina, the second largest city in Argentina and the capital of Córdoba Province' },
+      { name: 'Mallorca', description: 'Mallorca, also spelled Majorca in English, is the largest of Spain\'s Balearic Islands, and the seventh largest island in the Mediterranean Sea.', image: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_Mallorca.svg/1280px-Flag_of_Mallorca.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail' }
+    ],
+    itinerary: [
+      { day: 'Day 1-2', title: 'Gaudí’s Barcelona', description: 'Marvel at the Sagrada Família, stroll down Las Ramblas, and explore Park Güell.' },
+      { day: 'Day 3', title: 'Royal Madrid', description: 'Take the AVE high-speed train to Madrid. Visit the Prado Museum and enjoy tapas at Mercado de San Miguel.' },
+      { day: 'Day 4-5', title: 'Moorish Granada', description: 'Travel south to Andalusia. Spend a day exploring the magnificent Alhambra palace.' },
+      { day: 'Day 6-7', title: 'Flamenco in Seville', description: 'Head to Seville. Visit the Alcázar, the massive cathedral, and experience an authentic flamenco show.' }
+    ]
+  },
+  {
     id: 'italy',
     name: 'Italy',
     tagline: 'Art, History & Gastronomy',
@@ -93,27 +116,4 @@ export const europeData: StateData[] = [
       { day: 'Day 6-7', title: 'Beaches of Mykonos', description: 'Travel to Mykonos. Relax on pristine beaches and explore the charming Mykonos Town alleys.' }
     ]
   },
-  {
-    id: 'spain',
-    name: 'Spain',
-    tagline: 'Passion, Tapas & Architecture',
-    description: 'Spain, officially the Kingdom of Spain, is a country in Southern and Western Europe with territories in North Africa. Featuring the southernmost point of continental Europe, it is the largest country in Southern Europe and the fourth-most populous European Union (EU) member state. Spanning the major...',
-    image: 'https://images.unsplash.com/photo-1543783207-ec64e4d95325?q=80&w=2070&auto=format&fit=crop',
-    places: [
-      { name: 'Barcelona', description: 'Barcelona is a city on the northeastern coast of Spain. It is the capital and largest city of the autonomous community of Catalonia, as well as the second-most populous municipality of Spain after Madrid. With a population of 1.7 million within city ...', image: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Evening_light_over_Barcelona.jpg/1280px-Evening_light_over_Barcelona.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail' },
-      { name: 'Madrid', description: 'Madrid is the capital and largest city of Spain. It had a population of over 3.4 million in the city proper in 2025, and a metropolitan area population of approximately 6.8 million. Madrid is the second-largest city in the European Union (EU), after ...', image: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Madrid_-_Sky_Bar_360%C2%BA_%28Hotel_Riu_Plaza_Espa%C3%B1a%29%2C_vistas_19.jpg/1280px-Madrid_-_Sky_Bar_360%C2%BA_%28Hotel_Riu_Plaza_Espa%C3%B1a%29%2C_vistas_19.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail' },
-      { name: 'Seville', description: 'Seville is the capital and largest city of the Spanish autonomous community of Andalusia and the province of Seville. It is situated on the lower reaches of the River Guadalquivir, in the southwest of the Iberian Peninsula.', image: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/Sevilla_Cathedral_-_Southeast.jpg/1280px-Sevilla_Cathedral_-_Southeast.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail' },
-      { name: 'Granada', description: 'Granada is the capital city of the province of Granada, in the autonomous community of Andalusia, Spain. Granada is located at the foot of the Sierra Nevada mountains, at the confluence of four rivers, the Darro, the Genil, the Monachil and the Beiro...', image: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Granada_%2825987961022%29.jpg/1280px-Granada_%2825987961022%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail' },
-      { name: 'San Sebastián', description: 'San Sebastián or Donostia, officially known by the bilingual name Donostia / San Sebastián, is a city and municipality located in the Basque Autonomous Community in Spain. It lies on the coast of the Bay of Biscay, 20 km from the Spain–France border....', image: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/San_Sebasti%C3%A1n_-_Ayuntamiento_10.jpg/1280px-San_Sebasti%C3%A1n_-_Ayuntamiento_10.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail' },
-      { name: 'Valencia', description: 'Valencia, known officially in Valencian as València, is the capital and largest city of the Valencian Community and the province of the same name in Spain. It is located on the banks of the Turia, on the east coast of the Iberian Peninsula on the Med...', image: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fe/Malvarrosa_Beach%2C_Valencia%2C_Spain_%2829812271043%29.jpg/1280px-Malvarrosa_Beach%2C_Valencia%2C_Spain_%2829812271043%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail' },
-      { name: 'Cordoba', description: 'Córdoba most commonly refers to:Córdoba, Spain, a major city in southern Spain and formerly the imperial capital of Islamic Spain Córdoba, Argentina, the second largest city in Argentina and the capital of Córdoba Province' },
-      { name: 'Mallorca', description: 'Mallorca, also spelled Majorca in English, is the largest of Spain\'s Balearic Islands, and the seventh largest island in the Mediterranean Sea.', image: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_Mallorca.svg/1280px-Flag_of_Mallorca.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail' }
-    ],
-    itinerary: [
-      { day: 'Day 1-2', title: 'Gaudí’s Barcelona', description: 'Marvel at the Sagrada Família, stroll down Las Ramblas, and explore Park Güell.' },
-      { day: 'Day 3', title: 'Royal Madrid', description: 'Take the AVE high-speed train to Madrid. Visit the Prado Museum and enjoy tapas at Mercado de San Miguel.' },
-      { day: 'Day 4-5', title: 'Moorish Granada', description: 'Travel south to Andalusia. Spend a day exploring the magnificent Alhambra palace.' },
-      { day: 'Day 6-7', title: 'Flamenco in Seville', description: 'Head to Seville. Visit the Alcázar, the massive cathedral, and experience an authentic flamenco show.' }
-    ]
-  }
 ];

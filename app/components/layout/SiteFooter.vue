@@ -11,35 +11,35 @@
 
           <div class="accreditation-item">
             <img
-              src="/#"
+              src="/images/footer/images.png"
               alt="MATAI Fiji Happiness Specialist"
             />
           </div>
 
           <div class="accreditation-item">
             <img
-              src="/#"
+              src="/images/footer/images.png"
               alt="Aussie Specialist"
             />
           </div>
 
           <div class="accreditation-item">
             <img
-              src="/#"
+              src="/images/footer/images.png"
               alt="IATA TIDS"
             />
           </div>
 
           <div class="accreditation-item">
             <img
-              src="/#"
+              src="/images/footer/images.png"
               alt="ETAA"
             />
           </div>
 
           <div class="accreditation-item">
             <img
-              src="/#"
+              src="/images/footer/images.png"
               alt="TOAI"
             />
           </div>
@@ -299,11 +299,6 @@ const currentYear = new Date().getFullYear()
   object-fit: contain;
 
   opacity: 0.8;
-
-  filter:
-    grayscale(1)
-    brightness(0)
-    invert(1);
 
   transition:
     opacity 0.3s ease,

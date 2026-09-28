@@ -6,6 +6,7 @@ import ExperienceSection from '~/components/home/ExperienceSection.vue'
 import JourneySection from '~/components/home/JourneySection.vue'
 import WhyVedicSection from '~/components/home/WhyVedicSection.vue'
 import TravelSupportSection from '~/components/home/TravelSupportSection.vue'
+import CertificateSection from '~/components/home/CertificateSection.vue'
 
 </script>
 
@@ -13,11 +14,11 @@ import TravelSupportSection from '~/components/home/TravelSupportSection.vue'
   <main>
     <HeroSection />
     <PhilosophySection />
-    <DestinationSection />
-    <ExperienceSection/>
     <JourneySection/>
-    <WhyVedicSection />
+    <ExperienceSection/>
     <TravelSupportSection/>
+    <WhyVedicSection />
+    <CertificateSection />
   </main>
 </template>
 
