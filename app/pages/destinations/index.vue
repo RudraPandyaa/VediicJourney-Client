@@ -154,6 +154,49 @@
 
         </div>
       </div>
+    </section>  
+    <!-- =========================================================
+         CONTINENT DESTINATIONS
+    ========================================================== -->
+    <section class="continent-grid-section">
+      <div class="continent-grid-section__inner">
+
+        <div class="continent-grid-section__heading">
+
+          <h2 class="continent-grid-section__title">
+            EXPLORE BY CONTINENT
+          </h2>
+        </div>
+
+        <div class="continent-grid">
+          <NuxtLink
+            v-for="continent in continentCards"
+            :key="continent.slug"
+            :to="`/destinations/${continent.slug}`"
+            class="continent-card"
+          >
+            <div class="continent-card__image">
+              <img
+                :src="continent.image"
+                :alt="continent.name"
+                loading="lazy"
+              />
+
+              <div class="continent-card__overlay"></div>
+
+              <h3 class="continent-card__title">
+                {{ continent.name }}
+              </h3>
+
+              <span class="continent-card__explore">
+                Explore
+                <Icon name="lucide:arrow-right" />
+              </span>
+            </div>
+          </NuxtLink>
+        </div>
+
+      </div>
     </section>
   </main>
 </template>
@@ -275,6 +318,39 @@ const continents: Continent[] = [
 /* ============================================================
    STATE
 ============================================================ */
+
+const continentCards = [
+  {
+    name: 'Europe',
+    slug: 'europe',
+    image: '/images/destinations/europe.jpg'
+  },
+  {
+    name: 'South America',
+    slug: 'south-america',
+    image: '/images/destinations/south-america.jpg'
+  },
+  {
+    name: 'Africa',
+    slug: 'africa',
+    image: '/images/destinations/africa.jpg'
+  },
+  {
+    name: 'North America',
+    slug: 'north-america',
+    image: '/images/destinations/north-america.jpg'
+  },
+  {
+    name: 'Asia',
+    slug: 'asia',
+    image: '/images/destinations/asia.jpg'
+  },
+  {
+    name: 'Australia',
+    slug: 'australia',
+    image: '/images/destinations/australia.jpg'
+  }
+]
 
 const activeIndex = ref(0)
 const isGlobeHovered = ref(false)
@@ -1075,7 +1151,7 @@ onUnmounted(() => {
   padding:
     clamp(80px, 8vw, 130px)
     var(--page-padding)
-    clamp(100px, 12vw, 180px);
+    clamp(30px, 4vw, 60px);
 
   display: flex;
   align-items: center;
@@ -1483,7 +1559,162 @@ onUnmounted(() => {
    TABLET
 ============================================================ */
 
+
+/* ============================================================
+   CONTINENT GRID
+============================================================ */
+
+.continent-grid-section {
+  padding:
+    clamp(45px, 5vw, 75px)
+    var(--page-padding)
+    clamp(100px, 10vw, 150px);
+
+  background: $color-ivory;
+  color: $color-charcoal;
+}
+
+.continent-grid-section__inner {
+  width: 100%;
+  max-width: $container-max;
+  margin-inline: auto;
+}
+
+.continent-grid-section__heading {
+  margin-bottom: clamp(45px, 5vw, 70px);
+}
+
+.continent-grid-section__eyebrow {
+  margin: 0 0 18px;
+
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.continent-grid-section__title {
+  margin: 0;
+
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(4rem, 7vw, 7rem);
+  font-weight: 400;
+  line-height: 0.86;
+  letter-spacing: 0.015em;
+}
+
+.continent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.continent-card {
+  display: block;
+  min-width: 0;
+
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    .continent-card__image img {
+      transform: scale(1.045);
+    }
+
+    .continent-card__explore {
+      transform: translateX(4px);
+    }
+  }
+}
+
+.continent-card__image {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: $color-charcoal;
+}
+
+.continent-card__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform $transition-medium;
+}
+
+.continent-card__overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.08) 38%,
+      rgba(0, 0, 0, 0.62) 100%
+    );
+}
+
+.continent-card__title {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 1;
+
+  margin: 0;
+
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.7rem, 4vw, 4.7rem);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: 0.015em;
+
+  color: $color-ivory-light;
+}
+
+.continent-card__explore {
+  position: absolute;
+  right: 24px;
+  bottom: 22px;
+  z-index: 1;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  color: $color-ivory-light;
+
+  transition: transform $transition-fast;
+
+  :deep(svg) {
+    width: 14px;
+    height: 14px;
+  }
+}
+
 @media (max-width: 991px) {
+  .continent-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .continent-card__title {
+    top: 20px;
+    left: 20px;
+  }
+
+  .continent-card__explore {
+    right: 20px;
+    bottom: 19px;
+  }
+
   .world-section {
     min-height: auto;
   }
@@ -1508,6 +1739,11 @@ onUnmounted(() => {
 ============================================================ */
 
 @media (max-width: 600px) {
+  .continent-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
   .journey-page {
     padding-top: 90px;
   }

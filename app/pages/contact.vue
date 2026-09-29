@@ -622,13 +622,52 @@ onUnmounted(() => {
    PAGE
 ============================================================ */
 
+/*
+    Add your background image here when ready:
+
+    --contact-page-background: url('/images/contact/your-image.jpg');
+
+    The image will automatically cover the navbar + contact form area.
+*/
+
 .contact-page {
+    --contact-page-background: url('/images/support/flights.jpg');
+
+    position: relative;
+
     min-height: 100svh;
 
-    background: $color-ivory;
+    background-color: $color-ivory;
+    background-image: var(--contact-page-background);
+    background-position: center top;
+    background-size: cover;
+    background-repeat: no-repeat;
+
     color: $color-charcoal;
 }
 
+
+
+/* ============================================================
+   SHARED BACKGROUND — NAVBAR
+============================================================ */
+
+.contact-page {
+    :deep(.site-header) {
+        position: absolute;
+
+        top: 0;
+        right: 0;
+        left: 0;
+
+        z-index: 1000;
+
+        background: transparent !important;
+        box-shadow: none !important;
+
+        pointer-events: auto;
+    }
+}
 
 /* ============================================================
    HERO
@@ -749,10 +788,15 @@ onUnmounted(() => {
 ============================================================ */
 
 .contact-form-section {
+    position: relative;
+    z-index: 1;
+
+    min-height: 100svh;
+
     padding:
         150px var(--page-padding) 120px;
 
-    background: $color-ivory;
+    background: transparent;
 
 
     &__inner {
@@ -870,7 +914,7 @@ onUnmounted(() => {
         1px solid rgba($color-charcoal, 0.15);
 
     background:
-        rgba($color-charcoal, 0.025);
+        $color-ivory;
 }
 
 
@@ -900,7 +944,7 @@ onUnmounted(() => {
             'Manrope',
             sans-serif;
 
-        font-size: 10px;
+        font-size: 14px;
 
         .required {
             color: #b3261e;
@@ -922,7 +966,7 @@ onUnmounted(() => {
 
         font-family: 'Manrope', sans-serif;
 
-        font-size: 11px;
+        font-size: 12px;
     }
 
 

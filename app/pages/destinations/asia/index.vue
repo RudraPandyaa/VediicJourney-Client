@@ -10,11 +10,11 @@
       <!-- NAVBAR ABOVE THE HERO IMAGE -->
       <SiteHeader />
 
-      <!-- FULLSCREEN AFRICA IMAGE -->
+      <!-- FULLSCREEN ASIA IMAGE -->
       <div class="continent-hero__image">
         <img
-          src="/images/destinations/africa.jpg"
-          alt="Africa"
+          src="/images/destinations/asia.jpg"
+          alt="Asia"
         />
       </div>
 
@@ -25,13 +25,13 @@
       <div class="continent-hero__content">
 
         <h1 class="continent-hero__heading">
-          <span>AFRICA</span>
+          <span>ASIA</span>
         </h1>
 
         <p class="continent-hero__description">
           A tapestry of history, art, and romantic landscapes.
           Explore our curated experiences across the iconic
-          countries of Africa.
+          countries of Asia.
         </p>
 
       </div>
@@ -40,7 +40,7 @@
 
 
     <!-- ==================================================
-         ABOUT AFRICA + PLAN YOUR JOURNEY
+         ABOUT ASIA + PLAN YOUR JOURNEY
     =================================================== -->
 
     <section class="journey-cta">
@@ -50,17 +50,17 @@
         <div class="journey-cta__about">
 
           <p class="journey-cta__eyebrow">
-            DISCOVER AFRICA
+            DISCOVER ASIA
           </p>
 
           <h2 class="journey-cta__heading">
-            About Africa
+            About Asia
           </h2>
 
           <p class="journey-cta__description">
             A tapestry of history, art, and romantic landscapes.
             Explore our curated experiences across the iconic
-            countries of Africa.
+            countries of Asia.
           </p>
 
         </div>
@@ -78,7 +78,7 @@
             </h3>
 
             <p class="journey-cta__cta-description">
-              Let us help you create a journey through Africa
+              Let us help you create a journey through Asia
               designed around your interests and pace.
             </p>
 
@@ -100,7 +100,7 @@
 
 
     <!-- ==================================================
-         AFRICAAN COUNTRIES
+         ASIAAN COUNTRIES
          Static data for now — will be replaced by Vendure.
     =================================================== -->
 
@@ -112,16 +112,16 @@
       <div class="countries-section__header">
 
         <p class="countries-section__eyebrow">
-          DISCOVER AFRICA
+          DISCOVER ASIA
         </p>
 
         <h2 class="countries-section__heading">
-          Explore Africaan Countries
+          Explore Asiaan Countries
         </h2>
 
         <p class="countries-section__description">
           Discover the diverse cultures, landscapes and
-          experiences across Africa.
+          experiences across Asia.
         </p>
 
       </div>
@@ -191,7 +191,7 @@
 
 
     <!-- ==================================================
-         AFRICA ITINERARIES
+         ASIA ITINERARIES
          Static UI for now — will be replaced by Vendure.
     =================================================== -->
 
@@ -204,12 +204,12 @@
         </p>
 
         <h2 class="itineraries-section__heading">
-          Suggested Africa Tours
+          Suggested Asia Tours
         </h2>
 
         <p class="itineraries-section__description">
           Thoughtfully planned journeys designed to help
-          you experience the best of Africa.
+          you experience the best of Asia.
         </p>
 
       </div>
@@ -303,7 +303,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 import SiteHeader from '~/components/layout/SiteHeader.vue'
-import { africaData as statesData } from '~/data/africaData'
+import { asiaData as statesData } from '~/data/asiaData'
 
 const states = statesData
 
@@ -484,10 +484,10 @@ const countryImage = (country: any) =>
   country.heroImage ||
   country.imageUrl ||
   country.coverImage ||
-  '/images/destinations/africa.jpg'
+  '/images/destinations/asia.jpg'
 
 const countryPath = (country: any) =>
-  `/destinations/africa/${country.slug || String(country.name).toLowerCase().replace(/\\s+/g, '-')}`
+  `/destinations/asia/${country.slug || String(country.name).toLowerCase().replace(/\\s+/g, '-')}`
 
 /*
  * Static itinerary data for the UI phase.
@@ -495,15 +495,15 @@ const countryPath = (country: any) =>
  */
 const itineraries = [
   {
-    id: 'africaan-highlights',
-    title: 'Africaan Highlights',
+    id: 'asiaan-highlights',
+    title: 'Asiaan Highlights',
     nights: 5,
     days: 4,
     route: 'Spain · France · Italy',
     description:
-      'Experience some of Africa’s most iconic destinations through a thoughtfully planned journey.',
-    image: '/images/destinations/africa.jpg',
-    to: '/destinations/africa/itineraries/africaan-highlights'
+      'Experience some of Asia’s most iconic destinations through a thoughtfully planned journey.',
+    image: '/images/destinations/asia.jpg',
+    to: '/destinations/asia/itineraries/asiaan-highlights'
   },
   {
     id: 'mediterranean-escape',
@@ -513,30 +513,30 @@ const itineraries = [
     route: 'Spain · Italy · Greece',
     description:
       'Discover beautiful Mediterranean destinations, historic cities and unforgettable landscapes.',
-    image: '/images/destinations/africa.jpg',
-    to: '/destinations/africa/itineraries/mediterranean-escape'
+    image: '/images/destinations/asia.jpg',
+    to: '/destinations/asia/itineraries/mediterranean-escape'
   },
   {
-    id: 'alpine-africa',
-    title: 'Alpine Africa',
+    id: 'alpine-asia',
+    title: 'Alpine Asia',
     nights: 6,
     days: 5,
     route: 'Switzerland · Austria · France',
     description:
-      'Travel through dramatic alpine landscapes, charming cities and timeless Africaan scenery.',
-    image: '/images/destinations/africa.jpg',
-    to: '/destinations/africa/itineraries/alpine-africa'
+      'Travel through dramatic alpine landscapes, charming cities and timeless Asiaan scenery.',
+    image: '/images/destinations/asia.jpg',
+    to: '/destinations/asia/itineraries/alpine-asia'
   },
   {
-    id: 'northern-africa',
-    title: 'Northern Africa',
+    id: 'northern-asia',
+    title: 'Northern Asia',
     nights: 8,
     days: 7,
     route: 'Norway · Finland · Iceland',
     description:
-      'Discover the northern landscapes, coastal cities and unforgettable natural experiences of Africa.',
-    image: '/images/destinations/africa.jpg',
-    to: '/destinations/africa/itineraries/northern-africa'
+      'Discover the northern landscapes, coastal cities and unforgettable natural experiences of Asia.',
+    image: '/images/destinations/asia.jpg',
+    to: '/destinations/asia/itineraries/northern-asia'
   }
 ]
 
@@ -762,7 +762,7 @@ onUnmounted(() => {
 
 
 /* ==================================================
-   ABOUT AFRICA + PLAN YOUR JOURNEY
+   ABOUT ASIA + PLAN YOUR JOURNEY
 ================================================== */
 
 .journey-cta {

@@ -44,8 +44,7 @@ import { computed } from 'vue'
 const route = useRoute()
 
 const isDestinationsPage = computed(() => {
-  return route.path === '/destinations' ||
-    route.path.startsWith('/contact')
+  return route.path === '/destinations' 
 })
 </script>
 

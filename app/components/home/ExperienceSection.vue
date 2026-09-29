@@ -541,7 +541,7 @@ onBeforeUnmount(() => {
               index
             ) in experiences"
             :key="experience.slug"
-            :to="`/${experience.slug}`"
+            :to="`/experience/${experience.slug}`"
             class="experiences__card"
             :class="{
               'experiences__card--active':

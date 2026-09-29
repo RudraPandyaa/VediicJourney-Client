@@ -2,19 +2,103 @@
     <main v-if="category" class="category-page">
         <SiteHeader />
 
-        <section class="category-hero" :style="{ backgroundImage: `url(${category.image})` }">
-            <div class="category-hero__overlay"></div>
+        <section class="category-hero">
 
-            <div class="category-hero__content">
+            <!-- CURRENT CATEGORY -->
+            <div
+                ref="heroCurrentSlide"
+                class="category-hero__slide"
+            >
+                <div
+                    ref="heroCurrentMedia"
+                    class="category-hero__media"
+                    :style="{ backgroundImage: `url(${category.image})` }"
+                ></div>
 
-                <h1 class="category-hero__title">
-                    {{ category.name }}
-                </h1>
+                <div class="category-hero__overlay"></div>
 
-                <p class="category-hero__description">
-                    {{ category.description }}
-                </p>
+                <div
+                    ref="heroCurrentContent"
+                    class="category-hero__content"
+                >
+                    <p class="category-hero__eyebrow">
+                        EXPERIENCE
+                    </p>
+
+                    <h1 class="category-hero__title">
+                        {{ category.name }}
+                    </h1>
+
+                    <p class="category-hero__description">
+                        {{ category.description }}
+                    </p>
+                </div>
             </div>
+
+            <!-- INCOMING CATEGORY -->
+            <div
+                v-if="heroIncomingCategory"
+                ref="heroIncomingSlide"
+                class="category-hero__slide category-hero__slide--incoming"
+            >
+                <div
+                    ref="heroIncomingMedia"
+                    class="category-hero__media"
+                    :style="{ backgroundImage: `url(${heroIncomingCategory.image})` }"
+                ></div>
+
+                <div class="category-hero__overlay"></div>
+
+                <div
+                    ref="heroIncomingContent"
+                    class="category-hero__content"
+                >
+                    <p class="category-hero__eyebrow">
+                        EXPERIENCE
+                    </p>
+
+                    <h1 class="category-hero__title">
+                        {{ heroIncomingCategory.name }}
+                    </h1>
+
+                    <p class="category-hero__description">
+                        {{ heroIncomingCategory.description }}
+                    </p>
+                </div>
+            </div>
+
+            <button
+                type="button"
+                class="category-hero__control category-hero__control--prev"
+                aria-label="Previous experience"
+                :disabled="isHeroAnimating"
+                @click="previousCategory"
+            >
+                <Icon name="lucide:arrow-left" />
+            </button>
+
+            <button
+                type="button"
+                class="category-hero__control category-hero__control--next"
+                aria-label="Next experience"
+                :disabled="isHeroAnimating"
+                @click="nextCategory"
+            >
+                <Icon name="lucide:arrow-right" />
+            </button>
+
+            <div class="category-hero__progress" aria-hidden="true">
+                <span
+                    v-for="item in categories"
+                    :key="item.slug"
+                    class="category-hero__progress-dot"
+                    :class="{
+                        'is-active':
+                            item.slug === (heroIncomingCategory?.slug ?? category.slug)
+                    }"
+                ></span>
+            </div>
+
         </section>
 
         <section class="category-tours">
@@ -40,11 +124,11 @@
                     <Icon name="lucide:arrow-left" />
                 </button>
 
-                <div class="category-tours__viewport">
+                <div ref="sliderViewport" class="category-tours__viewport">
                     <div
                         class="category-tours__track"
                         :class="{ 'category-tours__track--reset': isResetting }"
-                        :style="{ transform: `translateX(-${currentIndex * slideWidth}%)` }"
+                        :style="{ transform: `translate3d(-${currentIndex * slideOffset}px, 0, 0)` }"
                         @transitionend="handleTransitionEnd"
                     >
                         <article
@@ -96,92 +180,12 @@
             </div>
         </section>
     </main>
-  <main v-else-if="support" ref="sectionRef" class="support-detail">
-    <SiteHeader />
-    <section
-      class="support-detail__hero"
-      :style="{ backgroundImage: `url(${support.image})` }"
-    >
-      <div class="support-detail__overlay"></div>
-
-      <div class="support-detail__hero-content">
-        <p class="support-detail__eyebrow">
-          {{ support.eyebrow }}
-        </p>
-
-        <h1 class="support-detail__title">
-          {{ support.title }}
-        </h1>
-
-        <p class="support-detail__description">
-          {{ support.description }}
-        </p>
-      </div>
-    </section>
-
-    <section class="support-detail__content">
-      <div class="support-detail__content-inner">
-        <div class="support-detail__intro">
-          <p class="support-detail__label">
-            HOW WE HELP
-          </p>
-
-          <h2 class="support-detail__heading">
-            Travel with every detail considered.
-          </h2>
-
-          <p class="support-detail__text">
-            {{ support.intro }}
-          </p>
-        </div>
-
-        <div class="support-detail__points">
-          <article
-            v-for="point in support.points"
-            :key="point"
-            class="support-detail__point"
-          >
-            <span class="support-detail__point-number">
-              —
-            </span>
-
-            <h3>
-              {{ point }}
-            </h3>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="support-detail__cta">
-      <h2>
-        Ready to plan your journey?
-      </h2>
-
-      <NuxtLink to="/contact" class="support-detail__cta-link">
-        <span>{{ support.cta }}</span>
-        <Icon name="lucide:arrow-right" />
-      </NuxtLink>
-    </section>
-  </main>
-
-<main v-else class="slug-not-found">
-    <SiteHeader />
-    <section class="slug-not-found__content">
-        <h1>404</h1>
-        <p>Page not found</p>
-        <NuxtLink to="/" class="support-detail__cta-link">
-            <span>Go back home</span>
-            <Icon name="lucide:arrow-right" />
-        </NuxtLink>
-    </section>
-</main>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import SiteHeader from '~/components/layout/SiteHeader.vue'
 
 interface Tour {
@@ -212,12 +216,6 @@ interface SupportPage {
     cta: string
 }
 
-/*
- * Temporary CMS-shaped data.
- *
- * Everything is kept in this single file for now.
- * Later this entire object can come from Vendure.
- */
 const categories: Category[] = [
     {
         name: 'Spiritual',
@@ -562,96 +560,227 @@ const categories: Category[] = [
     }
 ]
 
-const supportPages: Record<string, SupportPage> = {
-    visa: {
-        title: 'Visa Assistance',
-        eyebrow: 'TRAVEL SUPPORT',
-        description:
-            'Clear guidance through visa requirements and documentation, helping make the process feel straightforward from the start.',
-        image: '/images/support/visa.jpg',
-        intro:
-            'From documentation to application requirements, we help you understand the visa process before your journey begins.',
-        points: [
-            'Visa requirement guidance',
-            'Documentation support',
-            'Application preparation',
-            'Travel-specific visa assistance'
-        ],
-        cta: 'Plan your journey'
-    },
-
-    flights: {
-        title: 'Flights & Connections',
-        eyebrow: 'TRAVEL SUPPORT',
-        description:
-            'Thoughtfully considered routes and connections designed around comfort, timing and the rhythm of your journey.',
-        image: '/images/support/flights.jpg',
-        intro:
-            'We help shape your flight plan around your itinerary, preferred timing and the connections that make your journey feel seamless.',
-        points: [
-            'Route planning',
-            'Flight connection guidance',
-            'Schedule coordination',
-            'Journey-focused flight planning'
-        ],
-        cta: 'Plan your journey'
-    },
-
-    'private-chauffeur': {
-        title: 'Private Transfers',
-        eyebrow: 'TRAVEL SUPPORT',
-        description:
-            'Seamless arrivals, departures and private transfers arranged so every transition feels effortless.',
-        image: '/images/support/transfers.jpg',
-        intro:
-            'From airport arrivals to city transfers, private chauffeur services keep every transition comfortable and considered.',
-        points: [
-            'Airport transfers',
-            'Private chauffeur services',
-            'Inter-city transfers',
-            'Arrival and departure coordination'
-        ],
-        cta: 'Plan your journey'
-    },
-
-    'on-ground-support': {
-        title: 'On-ground Support',
-        eyebrow: 'TRAVEL SUPPORT',
-        description:
-            'Personal assistance throughout your journey, with trusted local support whenever and wherever it is needed.',
-        image: '/images/support/support.jpg',
-        intro:
-            'Travel with the reassurance of local assistance throughout your journey, whenever support is needed on the ground.',
-        points: [
-            'Local assistance',
-            'Journey coordination',
-            'Destination support',
-            'Personal travel assistance'
-        ],
-        cta: 'Plan your journey'
-    }
-}
-
 const route = useRoute()
+const router = useRouter()
+
+const heroCurrentSlide = ref<HTMLElement | null>(null)
+const heroCurrentMedia = ref<HTMLElement | null>(null)
+const heroCurrentContent = ref<HTMLElement | null>(null)
+
+const heroIncomingSlide = ref<HTMLElement | null>(null)
+const heroIncomingMedia = ref<HTMLElement | null>(null)
+const heroIncomingContent = ref<HTMLElement | null>(null)
+
+const heroIncomingCategory = ref<Category | null>(null)
+
+const isHeroAnimating = ref(false)
+const heroDirection = ref<'next' | 'prev'>('next')
+const heroAnimationDuration = 0.9
 
 const category = computed(() => {
     return categories.find(
-        item => item.slug === String(route.params.slug).toLowerCase()
+        item => item.slug === String(route.params.category).toLowerCase()
     )
 })
 
-const support = computed(() => {
-    return supportPages[String(route.params.slug).toLowerCase()] ?? null
-})
+const getCategoryIndex = () => {
+    const currentSlug = String(route.params.category).toLowerCase()
 
-const sectionRef = ref<HTMLElement | null>(null)
-let ctx: gsap.Context | null = null
+    return categories.findIndex(
+        item => item.slug === currentSlug
+    )
+}
+
+const preloadImage = (src: string) => {
+    return new Promise<void>((resolve) => {
+        const image = new Image()
+
+        image.onload = () => resolve()
+        image.onerror = () => resolve()
+        image.src = src
+    })
+}
+
+const preloadCategoryImages = () => {
+    categories.forEach(item => {
+        const image = new Image()
+        image.src = item.image
+    })
+}
+
+const goToCategory = async (direction: 'next' | 'prev') => {
+    if (isHeroAnimating.value) return
+
+    const currentIndex = getCategoryIndex()
+
+    if (currentIndex === -1) return
+
+    const nextIndex =
+        direction === 'next'
+            ? (currentIndex + 1) % categories.length
+            : (currentIndex - 1 + categories.length) % categories.length
+
+    const nextCategory = categories[nextIndex]
+
+    heroDirection.value = direction
+    isHeroAnimating.value = true
+
+    // Make sure the next image is decoded/loaded before the transition starts.
+    await preloadImage(nextCategory.image)
+
+    heroIncomingCategory.value = nextCategory
+
+    await nextTick()
+
+    if (
+        !heroCurrentSlide.value ||
+        !heroCurrentMedia.value ||
+        !heroCurrentContent.value ||
+        !heroIncomingSlide.value ||
+        !heroIncomingMedia.value ||
+        !heroIncomingContent.value
+    ) {
+        heroIncomingCategory.value = null
+        isHeroAnimating.value = false
+        return
+    }
+
+    const directionSign = direction === 'next' ? 1 : -1
+
+    // Incoming slide is already mounted and its image is already cached.
+    gsap.set(heroIncomingSlide.value, {
+        xPercent: directionSign * 100,
+        opacity: 1
+    })
+
+    gsap.set(heroIncomingMedia.value, {
+        xPercent: directionSign * 8,
+        scale: 1.08
+    })
+
+    gsap.set(heroIncomingContent.value, {
+        xPercent: directionSign * 18,
+        opacity: 0
+    })
+
+    gsap.set(heroCurrentSlide.value, {
+        xPercent: 0,
+        opacity: 1
+    })
+
+    gsap.set(heroCurrentMedia.value, {
+        xPercent: 0,
+        scale: 1
+    })
+
+    gsap.set(heroCurrentContent.value, {
+        xPercent: 0,
+        opacity: 1
+    })
+
+    const timeline = gsap.timeline({
+        onComplete: async () => {
+            await router.push(`/experience/${nextCategory.slug}`)
+
+            await nextTick()
+
+            heroIncomingCategory.value = null
+            isHeroAnimating.value = false
+
+            gsap.set(heroCurrentSlide.value, {
+                xPercent: 0,
+                opacity: 1
+            })
+
+            gsap.set(heroCurrentMedia.value, {
+                xPercent: 0,
+                scale: 1
+            })
+
+            gsap.set(heroCurrentContent.value, {
+                xPercent: 0,
+                opacity: 1
+            })
+        }
+    })
+
+    timeline
+        // Current image and text leave together.
+        .to(
+            heroCurrentSlide.value,
+            {
+                xPercent: -directionSign * 100,
+                duration: heroAnimationDuration,
+                ease: 'power4.inOut'
+            },
+            0
+        )
+        .to(
+            heroCurrentMedia.value,
+            {
+                xPercent: -directionSign * 8,
+                scale: 1.02,
+                duration: heroAnimationDuration,
+                ease: 'power3.inOut'
+            },
+            0
+        )
+        .to(
+            heroCurrentContent.value,
+            {
+                xPercent: -directionSign * 18,
+                opacity: 0,
+                duration: heroAnimationDuration * 0.9,
+                ease: 'power3.inOut'
+            },
+            0
+        )
+
+        // New image and text enter at the same time.
+        .to(
+            heroIncomingSlide.value,
+            {
+                xPercent: 0,
+                duration: heroAnimationDuration,
+                ease: 'power4.inOut'
+            },
+            0
+        )
+        .to(
+            heroIncomingMedia.value,
+            {
+                xPercent: 0,
+                scale: 1,
+                duration: heroAnimationDuration,
+                ease: 'power3.out'
+            },
+            0
+        )
+        .to(
+            heroIncomingContent.value,
+            {
+                xPercent: 0,
+                opacity: 1,
+                duration: heroAnimationDuration * 0.92,
+                ease: 'power3.out'
+            },
+            0.05
+        )
+}
+
+const nextCategory = () => {
+    void goToCategory('next')
+}
+
+const previousCategory = () => {
+    void goToCategory('prev')
+}
 
 const visibleSlides = ref(3)
 const currentIndex = ref(0)
+const sliderViewport = ref<HTMLElement | null>(null)
+const slideOffset = ref(0)
 
-// Keep the UI data local for now. Every category is normalized to five
-// tours so the slider can always be tested with multiple cards.
 const categoryWithTours = computed(() => {
   if (!category.value) return null
 
@@ -680,6 +809,7 @@ const categoryWithTours = computed(() => {
     tours: [...baseTours, ...fallbacks].slice(0, 5)
   }
 })
+
 const isResetting = ref(false)
 
 const sliderTours = computed(() => {
@@ -689,16 +819,7 @@ const sliderTours = computed(() => {
         return tours
     }
 
-    return [
-        ...tours,
-        ...tours.slice(0, visibleSlides.value)
-    ]
-})
-
-const slideWidth = computed(() => {
-    if (visibleSlides.value === 1) return 100
-    if (visibleSlides.value === 2) return 50
-    return 33.333333
+    return [...tours, ...tours.slice(0, visibleSlides.value)]
 })
 
 const updateVisibleSlides = () => {
@@ -713,6 +834,25 @@ const updateVisibleSlides = () => {
     }
 
     currentIndex.value = 0
+
+    nextTick(updateSliderMetrics)
+}
+
+const updateSliderMetrics = () => {
+    const viewport = sliderViewport.value
+
+    if (!viewport) return
+
+    const gap = window.innerWidth <= 700
+        ? 0
+        : window.innerWidth <= 1000
+            ? 20
+            : 24
+
+    slideOffset.value =
+        (viewport.clientWidth - gap * (visibleSlides.value - 1)) /
+            visibleSlides.value +
+        gap
 }
 
 const nextTour = () => {
@@ -762,79 +902,80 @@ const handleTransitionEnd = () => {
     }
 }
 
+watch(
+    () => route.params.category,
+    async () => {
+        currentIndex.value = 0
 
-watch(() => route.params.slug, () => {
-  currentIndex.value = 0
-})
+        await nextTick()
+
+        updateSliderMetrics()
+
+        if (!isHeroAnimating.value) {
+            heroIncomingCategory.value = null
+
+            gsap.set(
+                [
+                    heroCurrentSlide.value,
+                    heroCurrentMedia.value,
+                    heroCurrentContent.value
+                ],
+                {
+                    clearProps: 'transform,opacity'
+                }
+            )
+        }
+    }
+)
 
 onMounted(() => {
     updateVisibleSlides()
+
+    // Preload every category image so subsequent hero transitions
+    // never wait for the network after the slide has started.
+    preloadCategoryImages()
+
+    nextTick(() => {
+        updateSliderMetrics()
+
+        gsap.set(
+            [
+                heroCurrentSlide.value,
+                heroCurrentMedia.value,
+                heroCurrentContent.value
+            ],
+            {
+                xPercent: 0,
+                opacity: 1
+            }
+        )
+
+        gsap.set(heroCurrentMedia.value, {
+            scale: 1
+        })
+    })
+
     window.addEventListener('resize', updateVisibleSlides)
-
-    if (typeof window !== 'undefined' && support.value && sectionRef.value) {
-        gsap.registerPlugin(ScrollTrigger)
-
-        ctx = gsap.context(() => {
-            gsap.from('.support-detail__eyebrow', {
-                y: 20,
-                opacity: 0,
-                duration: 0.7,
-                ease: 'power3.out'
-            })
-
-            gsap.from('.support-detail__title', {
-                y: 50,
-                opacity: 0,
-                duration: 0.9,
-                delay: 0.1,
-                ease: 'power3.out'
-            })
-
-            gsap.from('.support-detail__description', {
-                y: 25,
-                opacity: 0,
-                duration: 0.7,
-                delay: 0.2,
-                ease: 'power3.out'
-            })
-
-            gsap.from('.support-detail__point', {
-                y: 25,
-                opacity: 0,
-                duration: 0.6,
-                stagger: 0.08,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: '.support-detail__points',
-                    start: 'top 85%',
-                    once: true
-                }
-            })
-        }, sectionRef.value)
-    }
 })
 
 onUnmounted(() => {
     window.removeEventListener('resize', updateVisibleSlides)
-    ctx?.revert()
+
+    gsap.killTweensOf([
+        heroCurrentSlide.value,
+        heroCurrentMedia.value,
+        heroCurrentContent.value,
+        heroIncomingSlide.value,
+        heroIncomingMedia.value,
+        heroIncomingContent.value
+    ])
 })
 
-if (!category.value && !support.value) {
-    throw createError({
-        statusCode: 404,
-        statusMessage: 'Page not found'
-    })
-}
-
 useSeoMeta({
-    title: () =>
-        category.value
-            ? `${category.value.name} Journeys | Vedic Journey`
-            : `${support.value?.title ?? 'Travel Support'} | Vedic Journey`,
+    title: () => `${category.value?.name ?? 'Experience'} Journeys | Vedic Journey`,
     description: () =>
         category.value?.description ??
-        support.value?.description ??
-        'Explore curated journeys and travel support with Vedic Journey.'
+        'Explore curated journeys with Vedic Journey.'
 })
 </script>
 
@@ -850,33 +991,61 @@ useSeoMeta({
 .category-hero {
     position: relative;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
     min-height: 68svh;
-    padding:
-        150px var(--page-padding) 90px;
 
     overflow: hidden;
 
-    background:
-        $color-charcoal url('/images/experiences/wildlife.jpg') center / cover no-repeat;
+    background: $color-charcoal;
 
     color: $color-ivory-light;
     isolation: isolate;
 
+    &__slide {
+        position: absolute;
+        inset: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding:
+            150px var(--page-padding) 90px;
+
+        overflow: hidden;
+
+        will-change: transform, opacity;
+
+        z-index: 1;
+
+        &--incoming {
+            z-index: 2;
+        }
+    }
+
+    &__media {
+        position: absolute;
+        inset: -2%;
+
+        z-index: 0;
+
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+
+        will-change: transform;
+    }
+
     &__overlay {
         position: absolute;
         inset: 0;
-        z-index: 0;
+        z-index: 1;
 
         background: rgba(7, 7, 6, 0.56);
     }
 
     &__content {
         position: relative;
-        z-index: 1;
+        z-index: 2;
 
         width: 100%;
         max-width: 900px;
@@ -884,6 +1053,8 @@ useSeoMeta({
         margin-inline: auto;
 
         text-align: center;
+
+        will-change: transform, opacity;
     }
 
     &__eyebrow {
@@ -921,6 +1092,96 @@ useSeoMeta({
         line-height: 1.7;
 
         color: rgba(250, 248, 243, 0.9);
+    }
+
+    &__control {
+        position: absolute;
+        top: 50%;
+        z-index: 5;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 52px;
+        height: 52px;
+
+        padding: 0;
+
+        border: 1px solid rgba(250, 248, 243, 0.58);
+        border-radius: 0;
+
+        background: rgba(7, 7, 6, 0.12);
+        color: $color-ivory-light;
+
+        transform: translateY(-50%);
+
+        cursor: pointer;
+
+        transition:
+            background $transition-fast,
+            border-color $transition-fast,
+            color $transition-fast;
+
+        :deep(svg) {
+            width: 19px;
+            height: 19px;
+
+            transition: none;
+        }
+
+        &:hover {
+            background: $color-ivory-light;
+            border-color: $color-ivory-light;
+            color: $color-charcoal;
+        }
+
+        &:disabled {
+            opacity: 0.55;
+            cursor: default;
+        }
+
+        &--prev {
+            left: clamp(24px, 4vw, 64px);
+        }
+
+        &--next {
+            right: clamp(24px, 4vw, 64px);
+        }
+    }
+
+    &__progress {
+        position: absolute;
+        left: 50%;
+        bottom: 30px;
+        z-index: 5;
+
+        display: flex;
+        align-items: center;
+        gap: 7px;
+
+        transform: translateX(-50%);
+    }
+
+    &__progress-dot {
+        display: block;
+
+        width: 5px;
+        height: 5px;
+
+        border-radius: 50%;
+
+        background: rgba(250, 248, 243, 0.38);
+
+        transition:
+            width $transition-fast,
+            background $transition-fast;
+
+        &.is-active {
+            width: 22px;
+            border-radius: 999px;
+            background: $color-ivory-light;
+        }
     }
 }
 
@@ -993,6 +1254,8 @@ useSeoMeta({
 
     &__track {
         display: flex;
+        align-items: stretch;
+        gap: 24px;
 
         width: 100%;
 
@@ -1053,12 +1316,14 @@ useSeoMeta({
 }
 
 .tour-card {
-    flex: 0 0 33.333333%;
+    flex: 0 0 calc((100% - 48px) / 3);
 
     box-sizing: border-box;
 
-    padding: 0 12px;
+    display: flex;
+    flex-direction: column;
 
+    min-width: 0;
     overflow: hidden;
 
     border: 1px solid rgba($color-charcoal, 0.14);
@@ -1067,8 +1332,10 @@ useSeoMeta({
 
     &__image {
         width: 100%;
-        aspect-ratio: 1.35 / 1;
+        aspect-ratio: 1.55 / 1;
         overflow: hidden;
+
+        flex-shrink: 0;
 
         background: $color-charcoal;
 
@@ -1085,7 +1352,12 @@ useSeoMeta({
     }
 
     &__content {
-        padding: 30px;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+
+        min-height: 390px;
+        padding: 30px 30px 30px;
     }
 
     &__meta {
@@ -1139,9 +1411,13 @@ useSeoMeta({
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        align-self: center;
         gap: 14px;
 
-        margin-top: 26px;
+        width: max-content;
+        min-width: 185px;
+
+        margin-top: auto;
         padding: 14px 20px;
 
         border: 1px solid $color-charcoal;
@@ -1186,318 +1462,62 @@ useSeoMeta({
         padding-inline: 52px;
     }
 
+    .category-tours__track {
+        gap: 20px;
+    }
+
     .tour-card {
-        flex-basis: 50%;
+        flex-basis: calc((100% - 20px) / 2);
+
+        &__content {
+            min-height: 360px;
+            padding: 26px;
+        }
     }
 }
 
 @media (max-width: 700px) {
     .category-hero {
         min-height: 62svh;
-        padding:
-            130px var(--page-padding) 70px;
+
+        &__slide {
+            padding:
+                130px var(--page-padding) 70px;
+        }
+
+        &__control {
+            width: 44px;
+            height: 44px;
+
+            &--prev {
+                left: 16px;
+            }
+
+            &--next {
+                right: 16px;
+            }
+        }
+
+        &__progress {
+            bottom: 22px;
+        }
     }
 
     .category-tours__slider {
         padding-inline: 48px;
     }
 
+    .category-tours__track {
+        gap: 0;
+    }
+
     .tour-card {
         flex-basis: 100%;
-        padding-inline: 0;
+
+        &__content {
+            min-height: 330px;
+            padding: 26px;
+        }
     }
-
-    .tour-card__content {
-        padding: 26px;
-    }
 }
-
-.support-detail {
-  background: $color-ivory-light;
-  color: $color-charcoal;
-}
-
-.support-detail__hero {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  min-height: 100svh;
-  overflow: hidden;
-  background-position: center;
-  background-size: cover;
-  isolation: isolate;
-}
-
-.support-detail__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.2) 0%,
-    rgba(0, 0, 0, 0.32) 45%,
-    rgba(0, 0, 0, 0.78) 100%
-  );
-  z-index: -1;
-}
-
-.support-detail__hero-content {
-  width: 100%;
-  max-width: $container-max;
-  margin-inline: auto;
-  padding:
-    0
-    var(--page-padding)
-    clamp(70px, 9vw, 130px);
-  color: #fff;
-}
-
-.support-detail__eyebrow,
-.support-detail__label {
-  margin: 0 0 18px;
-  font-family: 'Manrope', sans-serif;
-  font-size: var(--fs-link);
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.support-detail__title {
-  max-width: 1100px;
-  margin: 0;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(5rem, 10vw, 10rem);
-  font-weight: 400;
-  line-height: 0.82;
-  letter-spacing: 0.015em;
-}
-
-.support-detail__description {
-  max-width: 650px;
-  margin: 28px 0 0;
-  font-family: 'Manrope', sans-serif;
-  font-size: var(--fs-body-lg);
-  line-height: 1.65;
-}
-
-.support-detail__content {
-  padding:
-    clamp(90px, 9vw, 150px)
-    var(--page-padding);
-}
-
-.support-detail__content-inner {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
-  gap: clamp(60px, 9vw, 150px);
-  max-width: $container-max;
-  margin-inline: auto;
-}
-
-.support-detail__heading {
-  max-width: 800px;
-  margin: 0;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(3.8rem, 6vw, 6.8rem);
-  font-weight: 400;
-  line-height: 0.86;
-  letter-spacing: 0.02em;
-}
-
-.support-detail__text {
-  max-width: 650px;
-  margin: 30px 0 0;
-  color: $color-text-muted;
-  font-family: 'Manrope', sans-serif;
-  line-height: 1.7;
-}
-
-.support-detail__points {
-  display: flex;
-  flex-direction: column;
-}
-
-.support-detail__point {
-  display: flex;
-  align-items: baseline;
-  gap: 18px;
-  padding: 24px 0;
-  border-top: 1px solid rgba(23, 23, 21, 0.2);
-}
-
-.support-detail__point:last-child {
-  border-bottom: 1px solid rgba(23, 23, 21, 0.2);
-}
-
-.support-detail__point-number {
-  font-family: 'Manrope', sans-serif;
-  color: $color-text-muted;
-}
-
-.support-detail__point h3 {
-  margin: 0;
-  font-family: 'Manrope', sans-serif;
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.support-detail__cta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 40px;
-  max-width: $container-max;
-  margin-inline: auto;
-  padding:
-    clamp(70px, 8vw, 120px)
-    var(--page-padding);
-  border-top: 1px solid rgba(23, 23, 21, 0.2);
-}
-
-.support-detail__cta h2 {
-  margin: 0;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(3.8rem, 6vw, 6.8rem);
-  font-weight: 400;
-  line-height: 0.86;
-}
-
-.support-detail__cta-link {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  min-height: 54px;
-  padding: 0 25px;
-  border: 1px solid $color-charcoal;
-  background: #000;
-  color: #fff;
-  font-family: 'Manrope', sans-serif;
-  font-size: var(--fs-link);
-  font-weight: 500;
-  letter-spacing: 0.07em;
-  text-decoration: none;
-  text-transform: uppercase;
-  transition:
-    background $transition-medium,
-    color $transition-medium;
-}
-
-.support-detail__cta-link :deep(svg) {
-  width: 16px;
-  height: 16px;
-  transition: transform $transition-medium;
-}
-
-.support-detail__cta-link:hover {
-  background: transparent;
-  color: #000;
-}
-
-.support-detail__cta-link:hover :deep(svg) {
-  transform: translateX(4px);
-}
-
-.support-detail--not-found {
-  min-height: 100svh;
-  display: grid;
-  place-items: center;
-  padding: 40px var(--page-padding);
-  text-align: center;
-}
-
-@media (max-width: 900px) {
-  .support-detail__content-inner {
-    grid-template-columns: 1fr;
-    gap: 70px;
-  }
-
-  .support-detail__cta {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 768px) {
-  .support-detail__hero-content {
-    padding-bottom: 70px;
-  }
-
-  .support-detail__title {
-    font-size: clamp(4rem, 15vw, 7rem);
-  }
-
-  .support-detail__description {
-    font-size: 0.95rem;
-  }
-
-  .support-detail__content {
-    padding-top: 75px;
-    padding-bottom: 85px;
-  }
-
-  .support-detail__cta {
-    padding-top: 70px;
-    padding-bottom: 80px;
-  }
-
-  .support-detail__cta-link {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .support-detail__title {
-    font-size: clamp(3.5rem, 16vw, 5.5rem);
-  }
-
-  .support-detail__heading,
-  .support-detail__cta h2 {
-    font-size: 3.5rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .support-detail__eyebrow,
-  .support-detail__title,
-  .support-detail__description,
-  .support-detail__image,
-  .support-detail__point {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
-}
-
-.slug-not-found {
-    min-height: 100svh;
-    background: $color-ivory-light;
-    color: $color-charcoal;
-}
-
-.slug-not-found__content {
-    min-height: calc(100svh - 80px);
-    display: grid;
-    place-items: center;
-    align-content: center;
-    gap: 18px;
-    padding: 120px var(--page-padding) 80px;
-    text-align: center;
-}
-
-.slug-not-found__content h1 {
-    margin: 0;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(6rem, 14vw, 12rem);
-    font-weight: 400;
-    line-height: 0.8;
-}
-
-.slug-not-found__content p {
-    margin: 0 0 18px;
-    font-family: 'Manrope', sans-serif;
-}
-
 </style>

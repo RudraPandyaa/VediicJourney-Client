@@ -167,14 +167,8 @@ onBeforeUnmount(() => {
 
           <span class="travel-support__heading-line">
             <span class="travel-support__heading-text">
-              EVERY DETAIL
-            </span>
-          </span>
-
-          <span class="travel-support__heading-line">
-            <span class="travel-support__heading-text travel-support__heading-text--accent">
-              TAKEN CARE OF
-            </span>
+              EVERY DETAIL TAKEN CARE OF
+            </span> 
           </span>
 
         </h2>
@@ -197,7 +191,7 @@ onBeforeUnmount(() => {
   <NuxtLink
     v-for="service in services"
     :key="service.title"
-    :to="`/${service.slug}`"
+    :to="`/support/${service.slug}`"
     class="travel-support__service"
   >
 
@@ -247,7 +241,7 @@ onBeforeUnmount(() => {
 
         </div>
 
-        <NuxtLink to="/visa" class="travel-support__cta-link">
+        <NuxtLink to="/support/visa" class="travel-support__cta-link">
           <span>
             Explore Visa Assistance
           </span>
@@ -263,12 +257,8 @@ onBeforeUnmount(() => {
 
 
 <style lang="scss" scoped>
+
 @use '~/assets/scss/variables' as *;
-
-
-// ============================================================
-// SECTION
-// ============================================================
 
 .travel-support {
   position: relative;
@@ -323,7 +313,7 @@ onBeforeUnmount(() => {
 .travel-support__heading {
   width: 100%;
 
-  max-width: 850px;
+  max-width: 1200px;
 
   margin: 0;
 
@@ -360,6 +350,10 @@ onBeforeUnmount(() => {
 
   padding:
     0.02em 0.06em 0.08em;
+
+  align-items: center;
+    
+  width:1200px;
 }
 
 
@@ -367,6 +361,10 @@ onBeforeUnmount(() => {
   display: block;
 
   will-change: transform;
+
+  align-items: center;
+
+  width: 1200px;
 }
 
 
@@ -657,7 +655,7 @@ onBeforeUnmount(() => {
 // ============================================================
 
 .travel-support__cta-title {
-  max-width: 700px;
+  max-width: 1200px;
 
   margin: 0;
 

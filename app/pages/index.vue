@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import HeroSection from '~/components/home/HeroSection.vue'
 import PhilosophySection from '~/components/home/PhilosophySection.vue'
-import DestinationSection from '~/components/home/DestinationSection.vue'
 import ExperienceSection from '~/components/home/ExperienceSection.vue'
 import JourneySection from '~/components/home/JourneySection.vue'
 import WhyVedicSection from '~/components/home/WhyVedicSection.vue'

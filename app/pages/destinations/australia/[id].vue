@@ -1,7 +1,7 @@
 <template>
   <main v-if="stateData" class="state-itinerary-page">
 
-    <NuxtLink to="/destinations/africa" class="back-button">
+    <NuxtLink to="/destinations/australia" class="back-button">
       <Icon name="lucide:arrow-left" />
       <span>Back to Destinations</span>
     </NuxtLink>
@@ -230,7 +230,7 @@
 
   <main v-else class="state-itinerary-page not-found">
 
-    <NuxtLink to="/destinations/africa" class="back-button">
+    <NuxtLink to="/destinations/australia" class="back-button">
       <Icon name="lucide:arrow-left" />
       <span>Back to Destinations</span>
     </NuxtLink>
@@ -239,10 +239,10 @@
       <h1 class="heading-lg">Destination not found</h1>
 
       <NuxtLink
-        to="/destinations/africa"
+        to="/destinations/australia"
         class="btn-primary"
       >
-        Back to Africa Destinations
+        Back to Australia Destinations
       </NuxtLink>
     </div>
 
@@ -256,7 +256,7 @@ import { useRoute } from 'vue-router'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-import { africaData as statesData } from '~/data/africaData'
+import { australiaData as statesData } from '~/data/australiaData'
 
 const route = useRoute()
 const stateId = route.params.id as string
@@ -270,7 +270,7 @@ const placeImage = (place: any) => {
     place.image ||
     place.heroImage ||
     place.imageUrl ||
-    '/images/destinations/africa.jpg'
+    '/images/destinations/australia.jpg'
   )
 }
 
@@ -288,7 +288,7 @@ const countryItineraries = computed(() => {
   const firstImage =
     country.places?.[0]?.image ||
     country.image ||
-    '/images/destinations/africa.jpg'
+    '/images/destinations/australia.jpg'
 
   const secondImage =
     country.places?.[1]?.image ||
@@ -312,7 +312,7 @@ const countryItineraries = computed(() => {
       description:
         `Discover the highlights of ${country.name} through a thoughtfully planned journey.`,
       image: firstImage,
-      to: `/destinations/africa/${country.id}/itineraries/${country.id}-highlights`
+      to: `/destinations/australia/${country.id}/itineraries/${country.id}-highlights`
     },
     {
       id: `${country.id}-explorer`,
@@ -323,7 +323,7 @@ const countryItineraries = computed(() => {
       description:
         `Experience more of ${country.name}, from its iconic places to its lesser-known highlights.`,
       image: secondImage,
-      to: `/destinations/africa/${country.id}/itineraries/${country.id}-explorer`
+      to: `/destinations/australia/${country.id}/itineraries/${country.id}-explorer`
     },
     {
       id: `${country.id}-escape`,
@@ -334,7 +334,7 @@ const countryItineraries = computed(() => {
       description:
         `Take a slower journey through ${country.name}, combining memorable places and experiences.`,
       image: thirdImage,
-      to: `/destinations/africa/${country.id}/itineraries/${country.id}-escape`
+      to: `/destinations/australia/${country.id}/itineraries/${country.id}-escape`
     }
   ]
 })

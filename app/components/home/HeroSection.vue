@@ -244,7 +244,7 @@ onUnmounted(() => {
   height: 100svh;
   min-height: 680px;
 
-  background: $color-charcoal;
+  // background: $color-charcoal;
   color: $color-ivory-light;
 
   // ==========================================================
@@ -279,7 +279,7 @@ onUnmounted(() => {
     z-index: $z-overlay;
     inset: 0;
 
-    background: rgba(9, 9, 8, 0.28);
+    // background: rgba(9, 9, 8, 0.28);
 
     pointer-events: none;
   }

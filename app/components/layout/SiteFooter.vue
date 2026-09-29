@@ -155,6 +155,44 @@
           </div>
 
 
+          <!-- QUICK LINKS -->
+          <nav class="footer-quick-links" aria-label="Quick Links">
+
+            <p class="quick-links-eyebrow">
+              Quick Links
+            </p>
+
+            <div class="quick-links-list">
+
+              <NuxtLink to="/contact">
+                Contact Us
+              </NuxtLink>
+
+              <NuxtLink to="/about">
+                About Us
+              </NuxtLink>
+
+              <NuxtLink to="/blogs">
+                Blogs
+              </NuxtLink>
+
+              <NuxtLink to="/destinations">
+                Destinations
+              </NuxtLink>
+
+              <NuxtLink to="/support/visa">
+                Visa Assistant
+              </NuxtLink>
+
+              <NuxtLink to="/support/private-chauffeur">
+                Cab Services
+              </NuxtLink>
+
+            </div>
+
+          </nav>
+
+
           <!-- RIGHT -->
           <div class="footer-newsletter">
 
@@ -269,7 +307,7 @@ const currentYear = new Date().getFullYear()
 ========================================= */
 
 .footer-accreditations {
-  padding: 80px 0 65px;
+  padding: 45px 0 35px;
   background: #e9e6dc;
 }
 
@@ -278,12 +316,12 @@ const currentYear = new Date().getFullYear()
   grid-template-columns: repeat(5, 1fr);
   align-items: center;
   justify-items: center;
-  gap: 50px;
+  gap: 35px;
 }
 
 .accreditation-item {
   width: 100%;
-  height: 110px;
+  height: 90px;
 
   display: flex;
   align-items: center;
@@ -291,8 +329,8 @@ const currentYear = new Date().getFullYear()
 }
 
 .accreditation-item img {
-  max-width: 150px;
-  max-height: 100px;
+  max-width: 120px;
+  max-height: 120px;
   width: auto;
   height: auto;
 
@@ -332,10 +370,10 @@ const currentYear = new Date().getFullYear()
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 100px;
+  grid-template-columns: 0.8fr 0.42fr 1.08fr;
+  gap: 55px;
 
-  padding: 70px 0 65px;
+  padding: 45px 0 45px;
 }
 
 
@@ -352,7 +390,7 @@ const currentYear = new Date().getFullYear()
 .footer-logo {
   display: inline-flex;
   align-items: center;
-  margin-bottom: 42px;
+  margin-bottom: 28px;
 }
 
 .footer-logo img {
@@ -384,7 +422,7 @@ const currentYear = new Date().getFullYear()
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-top: 38px;
+  margin-top: 28px;
 }
 
 .social-link {
@@ -425,6 +463,81 @@ const currentYear = new Date().getFullYear()
 
 
 /* =========================================
+   QUICK LINKS
+========================================= */
+
+.footer-quick-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 4px;
+}
+
+.quick-links-eyebrow {
+  margin: 0 0 18px;
+
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+
+  color: #000000;
+}
+
+.quick-links-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.quick-links-list a {
+  position: relative;
+
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 400;
+
+  color: rgba(0, 0, 0, 0.68);
+  text-decoration: none;
+
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.quick-links-list a::after {
+  content: '';
+
+  position: absolute;
+  right: 0;
+  bottom: -3px;
+  left: 0;
+
+  height: 1px;
+
+  background: currentColor;
+
+  transform: scaleX(0);
+  transform-origin: left;
+
+  transition: transform 0.3s ease;
+}
+
+.quick-links-list a:hover {
+  color: #000000;
+  transform: translateX(3px);
+}
+
+.quick-links-list a:hover::after {
+  transform: scaleX(1);
+}
+
+
+/* =========================================
    NEWSLETTER
 ========================================= */
 
@@ -436,7 +549,7 @@ const currentYear = new Date().getFullYear()
 .newsletter-card {
   width: 100%;
 
-  padding: 48px;
+  padding: 32px;
 
   border: 1px solid rgba(0, 0, 0, 0.4);
   background: rgba(255, 255, 255, 0.045);
@@ -479,7 +592,7 @@ const currentYear = new Date().getFullYear()
 .newsletter-description {
   max-width: 520px;
 
-  margin: 25px 0 35px;
+  margin: 20px 0 28px;
 
   font-family: 'Manrope', sans-serif;
   font-size: 14px;
@@ -585,7 +698,7 @@ const currentYear = new Date().getFullYear()
   align-items: center;
   justify-content: space-between;
 
-  padding-top: 25px;
+  padding-top: 18px;
 
   border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
@@ -642,8 +755,21 @@ const currentYear = new Date().getFullYear()
   }
 
   .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 50px;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 40px 0 40px;
+  }
+
+  .footer-brand {
+    grid-column: 1;
+  }
+
+  .footer-quick-links {
+    grid-column: 2;
+  }
+
+  .footer-newsletter {
+    grid-column: 1 / -1;
   }
 
 }
@@ -663,7 +789,7 @@ const currentYear = new Date().getFullYear()
   /* Accreditations */
 
   .footer-accreditations {
-    padding: 45px 0;
+    padding: 35px 0 30px;
   }
 
   .accreditation-grid {
@@ -684,15 +810,22 @@ const currentYear = new Date().getFullYear()
   /* Main */
 
   .footer-grid {
-    padding: 50px 0;
-    gap: 45px;
+    grid-template-columns: 1fr;
+    padding: 40px 0;
+    gap: 35px;
+  }
+
+  .footer-brand,
+  .footer-quick-links,
+  .footer-newsletter {
+    grid-column: auto;
   }
 
 
   /* Logo */
 
   .footer-logo {
-    margin-bottom: 30px;
+    margin-bottom: 24px;
   }
 
   .footer-logo img {
@@ -710,7 +843,7 @@ const currentYear = new Date().getFullYear()
   /* Social */
 
   .footer-socials {
-    margin-top: 30px;
+    margin-top: 24px;
   }
 
   .social-link {
@@ -719,10 +852,25 @@ const currentYear = new Date().getFullYear()
   }
 
 
+  /* Quick Links */
+
+  .footer-quick-links {
+    padding-top: 0;
+  }
+
+  .quick-links-list {
+    gap: 10px;
+  }
+
+  .quick-links-list a {
+    font-size: 13px;
+  }
+
+
   /* Newsletter */
 
   .newsletter-card {
-    padding: 30px 24px;
+    padding: 26px 22px;
   }
 
   .newsletter-title {
