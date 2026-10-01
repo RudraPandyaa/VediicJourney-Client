@@ -380,6 +380,90 @@ onBeforeUnmount(() => {
   <section ref="sectionRef" class="journeys">
     <div class="journeys__inner">
 
+      <section class="journeys__india">
+
+        <!-- LEFT: INDIA DETAILS -->
+        <div class="journeys__india-details">
+
+          <p class="journeys__india-label">
+            THE SOUL OF INDIA
+          </p>
+
+          <div class="journeys__india-copy">
+
+            <p class="journeys__india-description">
+              India is a journey through ancient traditions,
+              living cultures, sacred landscapes and stories
+              that have travelled through generations. From
+              timeless cities and spiritual places to rich
+              flavours, vibrant communities and extraordinary
+              experiences, every journey reveals another side
+              of the country.
+            </p>
+
+            <p class="journeys__india-description">
+              Discover India beyond the familiar — thoughtfully,
+              slowly and through experiences that bring you
+              closer to its people, places and heritage.
+            </p>
+
+          </div>
+
+          <NuxtLink to="/destinations/asia/india" class="journeys__india-cta">
+            <span>EXPLORE INDIA</span>
+            <Icon name="lucide:arrow-right" />
+          </NuxtLink>
+
+        </div>
+
+
+        <!-- RIGHT: VIDEO + BIG TYPOGRAPHY -->
+        <div class="journeys__india-visual">
+
+          <video class="journeys__india-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+            <source src="/videos/hero.mp4" type="video/mp4">
+          </video>
+
+          <div class="journeys__india-video-overlay" />
+
+          <div class="journeys__india-heading">
+
+            <span class="journeys__india-heading-line">
+              <span class="journeys__india-heading-text">
+                LET'S
+              </span>
+            </span>
+
+            <span class="journeys__india-heading-line">
+              <span class="journeys__india-heading-text">
+                EXPERIENCE
+              </span>
+            </span>
+
+            <span class="journeys__india-heading-line">
+              <span class="journeys__india-heading-text">
+                INDIA,
+              </span>
+            </span>
+
+            <span class="journeys__india-heading-line">
+              <span class="journeys__india-heading-text">
+                BEYOND
+              </span>
+            </span>
+
+            <span class="journeys__india-heading-line">
+              <span class="journeys__india-heading-text">
+                THE ORDINARY.
+              </span>
+            </span>
+
+          </div>
+
+        </div>
+
+      </section>
+
       <div class="journeys__layout">
 
         <!-- LEFT: SECTION HEADING -->
@@ -467,25 +551,38 @@ onBeforeUnmount(() => {
   color: $color-charcoal;
 
   &__inner {
-    width: 100%;
+  width: 100%;
 
-    padding:
-      clamp(100px, 8vw, 160px) var(--page-padding) clamp(90px, 8vw, 160px);
-  }
+  padding:
+    0
+    0
+    clamp(90px, 8vw, 160px);
+}
 
   /* ========================================================== */
   /* MAIN LAYOUT */
   /* ========================================================== */
 
   &__layout {
-    display: grid;
-    grid-template-columns: minmax(620px, 1.15fr) minmax(0, 1.6fr);
-    align-items: center;
-    gap: clamp(50px, 6vw, 100px);
-    width: 100%;
-    max-width: 1500px;
-    margin-inline: auto;
-  }
+  display: grid;
+
+  grid-template-columns:
+    minmax(620px, 1.15fr)
+    minmax(0, 1.6fr);
+
+  align-items: center;
+
+  gap:
+    clamp(
+      50px,
+      6vw,
+      100px
+    );
+
+  width: 100%;
+
+  margin-inline: auto;
+}
 
   /* ========================================================== */
   /* LEFT HEADING */
@@ -704,25 +801,207 @@ onBeforeUnmount(() => {
   }
 
   &__explore {
-  display: inline-flex;
-  align-items: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    min-height: 54px;
+    margin-top: 18px;
+    padding: 0 25px;
+
+    border: 1px solid #000;
+    background: #000;
+    color: #fff;
+
+    font-family: 'Manrope', sans-serif;
+    font-size: var(--fs-link);
+    font-weight: 500;
+    letter-spacing: 0.07em;
+
+    text-decoration: none;
+    text-transform: uppercase;
+
+    transition:
+      background $transition-medium,
+      color $transition-medium;
+
+    :deep(svg) {
+      width: 16px;
+      height: 16px;
+
+      /* No arrow animation */
+      transition: none;
+    }
+
+    &:hover {
+      background: transparent;
+      color: #000;
+    }
+
+    &:hover :deep(svg) {
+      /* Keep arrow completely static */
+      transform: none;
+    }
+  }
+  /* ========================================================== */
+/* INDIA INTRODUCTION */
+/* ========================================================== */
+
+&__india {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  width: 100%;
+
+  min-height:
+    clamp(
+      620px,
+      48vw,
+      780px
+    );
+
+  margin-bottom:
+    clamp(
+      110px,
+      10vw,
+      170px
+    );
+
+  border-bottom: 1px solid rgba(15, 15, 12, 0.18);
+}
+
+
+/* ========================================================== */
+/* INDIA DETAILS */
+/* ========================================================== */
+
+&__india-details {
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
   justify-content: center;
-  gap: 12px;
 
-  min-height: 54px;
-  margin-top: 18px;
-  padding: 0 25px;
+  min-width: 0;
 
-  border: 1px solid #000;
+  padding:
+    clamp(50px, 6vw, 100px)
+    clamp(35px, 6vw, 110px)
+    clamp(50px, 6vw, 100px)
+    clamp(25px, 4vw, 70px);
+
   background: #000;
   color: #fff;
 
+  border-right:
+    1px solid
+    rgba(
+      15,
+      15,
+      12,
+      0.18
+    );
+}
+
+
+&__india-copy {
+  max-width: 620px;
+}
+
+
+&__india-label {
+  position: absolute;
+
+  top: clamp(24px, 3vw, 48px);
+  right: clamp(35px, 6vw, 110px);
+  left: clamp(25px, 4vw, 70px);
+
+  margin: 0;
+
+  color: #fff;
+
+  font-family: 'Bebas Neue', sans-serif;
+
+  font-size: clamp(2rem, 5.2vw, 10rem);
+
+  font-weight: 400;
+
+  letter-spacing: 0.02em;
+
+  line-height: 0.9;
+
+  text-transform: uppercase;
+}
+
+
+&__india-description {
+  max-width: 600px;
+
+  margin: 0 0 22px;
+
+  color: #fff;
+
   font-family: 'Manrope', sans-serif;
+
+  font-size:
+    clamp(
+      1rem,
+      1.25vw,
+      1.25rem
+    );
+
+  line-height: 1.75;
+}
+
+
+&__india-description:last-child {
+  margin-bottom: 0;
+}
+
+
+/* ========================================================== */
+/* EXPLORE INDIA BUTTON */
+/* ========================================================== */
+
+&__india-cta {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  align-self: flex-start;
+
+  gap: 12px;
+
+  min-height: 54px;
+
+  margin-top: 42px;
+
+  padding: 0 25px;
+
+  border: 1px solid #000;
+
+  background: #fff;
+
+  color: #000;
+
+  font-family: 'Manrope', sans-serif;
+
   font-size: var(--fs-link);
+
   font-weight: 500;
+
   letter-spacing: 0.07em;
 
   text-decoration: none;
+
   text-transform: uppercase;
 
   transition:
@@ -733,19 +1012,134 @@ onBeforeUnmount(() => {
     width: 16px;
     height: 16px;
 
-    /* No arrow animation */
     transition: none;
   }
 
   &:hover {
     background: transparent;
-    color: #000;
+    color: #fff;
   }
 
   &:hover :deep(svg) {
-    /* Keep arrow completely static */
     transform: none;
   }
+}
+
+
+/* ========================================================== */
+/* INDIA VIDEO AREA */
+/* ========================================================== */
+
+&__india-visual {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  background: #000;
+}
+
+
+&__india-video {
+  position: absolute;
+
+  z-index: 1;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transform: scale(1.08);
+
+  opacity: 0.9;
+
+  pointer-events: none;
+}
+
+
+&__india-video-overlay {
+  position: absolute;
+
+  z-index: 2;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.62),
+      rgba(0, 0, 0, 0.18)
+    );
+
+  pointer-events: none;
+}
+
+
+/* ========================================================== */
+/* INDIA BIG TYPOGRAPHY */
+/* ========================================================== */
+
+&__india-heading {
+  position: relative;
+
+  z-index: 3;
+
+  width: 100%;
+
+  padding: 40px;
+
+  color: #fff;
+
+  font-family:
+    'Bebas Neue',
+    sans-serif;
+
+  font-size:
+    clamp(
+      5.5rem,
+      8.5vw,
+      10rem
+    );
+
+  font-weight: 400;
+
+  line-height: 0.82;
+
+  letter-spacing: 0.02em;
+}
+
+
+&__india-heading-line {
+  display: block;
+
+  overflow: hidden;
+
+  width: fit-content;
+
+  padding:
+    0.02em
+    0.08em
+    0.10em
+    0;
+}
+
+
+&__india-heading-text {
+  display: block;
+
+  white-space: nowrap;
+
+  will-change: transform;
 }
 }
 
@@ -807,7 +1201,7 @@ onBeforeUnmount(() => {
   .journeys {
     &__inner {
       padding:
-        90px var(--page-padding) 110px;
+        0 0 110px;
     }
 
     &__layout {
@@ -855,7 +1249,7 @@ onBeforeUnmount(() => {
   .journeys {
     &__inner {
       padding:
-        72px var(--page-padding) 80px;
+        0 0 80px;
     }
 
     &__layout {

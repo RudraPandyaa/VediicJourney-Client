@@ -130,9 +130,6 @@ onUnmounted(() => {
   width: 42px;
   height: 42px;
 
-  margin-top: -21px;
-  margin-left: -21px;
-
   border: 1px solid rgba(244, 240, 232, 0.75);
   border-radius: 50%;
 
@@ -159,10 +156,8 @@ onUnmounted(() => {
   width: 5px;
   height: 5px;
 
-  margin-top: -2.5px;
-  margin-left: -2.5px;
-
   border-radius: 50%;
+
   background: #f4f0e8;
 
   mix-blend-mode: difference;

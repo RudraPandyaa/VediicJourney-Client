@@ -1116,7 +1116,7 @@ onUnmounted(() => {
 
 .journey-hero {
   padding:
-    clamp(60px, 8vw, 120px)
+    clamp(60px, 8vw, 10px)
     var(--page-padding);
 
   text-align: center;
@@ -1127,7 +1127,7 @@ onUnmounted(() => {
 
   &__heading {
     margin: 0 auto;
-    max-width: 1000px;
+    max-width: 1200px;
 
     font-family: 'Bebas Neue', sans-serif;
     letter-spacing: 0.02em;

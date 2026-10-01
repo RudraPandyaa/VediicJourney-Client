@@ -557,22 +557,26 @@ onBeforeUnmount(() => {
           >
 
             <img
-              :src="experience.image"
-              :alt="experience.name"
-              class="experiences__image"
-              loading="eager"
-              decoding="async"
-            />
+  :src="experience.image"
+  :alt="experience.name"
+  class="experiences__image"
+  loading="eager"
+  decoding="async"
+/>
 
-            <div
-              class="experiences__image-overlay"
-            />
+<div
+  class="experiences__image-overlay"
+ />
 
-            <div
-              class="experiences__card-title"
-            >
-              {{ experience.name }}
-            </div>
+<div class="experiences__explore-button">
+  Explore now
+</div>
+
+<div
+  class="experiences__card-title"
+>
+  {{ experience.name }}
+</div>
 
           </NuxtLink>
 
@@ -979,6 +983,7 @@ onBeforeUnmount(() => {
 }
 
 
+
 // ============================================================
 // OVERLAY
 // ============================================================
@@ -1022,6 +1027,72 @@ onBeforeUnmount(() => {
       transparent
       100%
     );
+}
+
+// ============================================================
+// EXPLORE NOW BUTTON
+// ============================================================
+
+.experiences__explore-button {
+  position: absolute;
+
+  top: 24px;
+
+  right: 24px;
+
+  z-index: 6;
+
+  padding:
+    12px
+    12px;
+
+  background: #fff;
+
+  color: #000;
+
+  border: none;
+
+  border-radius: 0;
+
+  font-family:
+    'Bebas Neue',
+    sans-serif;
+
+  font-size: 20px;
+
+  font-weight: 500;
+
+  line-height: 0.6;
+
+  letter-spacing: 0.04em;
+
+  text-transform: uppercase;
+
+  white-space: nowrap;
+
+  opacity: 0;
+
+  transform:
+    translateY(-8px);
+
+  pointer-events: none;
+
+  transition:
+    opacity 250ms ease,
+    transform 250ms ease;
+}
+
+
+// ============================================================
+// SHOW EXPLORE BUTTON ON IMAGE HOVER
+// ============================================================
+
+.experiences__card:hover
+.experiences__explore-button {
+  opacity: 1;
+
+  transform:
+    translateY(0);
 }
 
 

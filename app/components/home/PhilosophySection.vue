@@ -25,7 +25,7 @@
       <!-- CTA -->
       <NuxtLink to="/contact" class="philosophy__link" aria-label="Plan your journey with Vedic Journey">
         <span class="philosophy__link-text">
-          Plan Your Journey
+          Contact US
         </span>
 
         <span class="philosophy__link-arrow">
@@ -175,7 +175,7 @@ onUnmounted(() => {
 
   overflow: hidden;
 
-  background: $color-charcoal;
+  background: #000;
   color: $color-ivory-light;
 }
 

@@ -46,7 +46,7 @@
       <div class="blogs-featured__header">
 
         <h2>
-          STORIES WORTH<br />
+          STORIES WORTH
           TRAVELLING FOR.
         </h2>
 
@@ -70,7 +70,6 @@
 
 
           <h3>
-            The Art of Slow Travel:
             Discovering Japan Beyond
             the Tourist Trail
           </h3>
@@ -113,8 +112,7 @@
         <div>
 
           <h2>
-            TRAVEL<br />
-            INSPIRATION.
+            TRAVEL INSPIRATION.
           </h2>
         </div>
 
@@ -243,10 +241,6 @@
 
       <div class="blogs-world__content">
 
-        <p class="blogs-world__eyebrow eyebrow">
-          STORIES FROM AROUND THE WORLD
-        </p>
-
         <h2>
           ONE WORLD.<br />
           MANY STORIES.
@@ -343,7 +337,7 @@ const posts: BlogPost[] = [
   {
     slug: 'the-art-of-slow-travel',
     title:
-      'The Art of Slow Travel: Discovering Japan Beyond the Tourist Trail',
+      'Discovering Japan Beyond the Tourist Trail',
     excerpt:
       'Travel deeper, take your time and discover the quieter side of Japan through its landscapes, traditions, food and everyday rituals.',
     category: 'DESTINATIONS',
@@ -725,7 +719,8 @@ onUnmounted(() => {
 
   width: 100%;
 
-  min-height: 82svh;
+  min-height: 100svh;
+  height: 100svh;
 
   overflow: hidden;
 
@@ -746,7 +741,7 @@ onUnmounted(() => {
   :deep(.site-header) {
     position: absolute;
 
-    z-index: $z-content;
+    z-index: 100;
 
     top: 0;
     right: 0;
@@ -764,7 +759,7 @@ onUnmounted(() => {
 
   position: absolute;
 
-  z-index: $z-video;
+  z-index: 1;
 
   inset: 0;
 
@@ -828,7 +823,7 @@ onUnmounted(() => {
 
   position: relative;
 
-  z-index: $z-content;
+  z-index: 2;
 
   width: 100%;
 
@@ -1126,29 +1121,49 @@ onUnmounted(() => {
   display: inline-flex;
 
   align-items: center;
+  justify-content: center;
 
   gap: 12px;
 
-  padding-bottom: 7px;
+  width: fit-content;
 
-  border-bottom:
-    1px solid $color-charcoal;
+  min-height: 48px;
+  padding: 0 20px;
 
-  color: $color-charcoal;
+  border: 1px solid $color-charcoal;
+  border-radius: 0;
+
+  background: $color-charcoal;
+
+  color: $color-ivory-light;
 
   font-family:
     'Manrope',
     sans-serif;
 
-  font-size: 13px;
+  font-size: 12px;
 
   font-weight: 600;
 
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
 
   text-transform: uppercase;
 
   text-decoration: none;
+
+  transition:
+    background $transition-fast,
+    color $transition-fast,
+    border-color $transition-fast;
+
+}
+
+
+.blogs-featured__link:hover {
+
+  background: transparent;
+
+  color: $color-charcoal;
 
 }
 
@@ -1281,17 +1296,15 @@ onUnmounted(() => {
 
 .blogs-filters__button {
 
-  padding:
-    12px 20px;
+  min-height: 44px;
+  padding: 0 18px;
 
-  border:
-    1px solid rgba($color-charcoal, 0.25);
-
+  border: 1px solid $color-charcoal;
   border-radius: 0;
 
-  background: transparent;
+  background: $color-charcoal;
 
-  color: $color-charcoal;
+  color: $color-ivory-light;
 
   font-family:
     'Manrope',
@@ -1315,14 +1328,24 @@ onUnmounted(() => {
 }
 
 
-.blogs-filters__button:hover,
+.blogs-filters__button:hover {
+
+  border-color: $color-charcoal;
+
+  background: transparent;
+
+  color: $color-charcoal;
+
+}
+
+
 .blogs-filters__button.is-active {
 
   border-color: $color-charcoal;
 
-  background: $color-charcoal;
+  background: $color-ivory-light;
 
-  color: $color-ivory-light;
+  color: $color-charcoal;
 
 }
 
@@ -1353,7 +1376,11 @@ onUnmounted(() => {
 
 .blog-card {
 
+  display: flex;
+  flex-direction: column;
+
   min-width: 0;
+  height: 100%;
 
 }
 
@@ -1430,6 +1457,10 @@ onUnmounted(() => {
 
 .blog-card__content {
 
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
   padding-top: 24px;
 
 }
@@ -1505,7 +1536,7 @@ onUnmounted(() => {
 .blog-card__excerpt {
 
   margin:
-    22px 0 0;
+    22px 0 30px;
 
   font-family:
     'Manrope',
@@ -1526,17 +1557,22 @@ onUnmounted(() => {
   display: inline-flex;
 
   align-items: center;
+  justify-content: center;
 
   gap: 12px;
 
-  margin-top: 25px;
+  width: fit-content;
+  min-height: 46px;
+  margin-top: auto;
+  flex-shrink: 0;
+  padding: 0 18px;
 
-  padding-bottom: 7px;
+  border: 1px solid $color-charcoal;
+  border-radius: 0;
 
-  border-bottom:
-    1px solid rgba($color-charcoal, 0.45);
+  background: $color-charcoal;
 
-  color: $color-charcoal;
+  color: $color-ivory-light;
 
   font-family:
     'Manrope',
@@ -1551,6 +1587,20 @@ onUnmounted(() => {
   text-transform: uppercase;
 
   text-decoration: none;
+
+  transition:
+    background $transition-fast,
+    color $transition-fast,
+    border-color $transition-fast;
+
+}
+
+
+.blog-card__link:hover {
+
+  background: transparent;
+
+  color: $color-charcoal;
 
 }
 
@@ -1696,19 +1746,21 @@ onUnmounted(() => {
   display: inline-flex;
 
   align-items: center;
+  justify-content: center;
 
   gap: 13px;
 
   width: fit-content;
-
+  min-height: 48px;
   margin-top: 38px;
+  padding: 0 20px;
 
-  padding-bottom: 8px;
+  border: 1px solid $color-ivory-light;
+  border-radius: 0;
 
-  border-bottom:
-    1px solid rgba(255, 255, 255, 0.75);
+  background: $color-ivory-light;
 
-  color: #fff;
+  color: $color-charcoal;
 
   font-family:
     'Manrope',
@@ -1723,6 +1775,20 @@ onUnmounted(() => {
   text-transform: uppercase;
 
   text-decoration: none;
+
+  transition:
+    background $transition-fast,
+    color $transition-fast,
+    border-color $transition-fast;
+
+}
+
+
+.blogs-world__link:hover {
+
+  background: transparent;
+
+  color: $color-ivory-light;
 
 }
 
@@ -1818,18 +1884,20 @@ onUnmounted(() => {
   display: inline-flex;
 
   align-items: center;
+  justify-content: center;
 
   gap: 13px;
 
+  min-height: 48px;
   margin-top: 38px;
+  padding: 0 20px;
 
-  padding-bottom: 8px;
+  border: 1px solid $color-charcoal;
+  border-radius: 0;
 
-  border-bottom:
-    1px solid $color-charcoal;
+  background: $color-charcoal;
 
-  color:
-    $color-charcoal;
+  color: $color-ivory-light;
 
   font-family:
     'Manrope',
@@ -1844,6 +1912,19 @@ onUnmounted(() => {
   text-transform: uppercase;
 
   text-decoration: none;
+
+  transition:
+    background $transition-fast,
+    color $transition-fast,
+    border-color $transition-fast;
+
+}
+
+
+.blogs-inspiration__link:hover {
+
+  background: transparent;
+  color: $color-charcoal;
 
 }
 
@@ -1909,17 +1990,20 @@ onUnmounted(() => {
   display: inline-flex;
 
   align-items: center;
+  justify-content: center;
 
   gap: 14px;
 
+  min-height: 50px;
   margin-top: 55px;
+  padding: 0 22px;
 
-  padding-bottom: 9px;
+  border: 1px solid $color-charcoal;
+  border-radius: 0;
 
-  border-bottom:
-    1px solid $color-charcoal;
+  background: $color-charcoal;
 
-  color: $color-charcoal;
+  color: $color-ivory-light;
 
   font-family:
     'Manrope',
@@ -1934,6 +2018,19 @@ onUnmounted(() => {
   text-transform: uppercase;
 
   text-decoration: none;
+
+  transition:
+    background $transition-fast,
+    color $transition-fast,
+    border-color $transition-fast;
+
+}
+
+
+.blogs-final__link:hover {
+
+  background: transparent;
+  color: $color-charcoal;
 
 }
 
@@ -2017,7 +2114,8 @@ onUnmounted(() => {
 
   .blogs-hero {
 
-    min-height: 78svh;
+    min-height: 100svh;
+    height: 100svh;
 
   }
 
