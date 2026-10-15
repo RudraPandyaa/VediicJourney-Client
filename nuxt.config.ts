@@ -32,23 +32,24 @@ export default defineNuxtConfig({
     ]
   },
 
-  app: {
-    head: {
-      htmlAttrs: {
-        lang: 'en'
-      },
-      meta: [
-        {
-          name: 'viewport',
-          content: 'width=device-width, initial-scale=1'
-        }
-      ]
-    }
-  },
-  nitro: {
+app: {
+  head: {
+    htmlAttrs: {
+      lang: 'en'
+    },
+    meta: [
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1'
+      }
+    ]
+  }
+},
+
+nitro: {
   prerender: {
     crawlLinks: false,
     failOnError: false
   }
-},
+}
 })
