@@ -11,35 +11,35 @@
 
           <div class="accreditation-item">
             <img
-              src="/images/footer/images.png"
+              src="/images/Footer/images.png"
               alt="MATAI Fiji Happiness Specialist"
             />
           </div>
 
           <div class="accreditation-item">
             <img
-              src="/images/footer/images.png"
+              src="/images/Footer/images.png"
               alt="Aussie Specialist"
             />
           </div>
 
           <div class="accreditation-item">
             <img
-              src="/images/footer/images.png"
+              src="/images/Footer/images.png"
               alt="IATA TIDS"
             />
           </div>
 
           <div class="accreditation-item">
             <img
-              src="/images/footer/images.png"
+              src="/images/Footer/images.png"
               alt="ETAA"
             />
           </div>
 
           <div class="accreditation-item">
             <img
-              src="/images/footer/images.png"
+              src="/images/Footer/images.png"
               alt="TOAI"
             />
           </div>
