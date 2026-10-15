@@ -59,7 +59,7 @@
           class="blogs-featured__image"
         >
           <img
-            src="/images/destinations/japan.jpg"
+            src="/images/destinations/Japan.jpg"
             alt="Japan travel experience"
           />
         </NuxtLink>
@@ -339,7 +339,7 @@ const posts: BlogPost[] = [
       'Travel deeper, take your time and discover the quieter side of Japan through its landscapes, traditions, food and everyday rituals.',
     category: 'DESTINATIONS',
     date: '12 SEPTEMBER 2026',
-    image: '/images/destinations/japan.jpg'
+    image: '/images/destinations/Japan.jpg'
   },
 
   {
