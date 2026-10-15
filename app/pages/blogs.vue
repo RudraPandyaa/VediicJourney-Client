@@ -28,7 +28,7 @@
 
       <div class="blogs-hero__image">
         <img
-          src="/images/destinations/japan.jpg"
+          src="/images/destinations/Japan.jpg"
           alt="Japan travel destination"
         />
       </div>
